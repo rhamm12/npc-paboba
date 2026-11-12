@@ -1,0 +1,3762 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXT PAGE CHALLENGE - PABOBA</title>
+  <script src="config.js"></script>
+  <script>
+    (function () {
+      try {
+        if (localStorage.getItem('npc_theme') === 'dark') {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  
+  <!-- Tailwind CSS & FontAwesome Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- JS-PDF and AutoTable for high-quality report creation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+  <!-- Chart.js with rounded segment rendering plugin -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Google Fonts: Inter & Fredoka for playful RPG aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+    .font-title {
+      font-family: 'Fredoka', sans-serif;
+    }
+    
+    /* 3D SVG Logo floating animations inspired by ChatGPT Image 16 Jun 2026, 20.18.41.png */
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0) rotate(-1.5deg) scale(1); }
+      50% { transform: translateY(-6px) rotate(2deg) scale(1.03); }
+    }
+    .animate-logo-float {
+      animation: logoFloat 4.5s ease-in-out infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.25); }
+    }
+    @keyframes ribbonPulse {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(2.5px); }
+    }
+    @keyframes pageFlutter {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(-1.8deg) translateY(-0.8px); }
+    }
+    .animate-sparkle-1 {
+      animation: twinkle 2s ease-in-out infinite;
+      transform-origin: 145px 35px;
+    }
+    .animate-sparkle-2 {
+      animation: twinkle 2.5s ease-in-out infinite 0.6s;
+      transform-origin: 158px 55px;
+    }
+    .animate-ribbon {
+      animation: ribbonPulse 3.5s ease-in-out infinite;
+    }
+    .animate-pages {
+      animation: pageFlutter 5.5s ease-in-out infinite;
+      transform-origin: 90px 123px;
+    }
+
+    /* Elegant Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #fbbf24;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #d97706;
+    }
+
+    /* Floating Background Ambient Particles */
+    @keyframes floatDecor {
+      0% { transform: translateY(110vh) translateX(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.25; }
+      90% { opacity: 0.25; }
+      100% { transform: translateY(-10vh) translateX(80px) rotate(360deg); opacity: 0; }
+    }
+    .ambient-decor {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      animation: floatDecor linear infinite;
+    }
+
+    /* Exploding Victory Particles */
+    @keyframes rpgFall {
+      0% { transform: translateY(-40px) rotate(0deg) scale(0.5); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 0.9; }
+      100% { transform: translateY(480px) rotate(360deg) scale(1.1); opacity: 0; }
+    }
+    .rpg-particle {
+      position: absolute;
+      pointer-events: none;
+      animation: rpgFall linear forwards;
+      z-index: 50;
+    }
+
+    /* ===== THEME: LIGHT / NIGHT MODE ===== */
+    html { color-scheme: light; }
+    html.dark { color-scheme: dark; }
+    body, header, .rounded-3xl, .rounded-2xl, .rounded-xl, input, select, textarea, button {
+      transition: background-color .25s ease, border-color .25s ease, color .25s ease;
+    }
+    html.dark body {
+      background-image: linear-gradient(to bottom, #0b1120, #111827) !important;
+      color: #e2e8f0;
+    }
+    html.dark .bg-white { background-color: #1e293b !important; }
+    html.dark .bg-white\/95 { background-color: rgba(15, 23, 42, .95) !important; }
+    html.dark .bg-slate-50 { background-color: #0f172a !important; }
+    html.dark .bg-slate-100 { background-color: #273449 !important; }
+    html.dark .bg-slate-200 { background-color: #334155 !important; }
+    html.dark .hover\:bg-slate-50:hover { background-color: #273449 !important; }
+    html.dark .hover\:bg-slate-100:hover { background-color: #334155 !important; }
+    html.dark .hover\:bg-slate-200:hover { background-color: #3b4a61 !important; }
+    html.dark .focus\:bg-white:focus { background-color: #0f172a !important; }
+    html.dark .bg-amber-50, html.dark .bg-amber-50\/70 { background-color: rgba(251, 191, 36, .08) !important; }
+    html.dark .bg-amber-100, html.dark .bg-amber-100\/60, html.dark .bg-amber-100\/30 { background-color: rgba(251, 191, 36, .16) !important; }
+    html.dark .hover\:bg-amber-100:hover, html.dark .hover\:bg-amber-200:hover { background-color: rgba(251, 191, 36, .25) !important; }
+    html.dark .bg-rose-50 { background-color: rgba(244, 63, 94, .12) !important; }
+    html.dark .bg-rose-100 { background-color: rgba(244, 63, 94, .2) !important; }
+    html.dark .hover\:bg-rose-100:hover, html.dark .hover\:bg-rose-200:hover { background-color: rgba(244, 63, 94, .3) !important; }
+    html.dark .bg-emerald-50, html.dark .bg-green-50 { background-color: rgba(16, 185, 129, .12) !important; }
+    html.dark .bg-emerald-100 { background-color: rgba(16, 185, 129, .2) !important; }
+    html.dark .hover\:bg-emerald-200:hover { background-color: rgba(16, 185, 129, .3) !important; }
+    html.dark .bg-blue-100 { background-color: rgba(59, 130, 246, .2) !important; }
+    html.dark .text-slate-800, html.dark .text-slate-755 { color: #f1f5f9 !important; }
+    html.dark .text-slate-700 { color: #e2e8f0 !important; }
+    html.dark .text-slate-600 { color: #cbd5e1 !important; }
+    html.dark .text-slate-500 { color: #94a3b8 !important; }
+    html.dark .text-slate-400 { color: #8b9bb2 !important; }
+    html.dark .hover\:text-slate-600:hover { color: #e2e8f0 !important; }
+    html.dark .text-amber-800, html.dark .text-amber-900 { color: #fcd34d !important; }
+    html.dark .text-amber-700 { color: #fbbf24 !important; }
+    html.dark .text-rose-700, html.dark .text-rose-600 { color: #fb7185 !important; }
+    html.dark .text-emerald-800, html.dark .text-emerald-700, html.dark .text-emerald-600, html.dark .text-green-600, html.dark .text-green-700 { color: #34d399 !important; }
+    html.dark .text-blue-800, html.dark .text-blue-700, html.dark .text-blue-600 { color: #60a5fa !important; }
+    html.dark .border-slate-100, html.dark .border-slate-200, html.dark .border-slate-200\/60, html.dark .border-slate-200\/80, html.dark .border-slate-300, html.dark .divide-slate-100 > * + * { border-color: #334155 !important; }
+    html.dark .border-amber-100, html.dark .border-amber-200, html.dark .border-amber-200\/30, html.dark .border-amber-200\/40, html.dark .border-amber-200\/50 { border-color: rgba(251, 191, 36, .22) !important; }
+    html.dark .border-rose-100\/70, html.dark .border-rose-200, html.dark .border-rose-200\/80 { border-color: rgba(244, 63, 94, .35) !important; }
+    html.dark .border-emerald-100, html.dark .border-emerald-200, html.dark .border-green-200 { border-color: rgba(16, 185, 129, .35) !important; }
+    html.dark ::-webkit-scrollbar-track { background: #1e293b; }
+    html.dark input, html.dark select, html.dark textarea { color: #e2e8f0; }
+    html.dark input::placeholder, html.dark textarea::placeholder { color: #64748b; }
+    html.dark option { background-color: #0f172a; color: #e2e8f0; }
+    html.dark table, html.dark thead, html.dark tbody, html.dark tr { border-color: #334155; }
+    html.dark .ambient-decor { opacity: .15; }
+
+    /* Tombol tema */
+    #btnThemeToggle .icon-sun { display: none; }
+    html.dark #btnThemeToggle .icon-sun { display: inline-block; }
+    html.dark #btnThemeToggle .icon-moon { display: none; }
+
+    /* Penanda insight */
+    #insightCounterBox.state-empty { background: #f1f5f9; color: #64748b; border-color: #e2e8f0; }
+    #insightCounterBox.state-short { background: #fff1f2; color: #e11d48; border-color: #fecdd3; }
+    #insightCounterBox.state-ok { background: #ecfdf5; color: #059669; border-color: #a7f3d0; }
+    html.dark #insightCounterBox.state-empty { background: #0f172a; color: #94a3b8; border-color: #334155; }
+    html.dark #insightCounterBox.state-short { background: rgba(244, 63, 94, .15); color: #fb7185; border-color: rgba(244, 63, 94, .4); }
+    html.dark #insightCounterBox.state-ok { background: rgba(16, 185, 129, .15); color: #34d399; border-color: rgba(16, 185, 129, .4); }
+    #insightText.is-ok { border-color: #34d399 !important; }
+    #insightText.is-short { border-color: #fb7185 !important; }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-amber-50 to-yellow-100/50 min-h-screen text-slate-800 pb-12 relative">
+
+  <!-- Floating Ambient Ornaments (Spawning Container) -->
+  <div id="ambientContainer" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+  <!-- Header Bar -->
+  <header class="bg-white/95 backdrop-blur-md border-b-4 border-amber-400 shadow-md sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-3">
+      
+      <!-- Brand Logo & Subtitle (Clean & Borderless Concept) -->
+      <div class="flex items-center gap-3 text-center md:text-left">
+        <div class="flex items-center justify-center transform hover:scale-105 transition-transform duration-300 w-16 h-16 md:w-20 md:h-20">
+          <svg class="w-full h-full animate-logo-float" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+            <!-- Sparkles (From reference file ChatGPT Image 16 Jun 2026, 20.18.41.png) -->
+            <path class="animate-sparkle-1" d="M 145 25 Q 145 35 155 35 Q 145 35 145 45 Q 145 35 135 35 Q 145 35 145 25" fill="#FBBF24" />
+            <path class="animate-sparkle-2" d="M 158 48 Q 158 55 165 55 Q 158 55 158 62 Q 158 55 151 55 Q 158 55 158 48" fill="#F59E0B" />
+            
+            <!-- Document Paper Background -->
+            <g transform="rotate(-3, 90, 85)">
+              <rect x="48" y="28" width="84" height="98" rx="12" fill="#FEF3C7" stroke="#1E293B" stroke-width="4.5" />
+              <!-- Document Lines -->
+              <line x1="62" y1="46" x2="118" y2="46" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" />
+              <line x1="62" y1="58" x2="110" y2="58" stroke="#FBBF24" stroke-width="3" stroke-linecap="round" />
+              <line x1="62" y1="70" x2="118" y2="70" stroke="#F59E0B" stroke-width="3" stroke-linecap="round" />
+              <!-- Red Bookmark Ribbon -->
+              <path class="animate-ribbon" d="M 58 28 L 58 58 L 68 50 L 78 58 L 78 28 Z" fill="#F59E0B" stroke="#1E293B" stroke-width="3.5" stroke-linejoin="round" />
+            </g>
+
+            <!-- Book Pages Laying Open At Bottom -->
+            <g class="animate-pages">
+              <!-- Back Layers (3D stacked pages look) -->
+              <path d="M 90 128 C 115 128 148 108 166 118 L 166 138 C 148 128 115 148 90 148 Z" fill="#D97706" stroke="#1E293B" stroke-width="4.5" stroke-linejoin="round" />
+              <path d="M 90 128 C 65 128 32 108 14 118 L 14 138 C 32 128 65 148 90 148 Z" fill="#D97706" stroke="#1E293B" stroke-width="4.5" stroke-linejoin="round" />
+
+              <!-- Front main page -->
+              <path d="M 90 123 C 115 123 152 103 170 113 L 170 133 C 152 123 115 143 90 143 Z" fill="#FFFBEB" stroke="#1E293B" stroke-width="4.5" stroke-linejoin="round" />
+              <path d="M 90 123 C 65 123 28 103 10 113 L 10 133 C 28 123 65 143 90 143 Z" fill="#FFFBEB" stroke="#1E293B" stroke-width="4.5" stroke-linejoin="round" />
+              
+              <!-- Page detail lines -->
+              <path d="M 25 125 Q 55 115 80 130" fill="none" stroke="#FCD34D" stroke-width="2.5" stroke-linecap="round" />
+              <path d="M 155 125 Q 125 115 100 130" fill="none" stroke="#FCD34D" stroke-width="2.5" stroke-linecap="round" />
+            </g>
+
+            <!-- Bold 3D NPC Text (Fredoka style) -->
+            <!-- Back Shadow -->
+            <text x="93" y="112" font-family="'Fredoka', 'Inter', sans-serif" font-weight="950" font-size="62" fill="#1E293B" text-anchor="middle" transform="skewX(-6) rotate(-2)">NPC</text>
+            <!-- Front Gold Text with Thick Outline -->
+            <text x="90" y="108" font-family="'Fredoka', 'Inter', sans-serif" font-weight="950" font-size="62" fill="#FBBF24" stroke="#1E293B" stroke-width="4.5" stroke-linejoin="round" text-anchor="middle" transform="skewX(-6) rotate(-2)">NPC</text>
+
+            <!-- Curved Banner Ribbon At Bottom -->
+            <!-- Shadow -->
+            <path d="M 12 143 Q 90 125 168 143 L 163 158 Q 90 140 17 158 Z" fill="#1E293B" />
+            <!-- Main Gold Ribbon -->
+            <path d="M 10 140 Q 90 122 170 140 L 165 155 Q 90 137 15 155 Z" fill="#FBBF24" stroke="#1E293B" stroke-width="4.5" stroke-linejoin="round" />
+            <!-- Left Folding Edge -->
+            <path d="M 10 140 L 2 147 L 15 155 Z" fill="#D97706" stroke="#1E293B" stroke-width="4.5" stroke-linejoin="round" />
+            <!-- Right Folding Edge -->
+            <path d="M 170 140 L 178 147 L 165 155 Z" fill="#D97706" stroke="#1E293B" stroke-width="4.5" stroke-linejoin="round" />
+
+            <!-- Text on Banner -->
+            <text x="90" y="149" font-family="'Inter', sans-serif" font-weight="900" font-size="7.5" fill="#1E293B" text-anchor="middle" letter-spacing="0.4" transform="rotate(-1, 90, 149)">NEXT PAGE CHALLENGE</text>
+          </svg>
+        </div>
+        <div>
+          <h1 class="font-title text-2xl md:text-3xl font-extrabold text-amber-600 tracking-tight flex items-center justify-center md:justify-start gap-1">
+            NEXT PAGE CHALLENGE
+          </h1>
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-0.5">
+            by <span class="text-amber-500 font-bold">PABOBA</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Realtime Indonesian West Time (WIB) Clock -->
+      <div class="flex flex-col items-center">
+        <div class="bg-slate-900 text-amber-400 px-5 py-2 rounded-full font-mono text-lg font-bold shadow-lg border border-slate-700 flex items-center gap-2">
+          <i class="fa-regular fa-clock text-amber-400 animate-pulse"></i>
+          <span id="liveClock">00:00:00 WIB</span>
+        </div>
+        <div class="flex items-center gap-1.5 mt-1">
+          <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Waktu Indonesia Barat (WIB)</span>
+          <span id="cloudStatusBadge" class="hidden text-[9px] text-emerald-700 font-bold uppercase tracking-wide flex items-center gap-1">
+            <i class="fa-solid fa-cloud animate-pulse"></i> Menyinkronkan...
+          </span>
+        </div>
+      </div>
+
+      <!-- Mode & Navigation Toggles -->
+      <div class="flex flex-wrap items-center justify-center gap-2">
+        <button id="btnThemeToggle" onclick="toggleTheme()" title="Ganti Mode Terang / Gelap" aria-label="Ganti Mode Terang atau Gelap" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs w-9 h-9 rounded-xl transition-all shadow-md flex items-center justify-center">
+          <i class="fa-solid fa-moon icon-moon text-amber-500"></i>
+          <i class="fa-solid fa-sun icon-sun text-amber-400"></i>
+        </button>
+        <button id="btnHalamanUtamaHeader" onclick="switchMainTab(1)" class="bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold text-xs px-3.5 py-2 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center gap-1.5">
+          <i class="fa-solid fa-house"></i> Utama
+        </button>
+        <button id="btnPesertaMenu" onclick="switchMainTab(2)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3.5 py-2 rounded-xl transition-all shadow-md flex items-center gap-1.5">
+          <i class="fa-solid fa-user-graduate text-amber-500"></i> Peserta
+        </button>
+        <button id="btnPjGateway" onclick="openPinModal()" class="bg-slate-800 hover:bg-slate-950 text-white font-semibold text-xs px-4 py-2 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center gap-1.5">
+          <i class="fa-solid fa-shield-halved text-amber-400"></i> Mode PJ
+        </button>
+        <button id="btnExitPj" onclick="exitPJMode()" class="hidden bg-red-600 hover:bg-red-700 text-white font-semibold text-xs px-4 py-2 rounded-xl transition-all shadow-md flex items-center gap-1.5">
+          <i class="fa-solid fa-sign-out-alt"></i> Keluar PJ
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Marquee Berita -->
+  <div class="bg-amber-400 text-amber-950 font-semibold py-2 px-4 shadow-inner relative z-10">
+    <div class="max-w-6xl mx-auto flex items-center">
+      <div class="bg-amber-950 text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded uppercase tracking-wider mr-3 z-10 whitespace-nowrap flex items-center gap-1">
+        <i class="fa-solid fa-bullhorn text-xs animate-bounce"></i> Info Guild
+      </div>
+      <marquee class="text-sm tracking-wide" scrollamount="4">
+        📚 Selamat berjuang di NEXT PAGE CHALLENGE! • ⏰ Batas waktu maksimal laporan harian adalah pukul 22:00 WIB • 🛡️ Laporkan aktivitas bacaan harian Anda untuk menjaga stabilitas Health Points (HP) partner Anda! • 🚀 Satu halaman hari ini, sejuta inspirasi esok hari bersama PABOBA!
+      </marquee>
+    </div>
+  </div>
+
+  <!-- Batch Period Display -->
+  <div class="bg-amber-100/60 border-b border-amber-200 py-2.5 px-4 relative z-10">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-semibold text-slate-600">
+      <div class="flex items-center gap-2">
+        <span class="bg-amber-500 text-slate-900 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Periode Aktif</span>
+        <span class="text-slate-700 font-bold" id="displayBatchRange">Mulai: - s/d Selesai: -</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Application Wrapper -->
+  <main class="max-w-6xl mx-auto px-4 mt-6 relative z-10 font-sans">
+
+    <!-- VIEW 1: HOME VIEW -->
+    <section id="viewHome" class="space-y-6">
+      
+      <!-- Total Jumlah Peserta Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- Laporan Hari Ini Card -->
+        <div class="bg-white rounded-3xl p-5 shadow-md border border-amber-200/40 flex flex-col justify-between relative overflow-hidden">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">🔥 Laporan Hari Ini</span>
+          <div class="flex items-baseline gap-1 mt-4" id="homeStatToday">
+            <span class="text-4xl font-black text-amber-500">0</span>
+            <span class="text-xs text-slate-400 font-bold ml-1">orang</span>
+          </div>
+          <div class="text-[11px] text-amber-600 font-bold mt-2" id="homeStatTodaySub">
+            🔴 0 Alpa hari ini
+          </div>
+        </div>
+
+        <!-- Laporan Hari Sebelumnya Card -->
+        <div class="bg-white rounded-3xl p-5 shadow-md border border-amber-200/40 flex flex-col justify-between relative overflow-hidden">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">📅 Laporan Kemarin</span>
+          <div class="flex items-baseline gap-1 mt-4" id="homeStatYesterday">
+            <span class="text-4xl font-black text-slate-700">0</span>
+            <span class="text-xs text-slate-400 font-bold ml-1">orang</span>
+          </div>
+          <div class="text-[11px] text-slate-500 font-bold mt-2" id="homeStatYesterdaySub">
+            🔴 0 Alpa kemarin
+          </div>
+        </div>
+
+        <!-- Total Laporan Terkumpul Card -->
+        <div class="bg-white rounded-3xl p-5 shadow-md border border-amber-200/40 flex flex-col justify-between relative overflow-hidden">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">📚 Total Setoran</span>
+          <div class="flex items-baseline gap-1 mt-4" id="homeStatTotal">
+            <span class="text-4xl font-black text-emerald-600">0</span>
+            <span class="text-xs text-slate-400 font-bold ml-1">laporan</span>
+          </div>
+          <div class="text-[11px] text-emerald-600 font-bold mt-2" id="homeStatTotalSub">
+            Sepanjang Batch aktif
+          </div>
+        </div>
+
+        <!-- Survival Ratio Card -->
+        <div class="bg-white rounded-3xl p-5 shadow-md border border-amber-200/40 flex flex-col justify-between relative overflow-hidden">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">🛡️ Status Keberadaan</span>
+          <div id="homeStatSurvival" class="mt-4">
+            <div class="flex justify-between text-xs font-bold">
+              <span class="text-emerald-600">Bertahan: -</span>
+              <span class="text-rose-600">Gugur: -</span>
+            </div>
+          </div>
+          <div class="text-[11px] text-slate-400 font-bold mt-2">
+            Rasio pertahanan klan harian
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 Insight Tercepat -->
+      <div id="topInsightCard" class="bg-white rounded-3xl p-6 shadow-xl border border-amber-200/50">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4 gap-3">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-10 h-10 bg-amber-400 rounded-xl flex items-center justify-center text-amber-950 text-lg shadow-md shadow-amber-400/30 flex-shrink-0">
+              <i class="fa-solid fa-bolt"></i>
+            </div>
+            <div class="min-w-0">
+              <h2 class="font-title text-lg font-bold text-slate-800">3 Insight Tercepat</h2>
+              <p class="text-xs text-slate-400">Tiga pejuang pertama yang menyetor insight valid pada tanggal laporan aktif</p>
+            </div>
+          </div>
+          <span id="topInsightDateBadge" class="bg-amber-100 text-amber-700 text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap">-</span>
+        </div>
+        <div id="topInsightList" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
+        <div id="topInsightEmpty" class="hidden text-center py-8">
+          <div class="text-slate-300 text-4xl mb-2"><i class="fa-regular fa-clock"></i></div>
+          <p class="text-sm font-semibold text-slate-400">Belum ada insight valid yang masuk. Jadilah yang pertama!</p>
+        </div>
+      </div>
+
+      <!-- Visualisasi Bar Chart & Tata Cara Pelaporan -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left Column: Premium Segmented Doughnut Chart Keaktifan -->
+        <div class="lg:col-span-7 bg-white rounded-3xl p-6 shadow-xl border border-amber-200/50">
+          <div class="flex justify-between items-center border-b border-slate-100 pb-4 mb-4">
+            <div>
+              <h3 class="font-title text-xl font-bold text-slate-800">📊 Statistik Keaktifan Laporan</h3>
+              <p class="text-xs text-slate-500">Persentase setoran harian vs kelalaian secara real-time</p>
+            </div>
+            <select id="chartScopeToggle" onchange="updateStatsChart()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-700 outline-none focus:ring-2 focus:ring-amber-400">
+              <option value="activeDate">Tanggal Laporan</option>
+              <option value="all">Semua Hari</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
+            <div class="bg-slate-50 border border-slate-100 p-3 rounded-2xl text-center">
+              <span class="text-[9px] font-bold uppercase text-slate-400">Rasio Melapor</span>
+              <p id="statPercentageLapor" class="text-base font-black text-emerald-600 mt-1">0%</p>
+            </div>
+            <div class="bg-slate-50 border border-slate-100 p-3 rounded-2xl text-center">
+              <span class="text-[9px] font-bold uppercase text-slate-400">Total Setoran</span>
+              <p id="statTotalSetoran" class="text-base font-black text-slate-800 mt-1">0</p>
+            </div>
+            <div class="bg-slate-50 border border-slate-100 p-3 rounded-2xl text-center">
+              <span class="text-[9px] font-bold uppercase text-slate-400">Total Lapor</span>
+              <p id="statTotalLapor" class="text-base font-black text-emerald-500 mt-1">0</p>
+            </div>
+            <div class="bg-slate-50 border border-slate-100 p-3 rounded-2xl text-center">
+              <span class="text-[9px] font-bold uppercase text-slate-400">Total Alpa</span>
+              <p id="statTotalAlpa" class="text-base font-black text-rose-600 mt-1">0</p>
+            </div>
+          </div>
+
+          <!-- Beautiful Premium Chart Container -->
+          <div class="relative w-full h-[280px] flex items-center justify-center">
+            <canvas id="statsChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Right Column: Relaxed Guidelines Board -->
+        <div class="lg:col-span-5 bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-3xl p-6 shadow-xl border border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3 mb-4">
+              <div class="w-10 h-10 bg-amber-400 text-slate-950 rounded-xl flex items-center justify-center text-lg shadow">
+                <i class="fa-solid fa-scroll animate-bounce"></i>
+              </div>
+              <div>
+                <h3 class="font-title text-lg font-bold text-amber-400">Papan Aturan & Tata Cara</h3>
+                <p class="text-[10px] text-slate-400">Biar Petualangan Membaca Kamu Gak Alpa!</p>
+              </div>
+            </div>
+
+            <p class="text-sm text-slate-300 mb-4 font-semibold leading-relaxed">
+              Yo Pejuang Literasi PABOBA! 😎 Biar petualangan membaca kamu makin mulus tanpa kena penalti HP, nih dengerin panduan santai berikut:
+            </p>
+
+            <ul class="space-y-4 text-xs text-slate-300">
+              <li class="flex gap-3">
+                <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center flex-shrink-0">1</span>
+                <div>
+                  <strong class="text-white block mb-0.5">Membaca Minimal 10 Halaman! 📖</strong>
+                  Target harian kita minimal membaca 10 halaman per hari ya biar progres petualanganmu makin mantap dan konsisten!
+                </div>
+              </li>
+              <li class="flex gap-3">
+                <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center flex-shrink-0">2</span>
+                <div>
+                  <strong class="text-white block mb-0.5">Insight Berbobot (3-5 Kalimat) ✍️</strong>
+                  Tuliskan insight atau intisari penting dari bacaanmu hari ini minimal 3 sampai 5 kalimat lengkap biar nempel di otak!
+                </div>
+              </li>
+              <li class="flex gap-3">
+                <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center flex-shrink-0">3</span>
+                <div>
+                  <strong class="text-white block mb-0.5">Pencet Tombol "Peserta" di Atas 🚀</strong>
+                  Untuk menyetorkan laporan harian kamu, silakan pencet tombol menu "Peserta" di header atas ya. Di sana form pengisian lengkap sudah menanti!
+                </div>
+              </li>
+              <li class="flex gap-3">
+                <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center flex-shrink-0">4</span>
+                <div>
+                  <strong class="text-white block mb-0.5">Tenggat Waktu Jam 22:00 WIB ⏰</strong>
+                  Ini penting banget! Lewat dari jam 10 malam, robot kami bakal otomatis nyatet kamu alpa. Alpa berarti HP regu kamu langsung bocor!
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-amber-400/10 border border-amber-400/20 p-4 rounded-2xl mt-6 text-center">
+            <p class="text-xs text-amber-300 italic font-semibold">"Santai tapi konsisten, yuk kita taklukkan petualangan Next Page Challenge bersama PABOBA! 🚀"</p>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- VIEW 2: PARTICIPANT VIEW -->
+    <section id="viewPeserta" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- Column 2A: Setor Laporan & Info Pendukung (5/12) -->
+      <div class="lg:col-span-5 flex flex-col gap-6">
+        
+        <!-- Card: Setor Laporan Harian -->
+        <div class="bg-white rounded-3xl p-6 shadow-xl border border-amber-200/50 relative overflow-hidden">
+          <div class="absolute -right-8 -top-8 w-24 h-24 bg-amber-100 rounded-full opacity-50 pointer-events-none"></div>
+          
+          <div class="flex items-center gap-3 mb-5 border-b border-slate-100 pb-4">
+            <div class="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center text-white text-lg shadow-md shadow-amber-500/20">
+              <i class="fa-solid fa-file-signature"></i>
+            </div>
+            <div>
+              <h2 class="font-title text-xl font-bold text-slate-800">Setor Laporan Harian</h2>
+              <p class="text-xs text-slate-400">NPC Daily Reading Log Tracker</p>
+            </div>
+          </div>
+
+          <!-- Lock Warning Panel -->
+          <div id="lockWarning" class="hidden bg-rose-50 border border-rose-200 rounded-2xl p-4 mb-5 flex gap-3 text-rose-700 animate-pulse">
+            <i class="fa-solid fa-lock text-xl mt-0.5"></i>
+            <div>
+              <h4 class="font-bold text-sm">Waktu Pelaporan Ditutup!</h4>
+              <p class="text-xs text-rose-600/90 mt-0.5">Jam telah melewati batas maksimal (22:00 WIB). Akses pengisian ditutup otomatis. Silakan hubungi PJ untuk rekap manual.</p>
+            </div>
+          </div>
+
+          <!-- Status Indicator Grid -->
+          <div class="grid grid-cols-3 gap-2 mb-4">
+            <div class="bg-green-500/10 border border-green-500/20 text-green-700 p-2 rounded-xl text-center">
+              <div class="text-[10px] font-bold uppercase text-green-600">Laporan</div>
+              <div class="text-xs mt-1 font-semibold flex items-center justify-center gap-1"><span class="w-2.5 h-2.5 bg-green-500 rounded-full inline-block"></span> Lapor</div>
+            </div>
+            <div class="bg-rose-500/10 border border-rose-500/20 text-rose-700 p-2 rounded-xl text-center">
+              <div class="text-[10px] font-bold uppercase text-rose-600">Tidak Lapor</div>
+              <div class="text-xs mt-1 font-semibold flex items-center justify-center gap-1"><span class="w-2.5 h-2.5 bg-rose-500 rounded-full inline-block"></span> Alpa</div>
+            </div>
+            <div class="bg-blue-500/10 border border-blue-500/20 text-blue-700 p-2 rounded-xl text-center">
+              <div class="text-[10px] font-bold uppercase text-blue-600">Reset HP</div>
+              <div class="text-xs mt-1 font-semibold flex items-center justify-center gap-1"><span class="w-2.5 h-2.5 bg-blue-500 rounded-full inline-block"></span> Reset</div>
+            </div>
+          </div>
+
+          <!-- Form Fields -->
+          <div class="space-y-4">
+            <!-- Selection Date -->
+            <div>
+              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Tanggal Laporan Aktif</label>
+              <div class="flex items-center gap-2">
+                <div id="displayActiveDate" class="flex-1 bg-slate-50 border border-slate-200 text-slate-700 rounded-xl px-4 py-2.5 font-semibold text-sm flex items-center gap-2">
+                  <i class="fa-regular fa-calendar text-amber-500"></i>
+                  <span>Memuat Tanggal...</span>
+                </div>
+                <input type="date" id="pjDateSetter" onchange="updatePjTargetDate()" class="hidden flex-1 border-2 border-amber-300 focus:border-amber-500 outline-none rounded-xl px-3 py-2 text-sm font-semibold transition-all">
+              </div>
+              <p id="pjDateSetterLabel" class="hidden text-[10px] text-amber-600 font-bold mt-1 uppercase tracking-wider"><i class="fa-solid fa-gear"></i> Fitur PJ: Bebas Atur Tanggal Laporan</p>
+            </div>
+
+            <!-- Select Participant -->
+            <div>
+              <label for="selectParticipant" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Nama Peserta</label>
+              <select id="selectParticipant" class="w-full bg-slate-50 border-2 border-slate-100 focus:border-amber-400 focus:bg-white outline-none rounded-xl px-4 py-2.5 text-sm font-medium transition-all text-slate-700 shadow-sm">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+
+            <!-- Select Report Status -->
+            <div>
+              <label for="selectStatus" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Status Kegiatan</label>
+              <select id="selectStatus" onchange="detectInsightSentences()" class="w-full bg-slate-50 border-2 border-slate-100 focus:border-amber-400 focus:bg-white outline-none rounded-xl px-4 py-2.5 text-sm font-medium transition-all text-slate-700 shadow-sm">
+                <option value="Laporan" class="text-green-600 font-semibold">🟢 Laporan (Min. 10 Halaman)</option>
+                <option value="Tidak Laporan" class="text-rose-600 font-semibold">🔴 Tidak Laporan</option>
+                <option value="Reset HP" id="statusResetHpOption" class="hidden text-blue-600 font-semibold">🔵 Reset HP</option>
+                <option value="Gugur" id="statusGugurOption" class="hidden text-slate-900 font-semibold">⚫ Gugur</option>
+              </select>
+            </div>
+
+            <!-- Judul Buku -->
+            <div>
+              <label for="bookTitle" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Judul Buku</label>
+              <input type="text" id="bookTitle" maxlength="150" oninput="detectInsightSentences()" placeholder="Judul buku yang kamu baca hari ini" class="w-full bg-slate-50 border-2 border-slate-100 focus:border-amber-400 focus:bg-white outline-none rounded-xl px-4 py-2.5 text-sm font-medium transition-all text-slate-700 shadow-sm">
+            </div>
+
+            <!-- Penulis -->
+            <div>
+              <label for="bookAuthor" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Penulis</label>
+              <input type="text" id="bookAuthor" maxlength="120" oninput="detectInsightSentences()" placeholder="Nama penulis buku" class="w-full bg-slate-50 border-2 border-slate-100 focus:border-amber-400 focus:bg-white outline-none rounded-xl px-4 py-2.5 text-sm font-medium transition-all text-slate-700 shadow-sm">
+            </div>
+
+            <!-- Jumlah Halaman (awal - akhir) -->
+            <div>
+              <label for="pageStart" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Jumlah Halaman Yang Dibaca</label>
+              <div class="flex items-center gap-2">
+                <input type="number" id="pageStart" min="1" step="1" inputmode="numeric" oninput="detectInsightSentences()" placeholder="Dari hal." class="w-full bg-slate-50 border-2 border-slate-100 focus:border-amber-400 focus:bg-white outline-none rounded-xl px-4 py-2.5 text-sm font-medium transition-all text-slate-700 shadow-sm">
+                <span class="text-slate-400 font-bold">-</span>
+                <input type="number" id="pageEnd" min="1" step="1" inputmode="numeric" oninput="detectInsightSentences()" placeholder="Sampai hal." class="w-full bg-slate-50 border-2 border-slate-100 focus:border-amber-400 focus:bg-white outline-none rounded-xl px-4 py-2.5 text-sm font-medium transition-all text-slate-700 shadow-sm">
+              </div>
+              <p id="pageRangeInfo" class="text-[11px] font-bold text-slate-400 mt-1.5">Isi halaman awal dan akhir, contoh 10 - 20.</p>
+            </div>
+
+            <!-- Kolom Insight + Pendeteksi Kalimat (hanya titik) -->
+            <div>
+              <label for="insightText" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Insight Bacaan (Min. 3 Kalimat)</label>
+              <textarea id="insightText" rows="4" oninput="detectInsightSentences()" placeholder="Tulis insight bacaanmu hari ini. Akhiri setiap kalimat dengan tanda titik. Contoh: Hari ini saya belajar sesuatu. Hal itu mengubah cara pandang saya. Saya akan menerapkannya besok." class="w-full bg-slate-50 border-2 border-slate-100 focus:border-amber-400 focus:bg-white outline-none rounded-xl px-4 py-2.5 text-sm font-medium transition-all text-slate-700 shadow-sm resize-y"></textarea>
+              <div id="insightCounterBox" class="state-empty mt-2 border rounded-xl px-3 py-2 text-xs font-bold flex items-center justify-between gap-2">
+                <span id="insightCounterMsg"><i class="fa-regular fa-pen-to-square"></i> Belum ada insight. Minimal 3 kalimat bertitik.</span>
+                <span id="insightCounterNum" class="whitespace-nowrap">0/3</span>
+              </div>
+            </div>
+
+            <!-- Submission Button -->
+            <button onclick="submitDailyLog()" id="btnSubmitLog" class="w-full bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold py-3.5 rounded-xl transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2 mt-2">
+              <i class="fa-solid fa-paper-plane"></i> Kirim Laporan
+            </button>
+            <p id="submitGateHint" class="hidden text-center text-[11px] font-bold text-rose-600"><i class="fa-solid fa-lock"></i> Tombol terbuka setelah judul buku, penulis, jumlah halaman, dan insight (minimal 3 kalimat bertitik) terisi.</p>
+          </div>
+
+        </div>
+
+        <!-- Card: Belum Lapor Hari Ini -->
+        <div class="bg-white rounded-3xl p-6 shadow-xl border border-amber-200/50">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-rose-500 rounded-xl flex items-center justify-center text-white text-lg shadow-md shadow-rose-500/20">
+                <i class="fa-solid fa-user-clock animate-pulse"></i>
+              </div>
+              <div>
+                <h2 class="font-title text-lg font-bold text-slate-800">Belum Lapor Hari Ini</h2>
+                <p class="text-xs text-slate-400">Daftar pejuang yang ditunggu setoran target 10 halamannya</p>
+              </div>
+            </div>
+            <span id="badgeBelumLaporCount" class="bg-rose-100 text-rose-700 text-xs font-bold px-2.5 py-1 rounded-full">0 Orang</span>
+          </div>
+          
+          <!-- Scrollable Grid of Names -->
+          <div id="belumLaporContainer" class="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-[220px] overflow-y-auto pr-1">
+            <!-- Dynamically populated with red blinking indicators -->
+          </div>
+        </div>
+
+        <!-- Card: Jadwal Piket & Tim PJ Group -->
+        <div class="bg-white rounded-3xl p-6 shadow-xl border border-amber-200/50">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center text-white text-lg shadow-md">
+                <i class="fa-solid fa-user-shield"></i>
+              </div>
+              <div>
+                <h2 class="font-title text-lg font-bold text-slate-800">Tim & Piket PJ Group</h2>
+                <p class="text-xs text-slate-400">PABOBA Facilitators Schedule</p>
+              </div>
+            </div>
+            <div class="flex gap-1.5">
+              <button id="btnPjPiketSettings" onclick="openPiketSettings()" class="hidden text-xs bg-slate-100 hover:bg-amber-100 text-slate-700 font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200 hover:border-amber-300 transition-all flex items-center gap-1">
+                <i class="fa-solid fa-pen-to-square"></i> Kelola
+              </button>
+              <button id="btnPjPiketClear" onclick="clearPiketSchedules()" class="hidden text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold px-2.5 py-1.5 rounded-lg border border-rose-200 transition-all flex items-center gap-1">
+                <i class="fa-solid fa-trash-can"></i> Bersihkan
+              </button>
+            </div>
+          </div>
+
+          <!-- Render Current Schedule - Scrollable List -->
+          <div class="space-y-3 max-h-[280px] overflow-y-auto pr-1" id="piketListContainer">
+            <!-- Dynamically filled -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Column 2B: Tables and Database Log tabs (7/12) -->
+      <div class="lg:col-span-7 flex flex-col gap-6">
+        
+        <!-- Tab Controls -->
+        <div class="bg-white p-2.5 rounded-2xl shadow-md border border-amber-200/30 flex gap-2 overflow-x-auto">
+          <button id="tabBtn2" onclick="switchMainTab(2)" class="flex-1 whitespace-nowrap text-sm font-bold px-4 py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 text-slate-500 hover:bg-slate-50">
+            <i class="fa-solid fa-table"></i> Laporan Rekapan
+          </button>
+          <button id="tabBtn3" onclick="switchMainTab(3)" class="flex-1 whitespace-nowrap text-sm font-bold px-4 py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 text-slate-500 hover:bg-slate-50">
+            <i class="fa-solid fa-heart-pulse"></i> Partner & HP
+          </button>
+          <!-- Tab Kontrol PJ (Hanya Terbuka untuk Mode PJ) -->
+          <button id="tabBtn4" onclick="switchMainTab(4)" class="hidden flex-1 whitespace-nowrap text-sm font-bold px-4 py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 text-slate-500 hover:bg-slate-50">
+            <i class="fa-solid fa-gears text-amber-500"></i> Kontrol PJ
+          </button>
+        </div>
+
+        <!-- TAB CONTENT: Rekapan (TAB 2) -->
+        <div id="tabContent2" class="space-y-6">
+          <div class="bg-white rounded-3xl p-6 shadow-xl border border-amber-200/50">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-5 mb-5">
+              <div>
+                <h2 class="font-title text-xl font-bold text-slate-800">Tabel Laporan Rekapan</h2>
+                <p class="text-xs text-slate-400">Daftar lengkap setoran masuk</p>
+              </div>
+              <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                <select id="filterActiveOnly" onchange="visibleLogsLimit = 50; renderLaporanTable();" class="bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-755 outline-none">
+                  <option value="all">Semua Laporan</option>
+                  <option value="laporan">Khusus Yang Melapor</option>
+                  <option value="tidak">Khusus Tidak Melapor</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Real Time Filter Tools & Export Controls -->
+            <div id="pjExportToolsPanel" class="hidden bg-slate-50 rounded-2xl p-4 mb-5 border border-slate-100 grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+              <div class="md:col-span-8 flex flex-wrap gap-2 items-center">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider mr-1">Filter Export PDF:</span>
+                <input type="date" id="pdfStartDate" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-xs outline-none">
+                <span class="text-slate-400 text-xs">s/d</span>
+                <input type="date" id="pdfEndDate" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-xs outline-none">
+              </div>
+              <div class="md:col-span-4 flex justify-end gap-1.5 w-full">
+                <button onclick="exportLaporanPDF()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3 py-1.5 rounded-lg shadow transition-all flex items-center gap-1" title="Unduh Tabel Laporan">
+                  <i class="fa-solid fa-file-pdf"></i> Ekspor PDF
+                </button>
+                <button onclick="exportGrafikPDF()" class="bg-amber-500 hover:bg-amber-600 text-amber-950 font-bold text-xs px-3 py-1.5 rounded-lg shadow transition-all flex items-center gap-1" title="Unduh Hasil Grafik Statistik">
+                  <i class="fa-solid fa-chart-pie"></i> Ekspor PDF Grafik
+                </button>
+                <button onclick="clearDatabaseDialog()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-3 py-1.5 rounded-lg shadow transition-all flex items-center gap-1">
+                  <i class="fa-solid fa-trash-can"></i> Bersihkan
+                </button>
+              </div>
+            </div>
+
+            <!-- Table Content Wrapper -->
+            <div class="overflow-x-auto rounded-2xl border border-slate-100 max-h-[450px] overflow-y-auto" id="rekapanTableWrapper">
+              <table class="w-full text-left border-collapse min-w-[500px]">
+                <thead class="sticky top-0 bg-slate-50 z-10 shadow-sm">
+                  <tr class="border-b border-slate-100">
+                    <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Tanggal</th>
+                    <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Nama</th>
+                    <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Status</th>
+                    <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">Insight</th>
+                    <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 text-amber-600" id="colHeaderTrackingTime">Waktu</th>
+                    <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 hidden" id="colHeaderPjAction">Aksi PJ</th>
+                  </tr>
+                </thead>
+                <tbody id="laporanTableBody" class="divide-y divide-slate-100 text-sm text-slate-700">
+                  <!-- Dynamically filled with logs -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Load More Pagination Button -->
+            <div id="loadMoreContainer" class="flex justify-center mt-4 hidden">
+              <button onclick="loadMoreLogs()" class="bg-slate-100 hover:bg-amber-100 border border-slate-200 hover:border-amber-400 text-slate-700 hover:text-amber-950 font-bold text-xs px-4 py-2.5 rounded-xl transition-all shadow-sm flex items-center gap-1.5 hover:-translate-y-0.5">
+                <i class="fa-solid fa-arrow-down-short-wide"></i> Tampilkan Lebih Banyak (<span id="remainingLogsCount">0</span> data lagi)
+              </button>
+            </div>
+
+            <div id="emptyTableState" class="hidden text-center py-10">
+              <div class="text-slate-300 text-4xl mb-2"><i class="fa-solid fa-box-open"></i></div>
+              <p class="text-sm font-semibold text-slate-400">Belum ada rekapitulasi laporan tercatat</p>
+            </div>
+          </div>
+
+          <!-- Galeri Insight Member -->
+          <div id="insightGalleryCard" class="bg-white rounded-3xl p-6 shadow-xl border border-amber-200/50">
+            <div class="border-b border-slate-100 pb-4 mb-4">
+              <h2 class="font-title text-xl font-bold text-slate-800"><i class="fa-solid fa-lightbulb text-amber-500"></i> Galeri Insight Member</h2>
+              <p class="text-xs text-slate-400">Insight yang sudah ditulis member. Gunakan filter untuk menyaring.</p>
+            </div>
+
+            <div class="bg-slate-50 rounded-2xl p-4 mb-4 border border-slate-100 grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+              <select id="insightFilterName" onchange="insightVisibleLimit = 12; renderInsightGallery();" class="md:col-span-3 bg-white border border-slate-200 rounded-lg px-2.5 py-2 text-xs font-semibold text-slate-700 outline-none">
+                <option value="">Semua Member</option>
+              </select>
+              <input type="date" id="insightFilterDate" onchange="insightVisibleLimit = 12; renderInsightGallery();" class="md:col-span-3 bg-white border border-slate-200 rounded-lg px-2.5 py-2 text-xs outline-none text-slate-700">
+              <select id="insightFilterQuality" onchange="insightVisibleLimit = 12; renderInsightGallery();" class="md:col-span-3 bg-white border border-slate-200 rounded-lg px-2.5 py-2 text-xs font-semibold text-slate-700 outline-none">
+                <option value="all">Semua Insight Tertulis</option>
+                <option value="valid">Hanya Insight Valid (min. 3 kalimat)</option>
+                <option value="kurang">Hanya Yang Kurang Dari 3 Kalimat</option>
+              </select>
+              <input type="text" id="insightFilterKeyword" oninput="insightVisibleLimit = 12; renderInsightGallery();" placeholder="Cari kata kunci, judul, penulis..." class="md:col-span-3 bg-white border border-slate-200 rounded-lg px-2.5 py-2 text-xs outline-none text-slate-700">
+              <div class="md:col-span-12 flex items-center justify-between gap-2">
+                <span id="insightGalleryCount" class="text-xs font-bold text-slate-500">0 insight</span>
+                <button onclick="resetInsightFilters()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3 py-1.5 rounded-lg transition-all"><i class="fa-solid fa-rotate-left"></i> Reset Filter</button>
+              </div>
+            </div>
+
+            <div id="insightGalleryList" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[560px] overflow-y-auto pr-1"></div>
+
+            <div id="insightLoadMoreContainer" class="hidden flex justify-center mt-4">
+              <button onclick="insightVisibleLimit += 12; renderInsightGallery();" class="bg-slate-100 hover:bg-amber-100 border border-slate-200 hover:border-amber-400 text-slate-700 hover:text-amber-950 font-bold text-xs px-4 py-2.5 rounded-xl transition-all shadow-sm flex items-center gap-1.5">
+                <i class="fa-solid fa-arrow-down-short-wide"></i> Tampilkan Lebih Banyak (<span id="insightRemainingCount">0</span> lagi)
+              </button>
+            </div>
+
+            <div id="insightGalleryEmpty" class="hidden text-center py-10">
+              <div class="text-slate-300 text-4xl mb-2"><i class="fa-regular fa-comment-dots"></i></div>
+              <p class="text-sm font-semibold text-slate-400">Belum ada insight yang cocok dengan filter</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB CONTENT: Partner HP Board (TAB 3) -->
+        <div id="tabContent3" class="hidden space-y-6">
+          
+          <!-- RPG Roadmap Flowchart -->
+          <div class="bg-gradient-to-r from-amber-500/15 via-amber-400/5 to-orange-500/10 rounded-3xl p-6 border border-amber-300/40 shadow-sm relative overflow-hidden">
+            <div class="absolute -right-12 -bottom-12 w-32 h-32 bg-amber-400/10 rounded-full blur-2xl"></div>
+            <h3 class="font-title text-base md:text-lg font-bold text-amber-800 mb-4 flex items-center gap-2">
+              <i class="fa-solid fa-map-location-dot animate-bounce text-amber-600"></i> Peta Jalan & Alur Quest Game NPC
+            </h3>
+            <div class="relative flex flex-col lg:flex-row justify-between items-stretch gap-4 md:gap-3 z-10">
+              <div class="flex-1 bg-white rounded-2xl p-4 border border-amber-100 shadow-sm flex flex-col items-center text-center hover:scale-[1.02] transition-all">
+                <span class="w-8 h-8 bg-amber-400 text-slate-900 font-bold rounded-full flex items-center justify-center text-xs shadow-md mb-2">1</span>
+                <h4 class="font-title text-xs font-bold text-slate-700 uppercase tracking-wide">📖 Membaca</h4>
+                <p class="text-[10px] text-slate-400 mt-1 leading-relaxed">Membaca buku target minimal <strong>10 halaman</strong>.</p>
+              </div>
+              <div class="hidden lg:flex items-center text-amber-400 text-sm"><i class="fa-solid fa-chevron-right"></i></div>
+              <div class="flex-1 bg-white rounded-2xl p-4 border border-amber-100 shadow-sm flex flex-col items-center text-center hover:scale-[1.02] transition-all">
+                <span class="w-8 h-8 bg-amber-500 text-white font-bold rounded-full flex items-center justify-center text-xs shadow-md mb-2 animate-pulse">2</span>
+                <h4 class="font-title text-xs font-bold text-slate-700 uppercase tracking-wide">✍️ Setor Log</h4>
+                <p class="text-[10px] text-slate-400 mt-1 leading-relaxed">Sertakan insight berbobot minimal <strong>3-5 kalimat</strong>.</p>
+              </div>
+              <div class="hidden lg:flex items-center text-amber-400 text-sm"><i class="fa-solid fa-chevron-right"></i></div>
+              <div class="flex-1 bg-white rounded-2xl p-4 border border-amber-100 shadow-sm flex flex-col items-center text-center hover:scale-[1.02] transition-all">
+                <span class="w-8 h-8 bg-emerald-500 text-white font-bold rounded-full flex items-center justify-center text-xs shadow-md mb-2">3</span>
+                <h4 class="font-title text-xs font-bold text-slate-700 uppercase tracking-wide">⚖️ Kalkulasi HP</h4>
+                <p class="text-[10px] text-slate-400 mt-1 leading-relaxed">Lapor = Nyawa Aman.<br>Alpa = HP Regu dipotong -1.</p>
+              </div>
+              <div class="hidden lg:flex items-center text-amber-400 text-sm"><i class="fa-solid fa-chevron-right"></i></div>
+              <div class="flex-1 bg-white rounded-2xl p-4 border border-amber-100 shadow-sm flex flex-col items-center text-center hover:scale-[1.02] transition-all">
+                <span class="w-8 h-8 bg-slate-800 text-amber-400 font-bold rounded-full flex items-center justify-center text-xs shadow-md mb-2">4</span>
+                <h4 class="font-title text-xs font-bold text-slate-700 uppercase tracking-wide">🛡️ Keaktifan</h4>
+                <p class="text-[10px] text-slate-400 mt-1 leading-relaxed">Jika partner &lt;= -7 HP / Single &lt;= -4 HP = <strong>Gugur Bersama</strong>.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rules Summary Panel for Health Points -->
+          <div class="bg-amber-50 rounded-2xl p-4 border border-amber-200/50 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <span class="bg-emerald-100 text-emerald-800 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider"><i class="fa-solid fa-people-group"></i> Kuota Partner</span>
+              <p class="text-xs text-slate-600 mt-1.5 leading-relaxed"><strong>Sistem Partner:</strong> Memulai dengan 0 HP. Jika menyentuh <strong class="text-rose-600">-7 HP</strong>, maka kedua partner dinyatakan gugur bersama.</p>
+            </div>
+            <div>
+              <span class="bg-amber-100 text-amber-800 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider"><i class="fa-solid fa-user"></i> Single Fighter</span>
+              <p class="text-xs text-slate-600 mt-1.5 leading-relaxed"><strong>Sistem Single:</strong> Memulai dengan 0 HP. Jika menyentuh <strong class="text-rose-600">-4 HP</strong>, maka Anda gugur secara individu.</p>
+            </div>
+          </div>
+
+          <!-- HP BOARD Per Anggota (Individu) -->
+          <div class="bg-white rounded-3xl p-6 shadow-xl border border-amber-200/50">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-5 mb-5">
+              <div>
+                <h2 class="font-title text-xl font-bold text-slate-800">Status HP Per Anggota (Individu)</h2>
+                <p class="text-xs text-slate-400">Peta pertahanan nyawa real-time untuk masing-masing peserta</p>
+              </div>
+              <div class="flex gap-2 w-full sm:w-auto">
+                <input type="text" id="searchIndividualHp" oninput="renderIndividualHpList()" placeholder="Cari nama..." class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs outline-none focus:border-amber-400 font-medium transition-all w-full sm:w-48">
+                <select id="filterHpStatus" onchange="renderIndividualHpList()" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-700 outline-none">
+                  <option value="all">Semua</option>
+                  <option value="aktif">Aktif</option>
+                  <option value="gugur">Gugur</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-2" id="individualHpContainer">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Dewan Duka Cita (Fallen Warriors Elimination List) -->
+          <div class="bg-slate-900 text-slate-100 rounded-3xl p-6 shadow-xl border border-slate-800">
+            <div class="border-b border-slate-800 pb-4 mb-4">
+              <h2 class="font-title text-xl font-bold text-rose-500 flex items-center gap-2">
+                <i class="fa-solid fa-skull-crossbones"></i> Dewan Duka Cita: Papan Eliminasi
+              </h2>
+              <p class="text-xs text-slate-400">Monumen kehormatan pejuang yang telah tereliminasi baik single fighter maupun gugur bersama</p>
+            </div>
+            <div id="eliminationListContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[300px] overflow-y-auto pr-2">
+              <!-- Dynamically populated with gray stone design style -->
+            </div>
+          </div>
+
+          <!-- Original Partner Table Panel -->
+          <div class="bg-white rounded-3xl p-6 shadow-xl border border-amber-200/50">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-5 mb-5">
+              <div>
+                <h2 class="font-title text-xl font-bold text-slate-800">Quest Board: Partner Health Points</h2>
+                <p class="text-xs text-slate-400">Tabel monitoring sisa kuota nyawa partner harian</p>
+              </div>
+              <button id="btnPjExportHpPdf" onclick="exportPartnerHpPDF()" class="hidden bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-3.5 py-2 rounded-xl shadow transition-all flex items-center gap-1">
+                <i class="fa-solid fa-file-pdf text-amber-400"></i> Ekspor PDF Quest HP
+              </button>
+            </div>
+
+            <!-- Partner/Single List Table Layout -->
+            <div class="overflow-x-auto rounded-2xl border border-slate-100">
+              <table class="w-full text-left border-collapse min-w-[500px]">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-100">
+                    <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Jenis Regu</th>
+                    <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Nama Peserta (Partner)</th>
+                    <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Health Points Status</th>
+                    <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Status Keaktifan</th>
+                    <th class="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider hidden" id="colHeaderHpAction">Aksi Kontrol PJ</th>
+                  </tr>
+                </thead>
+                <tbody id="hpTableBody" class="divide-y divide-slate-100 text-sm text-slate-700">
+                  <!-- Automatically filled -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB CONTENT: Kontrol PJ Control Console (TAB 4) -->
+        <div id="tabContent4" class="hidden space-y-6">
+          <div class="bg-white rounded-3xl p-6 shadow-xl border border-amber-200/50">
+            <div class="border-b border-slate-100 pb-4 mb-5">
+              <h2 class="font-title text-xl font-bold text-slate-800">🛡️ Dashboard Kontrol Admin PJ</h2>
+              <p class="text-xs text-slate-400">Pengaturan system database and partners config</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Panel: Atur Periode Mulai & Selesai Batch -->
+              <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 md:col-span-2">
+                <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-1.5 font-title">
+                  <i class="fa-solid fa-calendar-days text-amber-500 font-normal"></i> Pengaturan Rentang Tanggal Batch
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Tanggal Mulai Batch</label>
+                    <input type="date" id="pjBatchStartDate" onchange="saveBatchDates()" class="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-sm outline-none focus:border-amber-400 transition-all">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Tanggal Akhir Batch</label>
+                    <input type="date" id="pjBatchEndDate" onchange="saveBatchDates()" class="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-sm outline-none focus:border-amber-400 transition-all">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Panel: Tambah Peserta Manual -->
+              <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-1.5"><i class="fa-solid fa-user-plus text-amber-500"></i> Input Manual Peserta Baru</h3>
+                <div class="space-y-3">
+                  <input type="text" id="manualParticipantName" placeholder="Masukkan nama peserta..." class="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-sm outline-none focus:border-amber-400 transition-all">
+                  <button onclick="addManualParticipant()" class="w-full bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold py-2 text-xs rounded-xl transition-all shadow-sm flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-plus"></i> Tambah ke Guild
+                  </button>
+                </div>
+              </div>
+
+              <!-- Panel: Edit PIN Keamanan PJ -->
+              <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-1.5"><i class="fa-solid fa-key text-amber-500"></i> Ganti PIN Keamanan PJ</h3>
+                <div class="space-y-3">
+                  <input type="password" id="newSecurityPin" maxlength="6" placeholder="PIN Baru (Maks 6 karakter)" class="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-sm outline-none focus:border-amber-400 transition-all text-center tracking-widest">
+                  <button onclick="updatePjPin()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 text-xs rounded-xl transition-all shadow-sm flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-lock-open"></i> Simpan PIN Baru
+                  </button>
+                </div>
+              </div>
+
+              <!-- Panel: Management Partner Shuffling & Config -->
+              <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 md:col-span-2">
+                <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-2.5 flex items-center gap-1.5"><i class="fa-solid fa-shuffle text-amber-500"></i> Generator Pengacakan & Input Partner</h3>
+                <p class="text-xs text-slate-500 mb-4 leading-relaxed">Gunakan alat pengacak otomatis untuk meratakan partner di Batch ini, atau tambahkan partner secara manual di bawah jika ada kecocokan khusus.</p>
+                
+                <!-- Manual Partner Form -->
+                <div class="bg-white border border-slate-200/80 rounded-xl p-3.5 space-y-3 mb-4">
+                  <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider"><i class="fa-solid fa-pen"></i> Input Partner Manual</span>
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                    <select id="manualPartner1" class="bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs outline-none focus:border-amber-400 font-semibold text-slate-700">
+                      <!-- Dynamic Options -->
+                    </select>
+                    <select id="manualPartner2" class="bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs outline-none focus:border-amber-400 font-semibold text-slate-700">
+                      <!-- Dynamic Options -->
+                    </select>
+                    <button onclick="addManualPartnerPair()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 px-3 text-xs rounded-lg transition-all flex items-center justify-center gap-1">
+                      <i class="fa-solid fa-link"></i> Pasangkan Manual
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Dedicated Resign Feature Panel -->
+                <div class="bg-white border border-rose-200/80 rounded-xl p-3.5 space-y-3 mb-4 shadow-sm">
+                  <span class="text-[10px] font-bold text-rose-600 uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-user-slash"></i> Fitur Khusus: Proses Pengunduran Diri (Resign)</span>
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                    <select id="resignParticipantSelector" class="bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs outline-none focus:border-amber-400 font-semibold text-slate-700 sm:col-span-2">
+                      <!-- Dynamic Options -->
+                    </select>
+                    <button onclick="triggerDedicatedResign()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 px-3 text-xs rounded-lg transition-all flex items-center justify-center gap-1 shadow-sm hover:shadow">
+                      <i class="fa-solid fa-user-slash"></i> Proses Resign
+                    </button>
+                  </div>
+                  <p class="text-[9px] text-slate-400 leading-relaxed"><i class="fa-solid fa-circle-info"></i> Peserta yang resign akan otomatis dipisahkan dari pasangannya, partner yang ditinggalkan beralih menjadi <strong>Single Fighter (HP di-reset ke 0)</strong>, dan peserta yang resign otomatis tercatat permanen di <strong>Sheet "Gugur"</strong> dengan status "Mengundurkan Diri".</p>
+                </div>
+
+                <!-- Quick Shuffle Actions -->
+                <div class="flex flex-wrap gap-2.5">
+                  <button onclick="shuffleAllPartners()" class="flex-1 bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold py-2.5 text-xs rounded-xl transition-all shadow-sm flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-dice"></i> Acak Partner Otomatis
+                  </button>
+                  <button onclick="resetPartnerDatabase()" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 text-xs rounded-xl transition-all shadow-sm flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-arrows-rotate"></i> Reset / Hapus Semua Partner
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+  </main>
+
+  <!-- MODAL: WELCOME NOTIFICATION POPUP -->
+  <div id="modalWelcome" class="fixed inset-0 bg-slate-950/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 transition-all duration-300">
+    <div class="bg-white rounded-3xl p-6 md:p-8 shadow-2xl max-w-lg w-full border-4 border-amber-400 text-center relative transform transition-all overflow-hidden">
+      <div class="absolute -right-16 -top-16 w-36 h-36 bg-amber-100 rounded-full opacity-60"></div>
+      
+      <div class="w-20 h-20 bg-amber-500 text-slate-900 rounded-2xl flex items-center justify-center text-4xl mx-auto shadow-md mb-4 animate-bounce relative z-10">
+        <i class="fa-solid fa-book-open-reader"></i>
+      </div>
+      
+      <h2 class="font-title text-2xl md:text-3xl font-bold text-slate-800 mb-2 relative z-10">Selamat Datang di Next Page Challenge!</h2>
+      <p class="text-xs font-bold text-amber-600 tracking-wider uppercase mb-4 relative z-10">🛡️ PABOBA Guild Adventure System 🛡️</p>
+      
+      <div class="bg-amber-50/70 border border-amber-200/50 rounded-2xl p-4 mb-5 text-left text-xs text-slate-600 leading-relaxed space-y-2 relative z-10">
+        <p><strong>Next Page Challenge (NPC)</strong> adalah inisiatif klan PABOBA untuk mendampingi dan memicu kebiasaan konsisten membaca buku Anda.</p>
+        <p>Setiap harinya, Anda berkewajiban mengirimkan status membaca harian Anda sebelum batas waktu pukul <strong>22:00 WIB</strong> untuk menjaga agar kuota Health Points (HP) tidak berkurang!</p>
+        <p class="bg-white p-2.5 rounded-lg border border-amber-100 font-semibold"><i class="fa-solid fa-bell text-amber-500"></i> Tip: Simpan progres membaca hari ini, jaga solidaritas klan, dan raih Health Points maksimal!</p>
+      </div>
+
+      <div class="flex flex-col gap-3 relative z-10">
+        <div class="flex items-center justify-center gap-2 mb-1">
+          <input type="checkbox" id="chkDoNotShowWelcome" class="w-4 h-4 text-amber-500 border-slate-300 rounded focus:ring-amber-400">
+          <label for="chkDoNotShowWelcome" class="text-xs text-slate-500 font-semibold cursor-pointer">Jangan tunjukkan panduan ini lagi secara otomatis</label>
+        </div>
+        
+        <button onclick="closeWelcomeModal()" class="w-full bg-slate-900 hover:bg-slate-950 text-white font-bold py-3 rounded-xl text-sm shadow-md transition-all">
+          Mulai Petualangan Membaca!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST: PJ Duty Notification (Floating Bottom-Right) -->
+  <div id="pjDutyToast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-500 ease-out pointer-events-none">
+    <div class="bg-slate-900 text-white px-5 py-4 rounded-2xl shadow-2xl border-2 border-amber-400 flex items-center gap-3.5 max-w-sm pointer-events-auto">
+      <div class="w-10 h-10 bg-amber-400 text-slate-900 rounded-xl flex items-center justify-center text-lg flex-shrink-0 animate-bounce">
+        <i class="fa-solid fa-user-shield"></i>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-[9px] text-amber-400 font-bold uppercase tracking-wider">PJ Piket Hari Ini</p>
+        <p id="pjDutyToastName" class="text-sm font-extrabold truncate">Memuat PJ...</p>
+      </div>
+      <button onclick="dismissPjToast()" class="text-slate-400 hover:text-white transition-colors p-1">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: PIN entry for PJ Authorization Mode -->
+  <div id="modalPin" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 transition-all duration-300">
+    <div class="bg-white rounded-3xl p-6 shadow-2xl max-w-sm w-full border border-amber-300/40 relative transform transition-all">
+      <div class="absolute right-4 top-4">
+        <button onclick="closePinModal()" class="text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 flex items-center justify-center transition-all">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      
+      <div class="text-center mt-2 mb-6">
+        <div class="w-14 h-14 bg-amber-400 text-slate-900 rounded-2xl flex items-center justify-center text-2xl mx-auto shadow-md mb-3">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h3 class="font-title text-xl font-bold text-slate-800">Akses Command Center PJ</h3>
+        <p class="text-xs text-slate-400 mt-1">Masukkan 6-Karakter PIN Keamanan</p>
+      </div>
+
+      <div class="space-y-4">
+        <input type="password" id="inputPin" maxlength="6" placeholder="••••••" class="w-full text-center text-2xl font-bold tracking-widest bg-slate-50 border-2 border-slate-100 focus:border-amber-400 focus:bg-white rounded-2xl py-3.5 outline-none transition-all">
+        
+        <div class="flex gap-2">
+          <button onclick="closePinModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-xl text-sm transition-all">
+            Batal
+          </button>
+          <button onclick="verifyPJPin()" class="flex-1 bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold py-3 rounded-xl text-sm transition-all shadow-md">
+            Verifikasi
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Motivation & Success Modal -->
+  <div id="modalSuccess" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 transition-all duration-300">
+    <div id="successModalBox" class="bg-white rounded-3xl p-8 shadow-2xl max-w-lg w-full border-4 border-amber-400 text-center relative transform transition-all overflow-hidden">
+      <div id="rpgParticleContainer" class="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl"></div>
+      <div id="successModalIconContainer" class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-4xl mx-auto shadow-inner mb-4 animate-bounce relative z-10">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <h2 id="successModalTitle" class="font-title text-2xl md:text-3xl font-bold text-slate-800 mb-2 relative z-10">Laporan Sukses Terkirim!</h2>
+      <p id="successParticipant" class="text-amber-500 font-bold text-lg uppercase tracking-wide mb-4 relative z-10">Miah</p>
+      <div class="bg-amber-50/10 border border-amber-200/40 rounded-2xl p-5 mb-6 relative z-10">
+        <p id="motivationMsg" class="text-slate-600 italic leading-relaxed text-sm">"Wah hebat sekali Miah! Halaman baru, dunia baru! Tetap konsisten ya!"</p>
+      </div>
+      <button id="successCloseBtn" onclick="closeSuccessModal()" class="w-full bg-slate-800 hover:bg-slate-950 text-white font-bold py-3.5 rounded-xl text-sm shadow-md transition-all relative z-10">
+        Selesai & Tutup
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: Spam Warning Modal -->
+  <div id="modalSpam" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 transition-all duration-300">
+    <div class="bg-white rounded-3xl p-8 shadow-2xl max-w-md w-full border-4 border-rose-500 text-center relative transform transition-all">
+      <div class="w-20 h-20 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-4xl mx-auto shadow-inner mb-4 animate-pulse">
+        <i class="fa-solid fa-triangle-exclamation animate-bounce"></i>
+      </div>
+      <h2 class="font-title text-2xl md:text-3xl font-bold text-slate-800 mb-2">Pendeteksi Spam Aktif!</h2>
+      <p id="spamParticipant" class="text-rose-600 font-bold text-lg uppercase tracking-wide mb-3">Fatih</p>
+      <div class="bg-rose-50 border border-rose-200 rounded-2xl p-5 mb-6">
+        <p class="text-rose-950 font-semibold text-sm leading-relaxed">
+          Sistem mendeteksi upaya pengiriman laporan secara berulang dalam waktu bersamaan. Anda sudah tercatat mengirimkan laporan harian untuk tanggal aktif saat ini!
+        </p>
+      </div>
+      <button onclick="closeSpamModal()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 rounded-xl text-sm shadow-md transition-all">
+        Mengerti & Kembali
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: Custom Alert Modal -->
+  <div id="modalCustomAlert" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 transition-all duration-300">
+    <div class="bg-white rounded-3xl p-6 shadow-2xl max-w-sm w-full border border-slate-200 text-center relative transform transition-all">
+      <div id="customAlertIconContainer" class="w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4"></div>
+      <h3 id="customAlertTitle" class="font-title text-xl font-bold text-slate-800 mb-1">Peringatan</h3>
+      <p id="customAlertMsg" class="text-xs text-slate-500 leading-relaxed mb-5"></p>
+      <button onclick="closeCustomAlert()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-2.5 rounded-xl text-xs transition-all">
+        OK
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: Custom Confirmation Modal -->
+  <div id="modalCustomConfirm" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 transition-all duration-300">
+    <div class="bg-white rounded-3xl p-6 shadow-2xl max-w-sm w-full border border-slate-200 text-center relative transform transition-all">
+      <div id="customConfirmIconContainer" class="w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4"></div>
+      <h3 id="customConfirmTitle" class="font-title text-xl font-bold text-slate-800 mb-1">Konfirmasi</h3>
+      <p id="customConfirmMsg" class="text-xs text-slate-500 leading-relaxed mb-5"></p>
+      <div class="flex gap-2">
+        <button onclick="closeCustomConfirm(false)" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2.5 rounded-xl text-xs transition-all">
+          Batal
+        </button>
+        <button onclick="closeCustomConfirm(true)" class="flex-1 bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold py-2.5 rounded-xl text-xs transition-all shadow-md">
+          Lanjutkan
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Piket Scheduler Settings Form -->
+  <div id="modalPiketSettings" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 transition-all duration-300">
+    <div class="bg-white rounded-3xl p-6 shadow-2xl max-w-sm w-full border border-amber-300/40 relative transform transition-all">
+      <div class="absolute right-4 top-4">
+        <button onclick="closePiketSettings()" class="text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 flex items-center justify-center transition-all">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      
+      <div class="text-center mt-2 mb-6">
+        <div class="w-14 h-14 bg-slate-900 text-amber-400 rounded-2xl flex items-center justify-center text-2xl mx-auto shadow-md mb-3">
+          <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <h3 class="font-title text-xl font-bold text-slate-800">Atur Jadwal Piket</h3>
+        <p class="text-xs text-slate-400 mt-1">Petugas Pendamping Guild Harian</p>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilih Tanggal Piket</label>
+          <input type="date" id="piketDate" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Nama Pendamping PJ</label>
+          <input type="text" id="piketPjName" placeholder="Contoh: Suro & Nuha" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:border-amber-400">
+        </div>
+        
+        <div class="flex gap-2 pt-2">
+          <button onclick="closePiketSettings()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-xl text-sm transition-all">
+            Batal
+          </button>
+          <button onclick="addPiketSchedule()" class="flex-1 bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold py-3 rounded-xl text-sm transition-all shadow-md">
+            Simpan Jadwal
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT LOGIC ENGINE -->
+  <script>
+    const CONFIG = {
+      defaultPin: "123456",
+      initialParticipants: [
+        "Fatih", "Devi", "Miah", "Ida", "Vina", "Septi", "Rii", "Wari", "Nurjanah", "Yola", 
+        "Umi", "Annisa", "Salma", "Rezki", "Azmi", "Bii", "Chairunnisa", "Mawar", "Suro", "Nuha", 
+        "Immaduddin", "Hikma", "Fadhilah", "Dino", "Emmy", "Icca", "Umy", "Eka", "Izzah", "Mimi", 
+        "Agung", "Dimas", "Jirfani", "Indra", "Dian", "Anita", "Sukarini", "Kartika", "Hasanah", 
+        "Amelia", "Putri", "Idha Sasongko", "Muslimah Annisa", "Fajriy", "Dindsan", "Aqilah", "Nur", 
+        "Melly", "Dika Septiamy"
+      ],
+      successMotivations: [
+        "Gokil abis {name}! 10 halaman dilalap habis hari ini. Otak auto-push rank ke level dewa! 🧠🔥",
+        "GG WP {name}! Progres membacamu hari ini dapet medali emas. Partner kamu auto senyum-senyum bangga nih! 🥇😎",
+        "Mantul banget, {name}! Konsistensi kamu hari ini bener-bener menyala abangku! Buku tamat, ilmu melekat! 🚀✨",
+        "Suhu {name} emang gak ada lawan! Ringkasan insight-nya gila sih, berbobot parah. Sungkem dulu! 🙇‍♂️📖",
+        "Misi harian beres, {name}! HP regu aman terkendali, naga kemalasan auto nangis di pojokan! 🐉🛡️",
+        "Satu kata buat {name}: LEGENDARIS! Lembaran baru dibaca, wawasan baru tercipta. Teruskan tren positif ini! 🌟",
+        "Gak sia-sia dapet sebutan MVP hari ini, {name}! Membaca minimal 10 halaman mah kecil buat kamu! 🤝👑",
+        "Wih, {name} lagi mode serius nih! Buku mana lagi yang mau kamu taklukkan berikutnya? Gas terus! ⛽💥",
+        "Combo strike! {name} berhasil menyetorkan insight tajam setajam silet. Partner kamu aman sentosa! 🔮⚔️",
+        "Info penting: {name} hari ini resmi bertambah pinter! Selamat menikmati EXP wawasan yang melimpah! 🏰🏰"
+      ],
+      absentMotivations: [
+        "Aduh {name}, hari ini mager melanda ya? Gak apa-apa, rehat dulu. Besok kita bales dendam baca lagi! 💤💛",
+        "HP bocor dikit gak ngaruh, {name}! Yang penting besok harus bangkit lagi, jangan biarkan regumu runtuh! 💪💥",
+        "Sayang banget hari ini absen, {name}. Yuk, kumpulin niat buat tebus kekosongan hari esok! ⏳📖",
+        "Kemalasan lagi nge-buff ya {name}? Jangan kelamaan tidurnya, lembaran buku setebal 10 halaman sudah rindu disentuh! 🌧️🕯️",
+        "Hari ini bolos quest dulu ya, {name}? Ingat, partner-mu lagi cemas nungguin kamu di arena! 🤝🛡️",
+        "Waduh, HP tim berkurang 1 gara-gara kamu absen, {name}. Besok wajib tebus dosa ya! 🥀⚡",
+        "Lagi sibuk dunia nyata ya, {name}? Santai, besok kita atur strategi lagi buat gempur lembaran buku! 🏹🏹",
+        "Rehat sejenak boleh, tapi jangan kebablasan ya {name}! Lilin literasimu jangan sampai padam! 🕯️⏳",
+        "Napas dulu, {name}. Besok kita kejar setoran bareng-bareng biar HP kembali stabil! 🛡️🌄",
+        "Petualangan terhenti sementara karena {name} lagi mode AFK. Besok balik lagi dengan kekuatan penuh ya! 🎮"
+      ],
+      mourningMotivations: [
+        "Innalillahi... Pejuang kita {name} resmi gugur dari arena Batch ini. Selamat beristirahat, kawan... 🥀🕯️",
+        "Lonceng duka berbunyi di menara klan PABOBA. {name} gugur di tengah petualangan... 🔔💀",
+        "Satu lagi bintang literasi redup. {name} tereliminasi. Perjuanganmu akan selalu dikenang di hati klan! 🥀🏰",
+        "Gugur bersama partner emang nyesek, {name}. Bersihkan senjatamu, evaluasi diri, dan mari gempur Batch berikutnya! ⚔️🏹",
+        "Langkah {name} terhenti di sini. Tetap cintai buku di luar sana, kawan seperjuangan! 🕯️⏳",
+        "Duka menyelimuti guild. {name} dinyatakan gugur dari petualangan. Terima kasih atas halaman yang pernah kaubaca! 🥀📖",
+        "Takdir berkata lain untuk {name}. Perjalanan yang hebat, namun konsistensi adalah kunci mutlak. Sampai jumpa di Batch baru! 🖤",
+        "Layar Game Over menyala untuk {name}. Jangan menyerah, bangun komitmen baru yang tak tergoyahkan! 🥀⏳",
+        "Gugurnya {name} menjadi alarm keras bagi kita semua: Konsistensi harian adalah harga mati! 🔔💀",
+        "Selamat tinggal dari medan tempur Batch ini, {name}. Istirahatlah, susun strategi baru, dan kembali lebih kuat! 🛡️🌄"
+      ]
+    };
+
+    let state = {
+      currentMode: "PESERTA",
+      activeTab: 1, 
+      activeDate: "",
+      securityPin: CONFIG.defaultPin,
+      startDate: "2026-05-01",
+      endDate: "2026-05-31",
+      participants: [...CONFIG.initialParticipants],
+      laporan: [],
+      partners: [],
+      piketPj: []
+    };
+
+    let isSubmitting = false;
+    let isInitialLoad = true;
+    let isSaving = false; 
+    let statsChart = null; 
+    let visibleLogsLimit = 50; 
+
+    function parseDateRobust(dateStr) {
+      if (!dateStr) return null;
+      if (dateStr instanceof Date) return dateStr;
+      
+      const strVal = String(dateStr).trim();
+      let parts = strVal.split(/[-/]/);
+      if (parts.length === 3) {
+        if (parts[0].length === 4) {
+          return new Date(parts[0], parts[1] - 1, parts[2]);
+        }
+        if (parts[2].length === 4) {
+          return new Date(parts[2], parts[1] - 1, parts[0]);
+        }
+      }
+      
+      const parsedDate = new Date(strVal);
+      if (!isNaN(parsedDate.getTime())) return parsedDate;
+      return null;
+    }
+
+    function getDayName(dateStr) {
+      const d = parseDateRobust(dateStr);
+      if (!d) return "";
+      const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+      return days[d.getDay()];
+    }
+
+    function formatDateId(dateStr) {
+      const d = parseDateRobust(dateStr);
+      if (!d) return "";
+      return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    function getWIBDateString() {
+      const now = new Date();
+      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const wib = new Date(utc + (3600000 * 7));
+      const yyyy = wib.getFullYear();
+      const mm = String(wib.getMonth() + 1).padStart(2, '0');
+      const dd = String(wib.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    function getYesterdayDateString() {
+      const todayStr = getWIBDateString();
+      const d = parseDateRobust(todayStr);
+      if (!d) return "";
+      d.setDate(d.getDate() - 1);
+      return formatDateStringForLoop(d);
+    }
+
+    function formatDateStringForLoop(date) {
+      const yyyy = date.getFullYear();
+      const mm = String(date.getMonth() + 1).padStart(2, '0');
+      const dd = String(date.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    // ===== Mode API (hosting di Vercel/GitHub Pages, data tetap di Google Sheets) =====
+    function isApiMode() {
+      const url = (typeof window !== 'undefined' && window.NPC_API_URL) ? String(window.NPC_API_URL).trim() : "";
+      return url.indexOf("https://script.google.com/") === 0;
+    }
+
+    function npcApiRunner() {
+      const cb = { ok: function () {}, fail: function () {} };
+      const url = String(window.NPC_API_URL).trim();
+      const api = {
+        withSuccessHandler: function (fn) { cb.ok = fn; return api; },
+        withFailureHandler: function (fn) { cb.fail = fn; return api; },
+        getDatabase: function () {
+          const sep = url.indexOf("?") === -1 ? "?" : "&";
+          fetch(url + sep + "action=load&t=" + Date.now(), { method: "GET", redirect: "follow" })
+            .then(function (res) { return res.json(); })
+            .then(function (json) {
+              if (!json || json.ok !== true) throw new Error((json && json.error) || "Respons API tidak valid");
+              cb.ok(json.data);
+            })
+            .catch(function (err) { cb.fail(err); });
+        },
+        saveStateToSheet: function (st) {
+          fetch(url, {
+            method: "POST",
+            redirect: "follow",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: "save", state: st })
+          })
+            .then(function (res) { return res.json(); })
+            .then(function (json) {
+              if (!json || json.ok !== true) throw new Error((json && json.error) || "Penyimpanan ditolak server");
+              cb.ok(true);
+            })
+            .catch(function (err) { cb.fail(err); });
+        }
+      };
+      return api;
+    }
+
+    function getRunner() {
+      return isApiMode() ? npcApiRunner() : google.script.run;
+    }
+
+    function isGoogleEnv() {
+      return isApiMode() || (typeof google !== 'undefined' && google.script && google.script.run);
+    }
+
+    function updateCloudSyncBadge(status) {
+      const badge = document.getElementById('cloudStatusBadge');
+      if (!badge) return;
+
+      if (status === 'syncing') {
+        badge.classList.remove('hidden');
+        badge.innerHTML = '<i class="fa-solid fa-cloud-arrow-up animate-bounce"></i> Menyinkronkan...';
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    function fallbackToLocalStorage() {
+      const savedState = localStorage.getItem("npc_app_state");
+      if (savedState) {
+        try {
+          const parsed = JSON.parse(savedState);
+          state.participants = parsed.participants || [...CONFIG.initialParticipants];
+          state.laporan = parsed.laporan || [];
+          state.partners = parsed.partners || [];
+          state.piketPj = parsed.piketPj || [];
+          state.securityPin = parsed.securityPin || CONFIG.defaultPin;
+          state.startDate = parsed.startDate || "2026-05-01";
+          state.endDate = parsed.endDate || "2026-05-31";
+        } catch (e) {
+          console.error("Gagal memulihkan data lokal:", e);
+        }
+      }
+      initApplicationUI();
+    }
+
+    function loadSavedState(isBackgroundSync = false) {
+      if (isSaving) return; 
+      
+      if (isGoogleEnv()) {
+        if (!isBackgroundSync) {
+          updateCloudSyncBadge('syncing');
+        }
+        getRunner()
+          .withSuccessHandler(function(db) {
+            if (isSaving) return; 
+            
+            if (!db || Object.keys(db).length === 0) {
+              db = {};
+            }
+            state.participants = db.participants || [...CONFIG.initialParticipants];
+            state.laporan = db.laporan || [];
+            state.partners = db.partners || [];
+            state.piketPj = db.piketPj || [];
+            state.securityPin = db.securityPin || CONFIG.defaultPin;
+            state.startDate = db.startDate || "2026-05-01";
+            state.endDate = db.endDate || "2026-05-31";
+            
+            updateCloudSyncBadge('synced');
+            
+            // Perform retroactive check-up on load
+            performRetroactiveAutoAbsen();
+            
+            if (isInitialLoad) {
+              isInitialLoad = false;
+              initApplicationUI();
+            } else {
+              renderLaporanTable();
+              renderHPTable();
+              renderIndividualHpList();
+              renderPiketSchedules();
+              renderBatchPeriodDisplay();
+              updateStatsChart();
+              renderBelumLaporUI();
+              updateHomeStatsGrid();
+            }
+          })
+          .withFailureHandler(function(err) {
+            console.error("Gagal sinkronisasi Google Sheets:", err);
+            showCustomAlert("Gagal Membaca Sheets", "Aplikasi tidak dapat terhubung ke Google Sheets. Sistem beralih ke Database lokal perangkat.", "fa-solid fa-triangle-exclamation", "text-rose-500", "bg-rose-50");
+            if (isInitialLoad) {
+              isInitialLoad = false;
+              fallbackToLocalStorage();
+              performRetroactiveAutoAbsen();
+            }
+          })
+          .getDatabase();
+      } else {
+        if (isInitialLoad) {
+          isInitialLoad = false;
+          fallbackToLocalStorage();
+          performRetroactiveAutoAbsen();
+        }
+      }
+    }
+
+    function startRealTimeSync() {
+      setInterval(() => {
+        loadSavedState(true);
+      }, 12000); 
+    }
+
+    function saveState() {
+      if (isGoogleEnv()) {
+        isSaving = true; 
+        updateCloudSyncBadge('syncing');
+        getRunner()
+          .withSuccessHandler(function() {
+            isSaving = false; 
+            updateCloudSyncBadge('synced');
+          })
+          .withFailureHandler(function(err) {
+            isSaving = false; 
+            console.error("Gagal sinkronisasi penyimpanan cloud:", err);
+            updateCloudSyncBadge('local');
+          })
+          .saveStateToSheet(state);
+      } else {
+        localStorage.setItem("npc_app_state", JSON.stringify(state));
+      }
+    }
+
+    function checkWelcomeModalOnLoad() {
+      const hidePreference = localStorage.getItem('hideWelcomeNPC');
+      if (!hidePreference) {
+        document.getElementById('modalWelcome').classList.remove('hidden');
+      }
+    }
+
+    function closeWelcomeModal() {
+      const doNotShowAgain = document.getElementById('chkDoNotShowWelcome').checked;
+      if (doNotShowAgain) {
+        localStorage.setItem('hideWelcomeNPC', 'true');
+      }
+      document.getElementById('modalWelcome').classList.add('hidden');
+    }
+
+    function generateAmbientOrnaments() {
+      const container = document.getElementById('ambientContainer');
+      if (!container) return;
+
+      const decors = ['📖', '📄', '✨', '📝', '📓', '📚'];
+      const totalDecorCount = 12;
+
+      for (let i = 0; i < totalDecorCount; i++) {
+        const el = document.createElement('div');
+        el.className = 'ambient-decor text-2xl select-none';
+        el.innerText = decors[Math.floor(Math.random() * decors.length)];
+        
+        el.style.left = Math.random() * 95 + '%';
+        el.style.bottom = '-' + (Math.random() * 20 + 20) + 'px';
+        el.style.animationDelay = Math.random() * 15 + 's';
+        el.style.animationDuration = (Math.random() * 10 + 15) + 's';
+        el.style.transform = `scale(${Math.random() * 0.5 + 0.5})`;
+        
+        container.appendChild(el);
+      }
+    }
+
+    function showPjDutyNotification() {
+      const pjName = getActivePjName();
+      const toast = document.getElementById('pjDutyToast');
+      const nameEl = document.getElementById('pjDutyToastName');
+      if (!toast || !nameEl) return;
+
+      nameEl.innerText = pjName;
+      
+      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      
+      if (window.pjToastTimeout) clearTimeout(window.pjToastTimeout);
+      window.pjToastTimeout = setTimeout(() => {
+        dismissPjToast();
+      }, 7000);
+    }
+
+    function dismissPjToast() {
+      const toast = document.getElementById('pjDutyToast');
+      if (toast) {
+        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }
+    }
+
+    function initApplicationUI() {
+      const todayString = getWIBDateString();
+      state.activeDate = todayString;
+      document.getElementById('pjDateSetter').value = todayString;
+      document.getElementById('pjBatchStartDate').value = state.startDate;
+      document.getElementById('pjBatchEndDate').value = state.endDate;
+      
+      syncActiveDateDisplay();
+      renderBatchPeriodDisplay();
+      populateParticipantDropdowns();
+      renderPiketSchedules();
+      generateAmbientOrnaments();
+      checkWelcomeModalOnLoad();
+      
+      switchMainTab(1); 
+      showPjDutyNotification();
+    }
+
+    function syncActiveDateDisplay() {
+      const parts = state.activeDate.split("-");
+      if (parts.length === 3) {
+        const d = new Date(parts[0], parts[1]-1, parts[2]);
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('displayActiveDate').querySelector('span').innerText = d.toLocaleDateString('id-ID', options);
+      } else {
+        document.getElementById('displayActiveDate').querySelector('span').innerText = state.activeDate;
+      }
+    }
+
+    function updatePjTargetDate() {
+      const val = document.getElementById('pjDateSetter').value;
+      if (val) {
+        state.activeDate = val;
+        syncActiveDateDisplay();
+        const now = new Date();
+        const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+        checkLockConditions(new Date(utc + (3600000 * 7)));
+        updateStatsChart(); 
+        renderBelumLaporUI(); 
+        showPjDutyNotification();
+      }
+    }
+
+    function getActivePjName() {
+      const matchedDuty = state.piketPj.find(p => p.date === state.activeDate);
+      if (matchedDuty) return matchedDuty.name;
+      
+      const dayName = getDayName(state.activeDate);
+      const matchedDayDuty = state.piketPj.find(p => p.day === dayName && !p.date);
+      if (matchedDayDuty) return matchedDayDuty.name;
+      
+      return "Tim PJ Utama Paboba";
+    }
+
+    function populateParticipantDropdowns() {
+      const selectors = ['selectParticipant', 'manualPartner1', 'manualPartner2'];
+      const disqNames = getDisqualifiedParticipants();
+
+      selectors.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        
+        const currentValue = el.value;
+        el.innerHTML = "";
+        
+        if (id === 'selectParticipant') {
+          const defaultOpt = document.createElement('option');
+          defaultOpt.value = "";
+          defaultOpt.innerText = "-- Pilih Nama Anda --";
+          el.appendChild(defaultOpt);
+        }
+
+        const sortedList = [...state.participants]
+          .filter(name => !disqNames.includes(name))
+          .sort();
+        
+        sortedList.forEach(name => {
+          const opt = document.createElement('option');
+          opt.value = name;
+          opt.innerText = name;
+          el.appendChild(opt);
+        });
+
+        if (currentValue && !disqNames.includes(currentValue)) {
+          el.value = currentValue;
+        }
+      });
+
+      // Also update dedicated resign dropdown
+      populateResignDropdown();
+    }
+
+    function populateResignDropdown() {
+      const el = document.getElementById('resignParticipantSelector');
+      if (!el) return;
+      el.innerHTML = '<option value="">-- Pilih Anggota Resign --</option>';
+      
+      const disqNames = getDisqualifiedParticipants();
+      const activeList = [...state.participants]
+        .filter(name => !disqNames.includes(name))
+        .sort();
+        
+      activeList.forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.innerText = name;
+        el.appendChild(opt);
+      });
+    }
+
+    function switchMainTab(index) {
+      const viewHome = document.getElementById('viewHome');
+      const viewPeserta = document.getElementById('viewPeserta');
+      const btnHome = document.getElementById('btnHalamanUtamaHeader');
+      const btnPeserta = document.getElementById('btnPesertaMenu');
+
+      if (index === 1) {
+        viewHome.classList.remove('hidden');
+        viewPeserta.classList.add('hidden');
+        
+        btnHome.className = "bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold text-xs px-3.5 py-2 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center gap-1.5 ring-2 ring-amber-400 ring-offset-2 scale-105";
+        btnPeserta.className = "bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3.5 py-2 rounded-xl transition-all shadow-md flex items-center gap-1.5";
+        
+        updateStatsChart();
+        updateHomeStatsGrid();
+        try { renderTopInsights(); } catch (e) { console.warn("Top insight dilewati:", e); }
+      } else {
+        viewHome.classList.add('hidden');
+        viewPeserta.classList.remove('hidden');
+
+        btnHome.className = "bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3.5 py-2 rounded-xl transition-all shadow-md flex items-center gap-1.5";
+        btnPeserta.className = "bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold text-xs px-3.5 py-2 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center gap-1.5 ring-2 ring-amber-400 ring-offset-2 scale-105";
+
+        if (index === 2) {
+          activateSubTab(2);
+        } else if (index === 3) {
+          activateSubTab(3);
+        } else if (index === 4) {
+          activateSubTab(4);
+        }
+      }
+    }
+
+    function activateSubTab(tabNum) {
+      const tabs = [2, 3, 4];
+      tabs.forEach(num => {
+        const btn = document.getElementById(`tabBtn${num}`);
+        const content = document.getElementById(`tabContent${num}`);
+        
+        if (num === tabNum) {
+          if (btn) {
+            btn.classList.add('bg-amber-400', 'text-amber-950');
+            btn.classList.remove('text-slate-500', 'hover:bg-slate-50');
+          }
+          if (content) content.classList.remove('hidden');
+        } else {
+          if (btn) {
+            btn.classList.remove('bg-amber-400', 'text-amber-950');
+            btn.classList.add('text-slate-500', 'hover:bg-slate-50');
+          }
+          if (content) content.classList.add('hidden');
+        }
+      });
+
+      if (tabNum === 2) {
+        visibleLogsLimit = 50; 
+        renderLaporanTable();
+      } else if (tabNum === 3) {
+        renderIndividualHpList();
+        renderHPTable();
+      }
+    }
+
+    function checkClock() {
+      const now = new Date();
+      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const wib = new Date(utc + (3600000 * 7));
+      const hours = String(wib.getHours()).padStart(2, '0');
+      const minutes = String(wib.getMinutes()).padStart(2, '0');
+      const seconds = String(wib.getSeconds()).padStart(2, '0');
+      document.getElementById('liveClock').innerText = `${hours}:${minutes}:${seconds} WIB`;
+      checkLockConditions(wib);
+      checkAndAutoAbsen(wib); 
+    }
+
+    function startClock() {
+      checkClock();
+      setInterval(checkClock, 1000);
+    }
+
+    function checkLockConditions(wibDate) {
+      const hours = wibDate.getHours();
+      const lockWarning = document.getElementById('lockWarning');
+      const selectParticipant = document.getElementById('selectParticipant');
+      const btnSubmitLog = document.getElementById('btnSubmitLog');
+
+      const isPastLimit = hours >= 22;
+      const isReportingCurrentDate = (state.activeDate === getWIBDateString());
+
+      if (isPastLimit && state.currentMode === "PESERTA" && isReportingCurrentDate) {
+        lockWarning.classList.remove('hidden');
+        selectParticipant.disabled = true;
+        btnSubmitLog.disabled = true;
+        btnSubmitLog.classList.add('opacity-50', 'cursor-not-allowed');
+      } else {
+        lockWarning.classList.add('hidden');
+        selectParticipant.disabled = false;
+        const insightBlocked = !isInsightRequirementMet();
+        btnSubmitLog.disabled = insightBlocked;
+        if (insightBlocked) {
+          btnSubmitLog.classList.add('opacity-50', 'cursor-not-allowed');
+        } else {
+          btnSubmitLog.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+      }
+    }
+
+    // Rentang halaman (awal - akhir)
+    function getPageRangeInfo() {
+      const sEl = document.getElementById('pageStart');
+      const eEl = document.getElementById('pageEnd');
+      if (!sEl || !eEl) return { valid: true, text: "", total: 0, touched: false };
+      const sRaw = sEl.value.trim();
+      const eRaw = eEl.value.trim();
+      const s = parseInt(sRaw, 10);
+      const e = parseInt(eRaw, 10);
+      const touched = sRaw !== "" || eRaw !== "";
+      const valid = !isNaN(s) && !isNaN(e) && s >= 1 && e >= s;
+      return { valid: valid, text: valid ? (s + "-" + e) : "", total: valid ? (e - s + 1) : 0, touched: touched };
+    }
+
+    function updatePageRangeLabel() {
+      const info = getPageRangeInfo();
+      const label = document.getElementById('pageRangeInfo');
+      if (!label) return;
+      label.classList.remove('text-slate-400', 'text-rose-600', 'text-emerald-600');
+      if (info.valid) {
+        label.innerText = "Total " + info.total + " halaman (hal. " + info.text + ")";
+        label.classList.add('text-emerald-600');
+      } else if (info.touched) {
+        label.innerText = "Halaman akhir harus sama atau lebih besar dari halaman awal.";
+        label.classList.add('text-rose-600');
+      } else {
+        label.innerText = "Isi halaman awal dan akhir, contoh 10 - 20.";
+        label.classList.add('text-slate-400');
+      }
+    }
+
+    // Insight wajib minimal 3 kalimat hanya untuk status "Laporan"
+    function isInsightRequirementMet() {
+      const statusEl = document.getElementById('selectStatus');
+      const areaEl = document.getElementById('insightText');
+      if (!statusEl || !areaEl) return true;
+      if (statusEl.value !== 'Laporan') return true;
+      const titleEl = document.getElementById('bookTitle');
+      const titleOk = !titleEl || titleEl.value.trim() !== "";
+      const authorEl = document.getElementById('bookAuthor');
+      const authorOk = !authorEl || authorEl.value.trim() !== "";
+      return titleOk && authorOk && getPageRangeInfo().valid && countInsightSentences(areaEl.value) >= 3;
+    }
+
+    function refreshSubmitGate() {
+      const now = new Date();
+      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      checkLockConditions(new Date(utc + (3600000 * 7)));
+      const hint = document.getElementById('submitGateHint');
+      if (hint) {
+        if (isInsightRequirementMet()) hint.classList.add('hidden');
+        else hint.classList.remove('hidden');
+      }
+    }
+
+    function isDeadlinePassed() {
+      const today = getWIBDateString();
+      if (state.activeDate < today) return true;
+      if (state.activeDate > today) return false;
+      
+      const now = new Date();
+      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const wib = new Date(utc + (3600000 * 7));
+      return wib.getHours() >= 22;
+    }
+
+    function getDisqualifiedParticipants() {
+      const disq = [];
+      state.partners.forEach(team => {
+        let isInactive = false;
+        if (team.active === false || team.active === "false" || team.active === "FALSE") {
+          isInactive = true;
+        } else if (team.active === true || team.active === "true" || team.active === "TRUE") {
+          isInactive = false;
+        } else {
+          isInactive = !team.active;
+        }
+
+        if (isInactive) {
+          if (team.name1 && team.name1 !== "-") disq.push(team.name1);
+          if (team.name2 && team.name2 !== "-") disq.push(team.name2);
+        }
+      });
+      return disq;
+    }
+
+    // ===== 3 Insight Tercepat (halaman utama) =====
+    function toggleInsightClamp(el) {
+      const txt = el.querySelector('.top-insight-text');
+      if (!txt) return;
+      txt.classList.toggle('line-clamp-5');
+    }
+
+    function renderTopInsights() {
+      const list = document.getElementById('topInsightList');
+      if (!list) return;
+      const empty = document.getElementById('topInsightEmpty');
+      const badge = document.getElementById('topInsightDateBadge');
+      const activeDate = state.activeDate;
+
+      if (badge) {
+        badge.innerText = (typeof formatDateId === 'function' ? formatDateId(activeDate) : "") || activeDate || "-";
+      }
+
+      const top = (state.laporan || [])
+        .filter(log => log.date === activeDate && log.status === 'Laporan' && log.insight === 'Insight' && log.insightText && String(log.insightText).trim() !== "")
+        .sort((a, b) => a.id - b.id)
+        .slice(0, 3);
+
+      list.innerHTML = "";
+      if (top.length === 0) {
+        list.classList.add('hidden');
+        empty.classList.remove('hidden');
+        return;
+      }
+      list.classList.remove('hidden');
+      empty.classList.add('hidden');
+
+      const medals = ["🥇", "🥈", "🥉"];
+      top.forEach((log, i) => {
+        const card = document.createElement('div');
+        card.className = "bg-slate-50 border border-amber-200/60 rounded-2xl p-4 flex flex-col gap-2 cursor-pointer hover:shadow-md transition-all";
+        card.title = "Klik untuk membuka atau menutup teks lengkap";
+        card.onclick = function () { toggleInsightClamp(card); };
+        card.innerHTML =
+          '<div class="flex items-start justify-between gap-2">' +
+            '<div class="min-w-0">' +
+              '<p class="font-bold text-sm text-slate-800 truncate">' + medals[i] + ' ' + escapeHtmlText(log.name) + '</p>' +
+              '<p class="text-[11px] text-slate-400 font-semibold"><i class="fa-regular fa-clock"></i> ' + escapeHtmlText(log.time || "") + '</p>' +
+            '</div>' +
+            '<span class="text-amber-700 font-bold bg-amber-100 px-2 py-0.5 rounded-lg text-[10px] whitespace-nowrap">#' + (i + 1) + '</span>' +
+          '</div>' +
+          (log.bookTitle ? '<p class="text-[11px] font-bold text-amber-600 truncate"><i class="fa-solid fa-book"></i> ' + escapeHtmlText(log.bookTitle) + (log.author ? ' oleh ' + escapeHtmlText(log.author) : '') + (log.pageRange ? ' &bull; Hal. ' + escapeHtmlText(log.pageRange) : '') + '</p>' : '') +
+          '<p class="top-insight-text line-clamp-5 text-sm text-slate-600 whitespace-pre-wrap break-words leading-relaxed">' + escapeHtmlText(log.insightText) + '</p>';
+        list.appendChild(card);
+      });
+    }
+
+    function updateHomeStatsGrid() {
+      const today = getWIBDateString();
+      const yesterday = getYesterdayDateString();
+      const disqNames = getDisqualifiedParticipants();
+
+      // Today's Stats
+      const todayLogs = state.laporan.filter(log => log.date === today);
+      const todayLaporCount = todayLogs.filter(log => log.status === 'Laporan').length;
+      const todayAlpaCount = todayLogs.filter(log => log.status === 'Tidak Laporan').length;
+
+      // Yesterday's Stats
+      const yesterdayLogs = state.laporan.filter(log => log.date === yesterday);
+      const yesterdayLaporCount = yesterdayLogs.filter(log => log.status === 'Laporan').length;
+      const yesterdayAlpaCount = yesterdayLogs.filter(log => log.status === 'Tidak Laporan').length;
+
+      // Total Reports
+      const totalLaporCount = state.laporan.filter(log => log.status === 'Laporan').length;
+
+      // Member stats
+      const totalParticipants = state.participants.length;
+      const gugurCount = disqNames.length;
+      const bertahanCount = Math.max(0, totalParticipants - gugurCount);
+
+      // Render Home Cards
+      document.getElementById('homeStatToday').innerHTML = `
+        <span class="text-4xl font-black text-amber-500">${todayLaporCount}</span>
+        <span class="text-xs text-slate-400 font-bold ml-1">dari ${state.participants.length - disqNames.length} aktif</span>
+      `;
+      document.getElementById('homeStatTodaySub').innerHTML = `🔴 <strong>${todayAlpaCount}</strong> Alpa hari ini`;
+
+      document.getElementById('homeStatYesterday').innerHTML = `
+        <span class="text-4xl font-black text-slate-700">${yesterdayLaporCount}</span>
+        <span class="text-xs text-slate-400 font-bold ml-1">orang</span>
+      `;
+      document.getElementById('homeStatYesterdaySub').innerHTML = `🔴 <strong>${yesterdayAlpaCount}</strong> Alpa kemarin`;
+
+      document.getElementById('homeStatTotal').innerHTML = `
+        <span class="text-4xl font-black text-emerald-600">${totalLaporCount}</span>
+        <span class="text-xs text-slate-400 font-bold ml-1">laporan</span>
+      `;
+      document.getElementById('homeStatTotalSub').innerText = "Terkumpul di Batch ini";
+
+      document.getElementById('homeStatSurvival').innerHTML = `
+        <div class="flex justify-between text-xs font-bold mt-2">
+          <span class="text-emerald-600">🛡️ Bertahan: ${bertahanCount}</span>
+          <span class="text-rose-600">💀 Gugur: ${gugurCount}</span>
+        </div>
+      `;
+    }
+
+    function performRetroactiveAutoAbsen() {
+      //      // SAFETY GUARDRAIL 1: Jika database benar-benar kosong (setelah di-reset atau awal batch baru),
+      // matikan auto-absen retroaktif agar tidak menulis ulang data kosong ke Google Sheets.
+      if (!state.laporan || state.laporan.length === 0) {
+        console.log("Database laporan kosong. Sistem mengenali ini sebagai Reset/Batch Baru. Auto-Absen Standby.");
+        return;
+      }
+
+      const todayStr = getWIBDateString();
+      const start = parseDateRobust(state.startDate);
+      const today = parseDateRobust(todayStr);
+
+      if (!start || !today) return;
+
+      const now = new Date();
+      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const wib = new Date(utc + (3600000 * 7));
+      const isPastDeadlineToday = wib.getHours() >= 22;
+
+      let limitDate = new Date(today);
+      if (!isPastDeadlineToday) {
+        limitDate.setDate(limitDate.getDate() - 1); // check only up to yesterday
+      }
+
+      let currentDate = new Date(start);
+      
+      // SAFETY GUARDRAIL 2: Batasi pengecekan mundur maksimal hanya 3 hari ke belakang.
+      // Ini mencegah penumpukan ribuan data fiktif jika startDate berada jauh di masa lalu.
+      let maxPastLimit = new Date(today);
+      maxPastLimit.setDate(maxPastLimit.getDate() - 3);
+      if (currentDate < maxPastLimit) {
+        currentDate = maxPastLimit;
+      }
+
+      let hasChanges = false;
+      const disqNames = getDisqualifiedParticipants();
+
+      while (currentDate <= limitDate) {
+        const dateStr = formatDateStringForLoop(currentDate);
+        
+        if (dateStr <= todayStr) {
+          state.participants.forEach(name => {
+            if (disqNames.includes(name)) return; // skip disqualified users
+
+            const hasLog = state.laporan.some(log => log.date === dateStr && log.name === name);
+            if (!hasLog) {
+              const autoLog = {
+                id: Date.now() + Math.floor(Math.random() * 100000),
+                date: dateStr,
+                name: name,
+                status: "Tidak Laporan",
+                insight: "Tidak Insight",
+                time: "22:00 WIB"
+              };
+              state.laporan.push(autoLog);
+              deductHP(name);
+              hasChanges = true;
+            }
+          });
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+
+      if (hasChanges) {
+        state.laporan.sort((a, b) => b.id - a.id);
+        saveState();
+        renderLaporanTable();
+        renderHPTable();
+        renderIndividualHpList();
+        updateStatsChart();
+        renderBelumLaporUI();
+        updateHomeStatsGrid();
+      }
+    }
+
+    function checkAndAutoAbsen(wibDate) {
+      const today = getWIBDateString();
+      if (state.activeDate !== today) return;
+      if (wibDate.getHours() < 22) return;
+
+      let hasNewAutoLogs = false;
+      const disqNames = getDisqualifiedParticipants();
+
+      state.participants.forEach(name => {
+        if (disqNames.includes(name)) return;
+
+        const alreadySubmitted = state.laporan.some(log => log.date === state.activeDate && log.name === name);
+        if (!alreadySubmitted) {
+          const autoLog = {
+            id: Date.now() + Math.floor(Math.random() * 1000), 
+            date: state.activeDate,
+            name: name,
+            status: "Tidak Laporan",
+            insight: "Tidak Insight",
+            time: "22:00 WIB"
+          };
+          
+          state.laporan.unshift(autoLog);
+          deductHP(name); 
+          hasNewAutoLogs = true;
+        }
+      });
+
+      if (hasNewAutoLogs) {
+        saveState();
+        renderLaporanTable();
+        renderHPTable();
+        renderIndividualHpList();
+        updateStatsChart(); 
+        renderBelumLaporUI(); 
+        updateHomeStatsGrid();
+      }
+    }
+
+    function getBelumLaporList() {
+      const disqNames = getDisqualifiedParticipants();
+      const activeLogs = state.laporan.filter(log => log.date === state.activeDate);
+      const submittedNames = activeLogs.map(log => log.name);
+      return state.participants.filter(name => !submittedNames.includes(name) && !disqNames.includes(name));
+    }
+
+    function renderBelumLaporUI() {
+      const container = document.getElementById('belumLaporContainer');
+      const badgeCount = document.getElementById('badgeBelumLaporCount');
+      if (!container) return;
+
+      const list = getBelumLaporList();
+      if (badgeCount) {
+        badgeCount.innerText = `${list.length} Orang`;
+      }
+
+      container.innerHTML = "";
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full text-center py-6 text-emerald-600 font-semibold text-xs flex flex-col items-center gap-1.5 bg-emerald-50 rounded-2xl border border-emerald-100">
+            <i class="fa-solid fa-circle-check text-lg"></i>
+            <span>Luar biasa! Semua pejuang sudah aman melapor hari ini! 🎉</span>
+          </div>
+        `;
+        return;
+      }
+
+      list.sort().forEach(name => {
+        const item = document.createElement('div');
+        item.className = "bg-rose-50 border border-rose-100/70 rounded-xl p-2.5 text-center text-xs font-bold text-rose-700 truncate hover:bg-rose-100 hover:border-rose-300 transition-all flex items-center justify-center gap-1.5 shadow-sm";
+        item.innerHTML = `<span class="w-2 h-2 bg-rose-500 rounded-full inline-block animate-pulse"></span> ${name}`;
+        container.appendChild(item);
+      });
+    }
+
+    function loadMoreLogs() {
+      visibleLogsLimit += 50;
+      renderLaporanTable();
+    }
+
+    // ===== Galeri Insight Member =====
+    let insightVisibleLimit = 12;
+
+    function escapeHtmlText(str) {
+      return String(str === undefined || str === null ? "" : str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function resetInsightFilters() {
+      document.getElementById('insightFilterName').value = "";
+      document.getElementById('insightFilterDate').value = "";
+      document.getElementById('insightFilterQuality').value = "all";
+      document.getElementById('insightFilterKeyword').value = "";
+      insightVisibleLimit = 12;
+      renderInsightGallery();
+    }
+
+    function renderInsightGallery() {
+      const list = document.getElementById('insightGalleryList');
+      if (!list) return;
+      const nameSel = document.getElementById('insightFilterName');
+      const dateVal = document.getElementById('insightFilterDate').value;
+      const qualityVal = document.getElementById('insightFilterQuality').value;
+      const keyword = document.getElementById('insightFilterKeyword').value.trim().toLowerCase();
+      const countEl = document.getElementById('insightGalleryCount');
+      const emptyEl = document.getElementById('insightGalleryEmpty');
+      const moreBox = document.getElementById('insightLoadMoreContainer');
+      const remainEl = document.getElementById('insightRemainingCount');
+
+      const allWithText = (state.laporan || []).filter(log => log.insightText && String(log.insightText).trim() !== "");
+
+      // Isi ulang daftar nama member (pilihan saat ini dipertahankan)
+      const currentName = nameSel.value;
+      const names = Array.from(new Set(allWithText.map(l => l.name))).sort((a, b) => String(a).localeCompare(String(b)));
+      nameSel.innerHTML = '<option value="">Semua Member</option>' +
+        names.map(n => '<option value="' + escapeHtmlText(n) + '">' + escapeHtmlText(n) + '</option>').join("");
+      nameSel.value = names.indexOf(currentName) !== -1 ? currentName : "";
+      const nameVal = nameSel.value;
+
+      let logs = allWithText.filter(log => {
+        if (nameVal && log.name !== nameVal) return false;
+        if (dateVal && log.date !== dateVal) return false;
+        if (qualityVal === 'valid' && log.insight !== 'Insight') return false;
+        if (qualityVal === 'kurang' && log.insight === 'Insight') return false;
+        if (keyword && (String(log.insightText) + " " + String(log.name) + " " + String(log.bookTitle || "") + " " + String(log.author || "")).toLowerCase().indexOf(keyword) === -1) return false;
+        return true;
+      });
+
+      logs.sort((a, b) => {
+        if (b.date !== a.date) return String(b.date).localeCompare(String(a.date));
+        return b.id - a.id;
+      });
+
+      const total = logs.length;
+      countEl.innerText = total + " insight ditemukan";
+      list.innerHTML = "";
+
+      if (total === 0) {
+        emptyEl.classList.remove('hidden');
+        moreBox.classList.add('hidden');
+        return;
+      }
+      emptyEl.classList.add('hidden');
+
+      if (total > insightVisibleLimit) {
+        moreBox.classList.remove('hidden');
+        remainEl.innerText = total - insightVisibleLimit;
+        logs = logs.slice(0, insightVisibleLimit);
+      } else {
+        moreBox.classList.add('hidden');
+      }
+
+      logs.forEach(log => {
+        const valid = log.insight === 'Insight';
+        const badge = valid
+          ? '<span class="text-green-600 font-bold bg-green-50 px-2 py-0.5 rounded-lg border border-green-200 text-[10px] whitespace-nowrap"><i class="fa-solid fa-circle-check"></i> Insight</span>'
+          : '<span class="text-rose-600 font-bold bg-rose-50 px-2 py-0.5 rounded-lg border border-rose-200 text-[10px] whitespace-nowrap"><i class="fa-solid fa-circle-xmark"></i> Kurang 3 Kalimat</span>';
+        const dateLabel = (typeof formatDateId === 'function' ? formatDateId(log.date) : "") || log.date;
+        const card = document.createElement('div');
+        card.className = "bg-slate-50 border border-slate-100 rounded-2xl p-4 flex flex-col gap-2";
+        card.innerHTML =
+          '<div class="flex items-start justify-between gap-2">' +
+            '<div class="min-w-0">' +
+              '<p class="font-bold text-sm text-slate-800 truncate">' + escapeHtmlText(log.name) + '</p>' +
+              '<p class="text-[11px] text-slate-400 font-semibold">' + escapeHtmlText(dateLabel) + ' &bull; ' + escapeHtmlText(log.time || "") + '</p>' +
+              (log.bookTitle ? '<p class="text-[11px] font-bold text-amber-600 truncate"><i class="fa-solid fa-book"></i> ' + escapeHtmlText(log.bookTitle) + (log.author ? ' oleh ' + escapeHtmlText(log.author) : '') + (log.pageRange ? ' &bull; Hal. ' + escapeHtmlText(log.pageRange) : '') + '</p>' : '') +
+            '</div>' + badge +
+          '</div>' +
+          '<p class="text-sm text-slate-600 whitespace-pre-wrap break-words leading-relaxed">' + escapeHtmlText(log.insightText) + '</p>';
+        list.appendChild(card);
+      });
+    }
+
+    function renderLaporanTable() {
+      const tbody = document.getElementById('laporanTableBody');
+      const emptyState = document.getElementById('emptyTableState');
+      const filterMode = document.getElementById('filterActiveOnly').value;
+      
+      tbody.innerHTML = "";
+
+      try { renderInsightGallery(); } catch (e) { console.warn("Galeri insight dilewati:", e); }
+      try { renderTopInsights(); } catch (e) { console.warn("Top insight dilewati:", e); }
+
+      let filteredLogs = [...state.laporan];
+
+      filteredLogs.sort((a, b) => {
+        if (b.date !== a.date) {
+          return b.date.localeCompare(a.date);
+        }
+        return b.id - a.id;
+      });
+
+      if (filterMode === 'laporan') {
+        filteredLogs = filteredLogs.filter(log => log.status === 'Laporan');
+      } else if (filterMode === 'tidak') {
+        filteredLogs = filteredLogs.filter(log => log.status === 'Tidak Laporan');
+      }
+
+      const totalFiltered = filteredLogs.length;
+      const loadMoreContainer = document.getElementById('loadMoreContainer');
+      const remainingLogsCount = document.getElementById('remainingLogsCount');
+
+      if (totalFiltered > visibleLogsLimit) {
+        if (loadMoreContainer) loadMoreContainer.classList.remove('hidden');
+        if (remainingLogsCount) remainingLogsCount.innerText = totalFiltered - visibleLogsLimit;
+        filteredLogs = filteredLogs.slice(0, visibleLogsLimit);
+      } else {
+        if (loadMoreContainer) loadMoreContainer.classList.add('hidden');
+      }
+
+      if (filteredLogs.length === 0) {
+        if (emptyState) emptyState.classList.remove('hidden');
+        return;
+      } else {
+        if (emptyState) emptyState.classList.add('hidden');
+      }
+
+      let lastDate = "";
+
+      filteredLogs.forEach(log => {
+        if (log.date !== lastDate) {
+          lastDate = log.date;
+          const separatorTr = document.createElement('tr');
+          separatorTr.className = "bg-amber-100/30 border-y border-amber-200/50 font-semibold text-slate-700 sticky top-[48px] z-[5]";
+          const dayName = getDayName(log.date) || "Hari";
+          const formattedDate = formatDateId(log.date) || log.date;
+          const colSpanCount = state.currentMode === "PJ" ? 6 : 5;
+          
+          separatorTr.innerHTML = `
+            <td colspan="${colSpanCount}" class="p-3.5 pl-4 bg-gradient-to-r from-amber-100/60 to-transparent">
+              <div class="flex items-center gap-2 text-amber-900 font-title text-xs tracking-wider">
+                <i class="fa-solid fa-calendar-day text-amber-500 animate-pulse"></i>
+                <span>REKAPAN HARI: ${dayName.toUpperCase()}, ${formattedDate.toUpperCase()}</span>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(separatorTr);
+        }
+
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50 transition-colors";
+
+        let statusBadgeClass = "";
+        let statusSymbol = "";
+        if (log.status === 'Laporan') {
+          statusBadgeClass = "bg-green-500 text-white";
+          statusSymbol = "🟢";
+        } else if (log.status === 'Tidak Laporan') {
+          statusBadgeClass = "bg-rose-500 text-white";
+          statusSymbol = "🔴";
+        } else if (log.status === 'Reset HP') {
+          statusBadgeClass = "bg-blue-500 text-white";
+          statusSymbol = "🔵";
+        } else {
+          statusBadgeClass = "bg-slate-800 text-white";
+          statusSymbol = "⚫";
+        }
+
+        const insightBadge = log.insight === 'Insight' 
+          ? '<span class="text-green-600 font-bold bg-green-50 px-2 py-1 rounded-lg border border-green-200"><i class="fa-solid fa-circle-check"></i> Insight</span>' 
+          : '<span class="text-rose-600 font-bold bg-rose-50 px-2 py-1 rounded-lg border border-rose-200"><i class="fa-solid fa-circle-xmark"></i> Tidak Insight</span>';
+
+        const textDecorClass = log.status === 'Gugur' ? 'line-through text-slate-400' : '';
+
+        const pjActionsHtml = state.currentMode === "PJ" 
+          ? `<td class="p-4"><button onclick="deleteLaporanRecord(${log.id})" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-2 py-1 rounded-md text-xs transition-all"><i class="fa-solid fa-trash"></i></button></td>`
+          : "";
+
+        tr.innerHTML = `
+          <td class="p-4 font-semibold text-xs text-slate-400 whitespace-nowrap">${log.date}</td>
+          <td class="p-4 font-bold text-slate-800 ${textDecorClass}">${log.name}</td>
+          <td class="p-4"><span class="${statusBadgeClass} text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap inline-flex items-center gap-1">${statusSymbol} ${log.status}</span></td>
+          <td class="p-4 text-xs font-semibold whitespace-nowrap">${insightBadge}</td>
+          <td class="p-4 text-xs font-mono text-slate-400 font-bold whitespace-nowrap">${log.time}</td>
+          ${pjActionsHtml}
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderIndividualHpList() {
+      const container = document.getElementById('individualHpContainer');
+      const elimContainer = document.getElementById('eliminationListContainer');
+      if (!container) return;
+
+      const searchVal = document.getElementById('searchIndividualHp').value.toLowerCase();
+      const hpFilter = document.getElementById('filterHpStatus').value;
+      container.innerHTML = "";
+      
+      if (elimContainer) {
+        elimContainer.innerHTML = "";
+      }
+
+      const individualData = [];
+      const eliminatedData = [];
+
+      state.participants.forEach(name => {
+        const team = state.partners.find(t => t.name1 === name || t.name2 === name);
+        if (team) {
+          const maxHp = team.type === "PARTNER" ? 6 : 3;
+          const actualHp = Math.max(0, maxHp + team.hp);
+          
+          const pInfo = {
+            name: name,
+            hp: actualHp,
+            maxHp: maxHp,
+            type: team.type,
+            active: team.active,
+            notes: team.notes || "",
+            partner: team.type === "PARTNER" ? (team.name1 === name ? team.name2 : team.name1) : "Single Fighter"
+          };
+
+          let isInactive = false;
+          if (team.active === false || team.active === "false" || team.active === "FALSE") {
+            isInactive = true;
+          } else if (team.active === true || team.active === "true" || team.active === "TRUE") {
+            isInactive = false;
+          } else {
+            isInactive = !team.active;
+          }
+
+          if (!isInactive) {
+            individualData.push(pInfo);
+          } else {
+            eliminatedData.push(pInfo);
+          }
+        } else {
+          individualData.push({
+            name: name,
+            hp: 3,
+            maxHp: 3,
+            type: "SINGLE",
+            active: true,
+            notes: "",
+            partner: "Single Fighter"
+          });
+        }
+      });
+
+      // Filter and render active participants
+      let filteredData = individualData;
+      if (searchVal) {
+        filteredData = filteredData.filter(p => p.name.toLowerCase().includes(searchVal));
+      }
+      if (hpFilter === 'aktif') {
+        filteredData = filteredData.filter(p => p.active);
+      } else if (hpFilter === 'gugur') {
+        filteredData = []; // showing only active in this loop
+      }
+
+      filteredData.sort((a, b) => a.name.localeCompare(b.name));
+
+      if (filteredData.length === 0 && hpFilter !== 'gugur') {
+        container.innerHTML = `
+          <div class="col-span-full text-center py-8">
+            <p class="text-sm font-semibold text-slate-400">Tidak ada anggota aktif yang cocok dengan filter pencarian.</p>
+          </div>
+        `;
+      } else {
+        filteredData.forEach(p => {
+          const percentage = Math.round((p.hp / p.maxHp) * 100);
+          let colorClass = "bg-emerald-500";
+          let textClass = "text-emerald-700 bg-emerald-50";
+          if (percentage <= 33) {
+            colorClass = "bg-rose-500";
+            textClass = "text-rose-700 bg-rose-50";
+          } else if (percentage <= 66) {
+            colorClass = "bg-amber-500";
+            textClass = "text-amber-700 bg-amber-50";
+          }
+
+          const card = document.createElement('div');
+          card.className = "bg-slate-50 rounded-2xl p-4 border border-slate-200/60 shadow-sm hover:shadow-md transition-all flex flex-col justify-between";
+
+          card.innerHTML = `
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <div>
+                <span class="text-xs font-bold text-slate-800">${p.name}</span>
+                <span class="text-[9px] block text-slate-400 font-semibold mt-0.5">Mitra: ${p.partner}</span>
+              </div>
+              <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold ${textClass}">
+                ${p.hp}/${p.maxHp} HP
+              </span>
+            </div>
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+              <div class="${colorClass} h-full transition-all duration-500" style="width: ${percentage}%"></div>
+            </div>
+            <div class="flex items-center justify-between mt-2 text-[9px] font-bold text-slate-400 uppercase tracking-wider">
+              <span>${p.type}</span>
+              <span>${percentage}% NYAWA</span>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      }
+
+      // Render Fallen Warriors (Dewan Duka Cita)
+      if (elimContainer) {
+        if (eliminatedData.length === 0) {
+          elimContainer.innerHTML = `
+            <div class="col-span-full text-center py-8 text-slate-500">
+              <div class="text-2xl mb-1">🕊️</div>
+              <p class="text-xs font-bold">Semua pejuang masih konsisten bertahan!</p>
+            </div>
+          `;
+        } else {
+          eliminatedData.sort((a, b) => a.name.localeCompare(b.name)).forEach(p => {
+            const card = document.createElement('div');
+            card.className = "bg-slate-800/80 rounded-xl p-3 border border-slate-700/60 shadow-inner flex items-center justify-between";
+            let reasonText = p.type === 'PARTNER' ? `💀 GUGUR BERSAMA (${p.partner})` : '💀 GUGUR MANDIRI';
+            if (p.notes) {
+              reasonText = `💀 ${p.notes.toUpperCase()}`;
+            }
+            card.innerHTML = `
+              <div class="min-w-0">
+                <span class="text-xs font-bold text-slate-200 block truncate line-through opacity-75">${p.name}</span>
+                <span class="text-[9px] text-rose-400 font-semibold uppercase tracking-wider block mt-0.5">
+                  ${reasonText}
+                </span>
+              </div>
+              <span class="bg-rose-950 text-rose-400 border border-rose-800/50 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider whitespace-nowrap">
+                GUGUR
+              </span>
+            `;
+            elimContainer.appendChild(card);
+          });
+        }
+      }
+    }
+
+    function renderHPTable() {
+      const tbody = document.getElementById('hpTableBody');
+      tbody.innerHTML = "";
+
+      if (state.partners.length === 0) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td colspan="5" class="p-8 text-center text-slate-400 font-semibold text-xs">Belum ada partner atau single fighter diacak/ditetapkan. Silakan acak otomatis di menu Kontrol PJ.</td>`;
+        tbody.appendChild(tr);
+        return;
+      }
+
+      state.partners.forEach((team, index) => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50 transition-colors";
+
+        const typeBadge = team.type === "PARTNER" 
+          ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-1 rounded-full"><i class="fa-solid fa-people-group"></i> Partner</span>'
+          : '<span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2.5 py-1 rounded-full"><i class="fa-solid fa-user"></i> Single Fighter</span>';
+
+        const nameDisplay = team.type === "PARTNER" 
+          ? `<strong>${team.name1}</strong> <span class="text-amber-500 font-bold">&amp;</span> <strong>${team.name2}</strong>`
+          : `<strong>${team.name1}</strong>`;
+
+        const currentHp = team.hp;
+        let displayHpText = `${currentHp} HP`;
+        let statusStyle = "text-emerald-600 bg-emerald-50 border-emerald-200";
+        if (currentHp < 0) {
+          statusStyle = "text-rose-600 bg-rose-50 border-rose-200";
+        }
+
+        const isInactive = team.active === false || team.active === "false" || team.active === "FALSE";
+        const activeBadge = !isInactive 
+          ? '<span class="bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Aktif</span>'
+          : `<span class="bg-slate-900 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">${team.notes || "Gugur"}</span>`;
+
+        let actionsHtml = "";
+        if (state.currentMode === "PJ") {
+          actionsHtml = `
+            <td class="p-4 flex flex-wrap gap-1">
+              <button onclick="modifyHPDirect(${index}, 1)" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-700 px-2 py-1 rounded text-xs font-bold" title="Tambah 1 HP">+1</button>
+              <button onclick="modifyHPDirect(${index}, -1)" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-2 py-1 rounded text-xs font-bold" title="Kurangi 1 HP">-1</button>
+              ${team.type === "PARTNER" ? `<button onclick="partnerResign(${index})" class="bg-amber-100 hover:bg-amber-200 text-amber-800 px-2 py-1 rounded text-xs font-semibold" title="Mitra Mundur">Mitra Mundur</button>` : ""}
+            </td>
+          `;
+        }
+
+        tr.innerHTML = `
+          <td class="p-4 whitespace-nowrap">${typeBadge}</td>
+          <td class="p-4 text-slate-800">${nameDisplay}</td>
+          <td class="p-4 whitespace-nowrap"><span class="border px-2.5 py-1 rounded-xl text-xs font-bold ${statusStyle}">${displayHpText}</span></td>
+          <td class="p-4 whitespace-nowrap">${activeBadge}</td>
+          ${actionsHtml}
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderPiketSchedules() {
+      const container = document.getElementById('piketListContainer');
+      container.innerHTML = "";
+
+      if (state.piketPj.length === 0) {
+        const div = document.createElement('div');
+        div.className = "text-center py-6 px-4 bg-slate-50 border border-dashed border-slate-200 rounded-2xl";
+        div.innerHTML = `
+          <div class="text-slate-300 text-2xl mb-1"><i class="fa-solid fa-calendar-xmark"></i></div>
+          <p class="text-xs font-semibold text-slate-400">Belum ada jadwal piket yang diatur oleh tim PIC.</p>
+        `;
+        container.appendChild(div);
+        return;
+      }
+
+      const sortedPiket = [...state.piketPj].sort((a, b) => {
+        if (a.date && b.date) return new Date(a.date) - new Date(b.date);
+        if (a.date) return -1;
+        if (b.date) return 1;
+        return 0;
+      });
+
+      sortedPiket.forEach(item => {
+        const div = document.createElement('div');
+        div.className = "flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100 rounded-2xl transition-all border border-slate-100 shadow-sm";
+        
+        const deleteBtn = state.currentMode === "PJ"
+          ? `<button onclick="deletePjSchedule(${item.id})" class="text-rose-600 hover:text-rose-800 p-1.5 rounded bg-rose-50 text-xs transition-all"><i class="fa-solid fa-trash"></i></button>`
+          : "";
+
+        let dayDisplay = item.day || "";
+        let dateDisplay = "";
+        
+        if (item.date) {
+          const resolvedDay = getDayName(item.date);
+          const resolvedDate = formatDateId(item.date);
+          
+          if (resolvedDay) dayDisplay = resolvedDay;
+          if (resolvedDate) dateDisplay = resolvedDate;
+        }
+
+        let formattedScheduleText = "";
+        if (dayDisplay && dateDisplay) {
+          formattedScheduleText = `${dayDisplay}, ${dateDisplay}`;
+        } else if (dayDisplay) {
+          formattedScheduleText = dayDisplay;
+        } else if (dateDisplay) {
+          formattedScheduleText = dateDisplay;
+        } else {
+          formattedScheduleText = "Jadwal harian aktif";
+        }
+
+        div.innerHTML = `
+          <div class="flex items-center gap-3 w-full border-l-4 border-amber-400 pl-2">
+            <div class="flex flex-col min-w-0">
+              <span class="text-xs font-bold text-slate-800 truncate">${item.name}</span>
+              <span class="text-[10px] text-slate-400 font-semibold mt-0.5">${formattedScheduleText}</span>
+            </div>
+          </div>
+          ${deleteBtn}
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function spawnRpgParticles(type) {
+      const container = document.getElementById('rpgParticleContainer');
+      if (!container) return;
+      container.innerHTML = ""; 
+      
+      const emojis = {
+        gembira: ['🎉', '✨', '🔥', '📚', '🌟', '🥳', '🎈', '🏆', '💫'],
+        sedih: ['💧', '🌧️', '💔', '😢', '🥺', '⏳', '🌂'],
+        berduka: ['🥀', '🕯️', '😭', '💀', '🍂', '💔', '⚰️', '🔔']
+      };
+      
+      const list = emojis[type] || [];
+      if (list.length === 0) return;
+      
+      const count = type === 'berduka' ? 35 : 25; 
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement('div');
+        el.className = 'rpg-particle text-xl select-none';
+        el.innerText = list[Math.floor(Math.random() * list.length)];
+        
+        el.style.left = Math.random() * 95 + '%';
+        el.style.top = '-' + (Math.random() * 40 + 10) + 'px';
+        el.style.animationDelay = Math.random() * 1.5 + 's';
+        el.style.animationDuration = (Math.random() * 2 + (type === 'berduka' ? 3.5 : 2)) + 's';
+        el.style.transform = `scale(${Math.random() * 0.6 + 0.6})`;
+        
+        container.appendChild(el);
+      }
+    }
+
+    function triggerSuccessModal(name, status) {
+      document.getElementById('successParticipant').innerText = name;
+      const modalBox = document.getElementById('successModalBox');
+      const iconContainer = document.getElementById('successModalIconContainer');
+      const titleEl = document.getElementById('successModalTitle');
+      const motivationEl = document.getElementById('motivationMsg');
+      const closeBtn = document.getElementById('successCloseBtn');
+      
+      let chosenMsg = "";
+
+      if (status === "Gugur") {
+        modalBox.className = "bg-slate-900 border-4 border-rose-700 rounded-3xl p-8 shadow-2xl max-w-lg w-full text-center relative transform transition-all text-white overflow-hidden";
+        iconContainer.className = "w-20 h-20 bg-rose-950 text-rose-50 border-2 border-rose-700 rounded-full flex items-center justify-center text-4xl mx-auto shadow-inner mb-4 animate-pulse relative z-10";
+        iconContainer.innerHTML = '<i class="fa-solid fa-skull-crossbones"></i>';
+        titleEl.innerText = "Duka Cita Pejuang";
+        titleEl.className = "font-title text-2xl md:text-3xl font-bold text-rose-500 mb-2 relative z-10";
+        closeBtn.className = "w-full bg-rose-700 hover:bg-rose-800 text-white font-bold py-3.5 rounded-xl text-sm shadow-md transition-all relative z-10";
+        
+        const randomIndex = Math.floor(Math.random() * CONFIG.mourningMotivations.length);
+        chosenMsg = CONFIG.mourningMotivations[randomIndex].replace("{name}", name);
+        
+        spawnRpgParticles('berduka');
+      } else if (status === "Tidak Laporan") {
+        modalBox.className = "bg-white border-4 border-blue-400 rounded-3xl p-8 shadow-2xl max-w-lg w-full text-center relative transform transition-all text-slate-800 overflow-hidden";
+        iconContainer.className = "w-20 h-20 bg-blue-100 text-blue-600 border-2 border-blue-300 rounded-full flex items-center justify-center text-4xl mx-auto shadow-inner mb-4 animate-bounce relative z-10";
+        iconContainer.innerHTML = '<i class="fa-solid fa-heart-crack"></i>';
+        titleEl.innerText = "Laporan Absen Terdata";
+        titleEl.className = "font-title text-2xl md:text-3xl font-bold text-blue-800 mb-2 relative z-10";
+        closeBtn.className = "w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 rounded-xl text-sm shadow-md transition-all relative z-10";
+        
+        const randomIndex = Math.floor(Math.random() * CONFIG.absentMotivations.length);
+        chosenMsg = CONFIG.absentMotivations[randomIndex].replace("{name}", name);
+        
+        spawnRpgParticles('sedih');
+      } else {
+        modalBox.className = "bg-white border-4 border-amber-400 rounded-3xl p-8 shadow-2xl max-w-lg w-full text-center relative transform transition-all text-slate-800 overflow-hidden";
+        iconContainer.className = "w-20 h-20 bg-emerald-100 text-emerald-600 border-2 border-emerald-300 rounded-full flex items-center justify-center text-4xl mx-auto shadow-inner mb-4 animate-bounce relative z-10";
+        iconContainer.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+        titleEl.innerText = "Laporan Sukses Terkirim!";
+        titleEl.className = "font-title text-2xl md:text-3xl font-bold text-emerald-800 mb-2 relative z-10";
+        closeBtn.className = "w-full bg-slate-800 hover:bg-slate-950 text-white font-bold py-3.5 rounded-xl text-sm shadow-md transition-all relative z-10";
+        
+        const randomIndex = Math.floor(Math.random() * CONFIG.successMotivations.length);
+        chosenMsg = CONFIG.successMotivations[randomIndex].replace("{name}", name);
+        
+        spawnRpgParticles('gembira');
+      }
+      
+      motivationEl.innerText = `"${chosenMsg}"`;
+      document.getElementById('modalSuccess').classList.remove('hidden');
+    }
+
+    function closeSuccessModal() {
+      document.getElementById('modalSuccess').classList.add('hidden');
+      document.getElementById('selectParticipant').value = "";
+    }
+
+    function triggerSpamModal(name) {
+      document.getElementById('spamParticipant').innerText = name;
+      document.getElementById('modalSpam').classList.remove('hidden');
+    }
+
+    function closeSpamModal() {
+      document.getElementById('spamParticipant').value = "";
+      document.getElementById('modalSpam').classList.add('hidden');
+    }
+
+    // ===== Pendeteksi kalimat insight (hanya berdasarkan tanda titik) =====
+    function countInsightSentences(text) {
+      if (!text) return 0;
+      let t = String(text);
+      // Titik desimal (contoh 3.5) bukan akhir kalimat
+      t = t.replace(/(\d)\.(?=\d)/g, "$1");
+      // Titik beruntun (...) dihitung satu titik
+      t = t.replace(/\.{2,}/g, ".");
+      const parts = t.split(".");
+      parts.pop(); // bagian terakhir tidak diakhiri titik
+      let count = 0;
+      for (let i = 0; i < parts.length; i++) {
+        if (/[A-Za-z0-9\u00C0-\u024F]/.test(parts[i])) count++;
+      }
+      return count;
+    }
+
+    function detectInsightSentences() {
+      const area = document.getElementById('insightText');
+      const box = document.getElementById('insightCounterBox');
+      const msg = document.getElementById('insightCounterMsg');
+      const num = document.getElementById('insightCounterNum');
+      if (!area || !box || !msg || !num) return 0;
+
+      const total = countInsightSentences(area.value);
+      num.innerText = Math.min(total, 99) + "/3";
+      box.classList.remove('state-empty', 'state-short', 'state-ok');
+      area.classList.remove('is-ok', 'is-short');
+
+      const statusNow = document.getElementById('selectStatus');
+      const optional = statusNow && statusNow.value !== 'Laporan';
+
+      if (optional && total < 3) {
+        box.classList.add('state-empty');
+        msg.innerHTML = '<i class="fa-solid fa-circle-info"></i> Insight tidak wajib untuk status ini.';
+      } else if (area.value.trim() === "") {
+        box.classList.add('state-empty');
+        msg.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> Belum ada insight. Minimal 3 kalimat bertitik.';
+      } else if (total < 3) {
+        box.classList.add('state-short');
+        area.classList.add('is-short');
+        msg.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Belum cukup. Kurang ' + (3 - total) + ' kalimat lagi (akhiri dengan titik). Terdeteksi: Tidak Insight.';
+      } else {
+        box.classList.add('state-ok');
+        area.classList.add('is-ok');
+        msg.innerHTML = '<i class="fa-solid fa-circle-check"></i> Mantap! Terdeteksi: Insight.';
+      }
+      updatePageRangeLabel();
+      refreshSubmitGate();
+      return total;
+    }
+
+    // ===== Mode Terang / Gelap =====
+    function isDarkMode() {
+      return document.documentElement.classList.contains('dark');
+    }
+
+    function applyThemeToChart() {
+      try {
+        if (typeof statsChart !== 'undefined' && statsChart) {
+          statsChart.options.plugins.legend.labels.color = isDarkMode() ? '#cbd5e1' : '#475569';
+        }
+        if (typeof updateStatsChart === 'function') updateStatsChart();
+      } catch (e) { console.warn("Chart theme sync skipped:", e); }
+    }
+
+    function toggleTheme() {
+      const dark = document.documentElement.classList.toggle('dark');
+      try { localStorage.setItem('npc_theme', dark ? 'dark' : 'light'); } catch (e) {}
+      applyThemeToChart();
+    }
+
+    function submitDailyLog() {
+      if (isSubmitting) return;
+      
+      const pName = document.getElementById('selectParticipant').value;
+      const status = document.getElementById('selectStatus').value;
+      const insight = countInsightSentences(document.getElementById('insightText').value) >= 3 ? "Insight" : "Tidak Insight";
+
+      if (!pName) {
+        showCustomAlert("Aksi Diperlukan", "Silakan pilih nama Anda terlebih dahulu!", "fa-solid fa-user-tag", "text-amber-500", "bg-amber-100");
+        return;
+      }
+
+      if (!isInsightRequirementMet()) {
+        const titleNow = document.getElementById('bookTitle');
+        if (titleNow && titleNow.value.trim() === "") {
+          showCustomAlert("Judul Buku Kosong", "Isi judul buku yang kamu baca terlebih dahulu sebelum mengirim laporan.", "fa-solid fa-book", "text-amber-500", "bg-amber-100");
+        } else if (document.getElementById('bookAuthor') && document.getElementById('bookAuthor').value.trim() === "") {
+          showCustomAlert("Penulis Kosong", "Isi nama penulis buku terlebih dahulu sebelum mengirim laporan.", "fa-solid fa-user-pen", "text-amber-500", "bg-amber-100");
+        } else if (!getPageRangeInfo().valid) {
+          showCustomAlert("Jumlah Halaman Belum Valid", "Isi halaman awal dan halaman akhir dengan benar. Halaman akhir harus sama atau lebih besar dari halaman awal.", "fa-solid fa-book-open", "text-amber-500", "bg-amber-100");
+        } else {
+          showCustomAlert("Insight Belum Cukup", "Tulis minimal 3 kalimat insight dan akhiri setiap kalimat dengan tanda titik sebelum mengirim laporan.", "fa-solid fa-pen-to-square", "text-amber-500", "bg-amber-100");
+        }
+        return;
+      }
+
+      if (state.currentMode === "PESERTA") {
+        const alreadySubmitted = state.laporan.some(log => log.date === state.activeDate && log.name === pName);
+        if (alreadySubmitted) {
+          triggerSpamModal(pName);
+          return;
+        }
+      }
+
+      isSubmitting = true;
+      const btn = document.getElementById('btnSubmitLog');
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'cursor-not-allowed');
+
+      const now = new Date();
+      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const wib = new Date(utc + (3600000 * 7));
+      const logTime = String(wib.getHours()).padStart(2, '0') + ":" + String(wib.getMinutes()).padStart(2, '0') + " WIB";
+
+      const newLog = {
+        id: Date.now(),
+        date: state.activeDate,
+        name: pName,
+        status: status,
+        insight: insight,
+        time: logTime,
+        insightText: (document.getElementById('insightText').value || "").trim(),
+        bookTitle: (document.getElementById('bookTitle').value || "").trim(),
+        pageRange: getPageRangeInfo().text,
+        author: (document.getElementById('bookAuthor').value || "").trim()
+      };
+
+      state.laporan.unshift(newLog);
+
+      if (status === "Tidak Laporan") {
+        deductHP(pName);
+        triggerSuccessModal(pName, "Tidak Laporan");
+      } else if (status === "Reset HP") {
+        resetHP(pName);
+        triggerSuccessModal(pName, "Laporan");
+      } else if (status === "Gugur") {
+        disqualifyParticipant(pName);
+      } else {
+        triggerSuccessModal(pName, "Laporan");
+      }
+
+      saveState();
+      renderLaporanTable();
+      renderHPTable();
+      renderIndividualHpList();
+      updateStatsChart(); 
+      renderBelumLaporUI();
+      populateParticipantDropdowns(); 
+      updateHomeStatsGrid();
+
+      isSubmitting = false;
+      btn.disabled = false;
+      btn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+      const insightBox = document.getElementById('insightText');
+      const bookBox = document.getElementById('bookTitle');
+      if (bookBox) bookBox.value = "";
+      const authorBox = document.getElementById('bookAuthor');
+      if (authorBox) authorBox.value = "";
+      const pStart = document.getElementById('pageStart');
+      const pEnd = document.getElementById('pageEnd');
+      if (pStart) pStart.value = "";
+      if (pEnd) pEnd.value = "";
+      if (insightBox) {
+        insightBox.value = "";
+        detectInsightSentences();
+      }
+    }
+
+    function deductHP(name) {
+      const idx = state.partners.findIndex(item => item.name1 === name || item.name2 === name);
+      if (idx !== -1) {
+        state.partners[idx].hp -= 1;
+        const team = state.partners[idx];
+        
+        if (team.type === "PARTNER" && team.hp <= -7) {
+          team.active = false;
+          triggerSuccessModal(team.name1 + " & " + team.name2, "Gugur");
+          
+          setTimeout(() => {
+            showCustomAlert(
+              "🚨 Batas HP Terlewati! (GUGUR BERSAMA)",
+              `Kelompok Partner [${team.name1}] & [${team.name2}] dinyatakan GUGUR BERSAMA karena Health Points (HP) telah menyentuh batas kritis -7 HP!`,
+              "fa-solid fa-skull-crossbones",
+              "text-rose-500",
+              "bg-rose-50"
+            );
+          }, 3500);
+        } else if (team.type === "SINGLE" && team.hp <= -4) {
+          team.active = false;
+          triggerSuccessModal(name, "Gugur");
+        }
+      }
+    }
+
+    function resetHP(name) {
+      const idx = state.partners.findIndex(item => item.name1 === name || item.name2 === name);
+      if (idx !== -1) {
+        const team = state.partners[idx];
+        team.hp = 0;
+        team.active = true;
+      }
+    }
+
+    function disqualifyParticipant(name) {
+      const idx = state.partners.findIndex(item => item.name1 === name || item.name2 === name);
+      if (idx !== -1) {
+        const team = state.partners[idx];
+        
+        if (team.type === "PARTNER") {
+          team.active = false;
+          triggerSuccessModal(team.name1 + " & " + team.name2, "Gugur");
+          
+          setTimeout(() => {
+            showCustomAlert(
+              "🚨 Status Gugur Bersama!",
+              `Pasangan klan [${team.name1}] & [${team.name2}] secara otomatis dinyatakan GUGUR BERSAMA dari Quest Batch ini!`,
+              "fa-solid fa-skull-crossbones",
+              "text-rose-500",
+              "bg-rose-50"
+            );
+          }, 3500);
+        } else {
+          team.active = false;
+          triggerSuccessModal(name, "Gugur");
+        }
+        
+        populateParticipantDropdowns();
+        updateHomeStatsGrid();
+      }
+    }
+
+    function partnerResign(index) {
+      if (state.currentMode !== "PJ") return;
+
+      const team = state.partners[index];
+      showCustomConfirm("Mitra Mengundurkan Diri", "Pasangan yang tersisa akan dipindahkan menjadi Single Fighter dengan HP direset ke 0.", () => {
+        let survivor = "";
+        let resigned = "";
+        
+        const chooseName = prompt(`Siapa partner yang MENGUNDURKAN DIRI?\n1. ${team.name1}\n2. ${team.name2}\n(Ketik 1 atau 2)`);
+        if (chooseName === "1") {
+          survivor = team.name2;
+          resigned = team.name1;
+        } else if (chooseName === "2") {
+          survivor = team.name1;
+          resigned = team.name2;
+        } else {
+          showCustomAlert("Input Tidak Valid", "Pilihan tidak valid! Pengunduran partner dibatalkan.", "fa-solid fa-circle-exclamation", "text-rose-600", "bg-rose-100");
+          return;
+        }
+
+        // Update the existing partner team to become survivor's active single fighter team
+        team.type = "SINGLE";
+        team.name1 = survivor;
+        team.name2 = "-";
+        team.hp = 0;
+        team.active = true;
+        team.notes = "";
+
+        // Push the resigned person as an inactive single fighter team so they are permanently logged
+        state.partners.push({
+          type: "SINGLE",
+          name1: resigned,
+          name2: "-",
+          hp: 0,
+          active: false,
+          notes: "Mengundurkan Diri"
+        });
+
+        saveState();
+        renderHPTable();
+        renderIndividualHpList();
+        populateParticipantDropdowns();
+        updateHomeStatsGrid();
+
+        triggerSuccessModal(resigned, "Gugur");
+        
+        setTimeout(() => {
+          showCustomAlert(
+            "🛡️ Berjuang Sendiri",
+            `[${survivor}] berhasil diselamatkan dan sekarang berstatus Single Fighter (HP di-reset ke 0)!`,
+            "fa-solid fa-shield-halved",
+            "text-emerald-600",
+            "bg-emerald-100"
+          );
+        }, 3500);
+
+      }, "fa-solid fa-user-minus", "text-amber-600", "bg-amber-100");
+    }
+
+    function triggerDedicatedResign() {
+      if (state.currentMode !== "PJ") return;
+      const resignedName = document.getElementById('resignParticipantSelector').value;
+      if (!resignedName) {
+        showCustomAlert("Pilih Peserta", "Silakan pilih nama peserta yang mengundurkan diri!", "fa-solid fa-circle-exclamation", "text-amber-500", "bg-amber-100");
+        return;
+      }
+
+      showCustomConfirm("Konfirmasi Pengunduran Diri", `Apakah Anda yakin ingin memproses pengunduran diri [${resignedName}]? Partner yang bersangkutan (jika ada) akan otomatis berjuang sendiri sebagai Single Fighter (HP di-reset ke 0).`, () => {
+        const idx = state.partners.findIndex(item => item.name1 === resignedName || item.name2 === resignedName);
+        if (idx === -1) {
+          // If not in a team, just push as an inactive single
+          state.partners.push({
+            type: "SINGLE",
+            name1: resignedName,
+            name2: "-",
+            hp: 0,
+            active: false,
+            notes: "Mengundurkan Diri"
+          });
+        } else {
+          const team = state.partners[idx];
+          if (team.type === "PARTNER") {
+            const survivor = team.name1 === resignedName ? team.name2 : team.name1;
+            
+            // Convert to single fighter survivor
+            team.type = "SINGLE";
+            team.name1 = survivor;
+            team.name2 = "-";
+            team.hp = 0;
+            team.active = true;
+            team.notes = "";
+            
+            // Push resigned person as inactive single
+            state.partners.push({
+              type: "SINGLE",
+              name1: resignedName,
+              name2: "-",
+              hp: 0,
+              active: false,
+              notes: "Mengundurkan Diri"
+            });
+          } else {
+            // If already single, just mark inactive
+            team.active = false;
+            team.notes = "Mengundurkan Diri";
+          }
+        }
+
+        saveState();
+        renderHPTable();
+        renderIndividualHpList();
+        populateParticipantDropdowns();
+        updateHomeStatsGrid();
+
+        triggerSuccessModal(resignedName, "Gugur");
+        
+        setTimeout(() => {
+          showCustomAlert(
+            "💾 Pengunduran Diri Diproses",
+            `[${resignedName}] berhasil tercatat mengundurkan diri (Gugur) dan disinkronkan ke dalam database PABOBA.`,
+            "fa-solid fa-circle-check",
+            "text-emerald-600",
+            "bg-emerald-100"
+          );
+        }, 3500);
+
+      }, "fa-solid fa-user-slash", "text-rose-600", "bg-rose-50");
+    }
+
+    function modifyHPDirect(index, change) {
+      if (state.currentMode !== "PJ") return;
+      state.partners[index].hp += change;
+      
+      const team = state.partners[index];
+      if (team.type === "PARTNER" && team.hp <= -7) {
+        team.active = false;
+        triggerSuccessModal(team.name1 + " & " + team.name2, "Gugur");
+        
+        setTimeout(() => {
+          showCustomAlert(
+            "🚨 Batas HP Terlewati! (GUGUR BERSAMA)",
+            `Kelompok Partner [${team.name1}] & [${team.name2}] dinyatakan GUGUR BERSAMA karena Health Points (HP) telah menyentuh batas kritis -7 HP!`,
+            "fa-solid fa-skull-crossbones",
+            "text-rose-500",
+            "bg-rose-50"
+          );
+        }, 3500);
+      } else if (team.type === "SINGLE" && team.hp <= -4) {
+        team.active = false;
+        triggerSuccessModal(team.name1, "Gugur");
+      } else {
+        team.active = true;
+      }
+
+      saveState();
+      renderHPTable();
+      renderIndividualHpList();
+      populateParticipantDropdowns(); 
+      updateHomeStatsGrid();
+    }
+
+    function openPinModal() {
+      document.getElementById('modalPin').classList.remove('hidden');
+      document.getElementById('inputPin').value = "";
+      document.getElementById('inputPin').focus();
+    }
+
+    function closePinModal() {
+      document.getElementById('modalPin').classList.add('hidden');
+    }
+
+    function verifyPJPin() {
+      const pinVal = document.getElementById('inputPin').value;
+      if (pinVal === state.securityPin) {
+        enterPJMode();
+        closePinModal();
+      } else {
+        showCustomAlert("Akses Ditolak", "PIN SALAH! Silakan masukkan 6 digit PIN yang benar.", "fa-solid fa-lock", "text-rose-600", "bg-rose-100");
+      }
+    }
+
+    function enterPJMode() {
+      state.currentMode = "PJ";
+      saveState();
+
+      document.getElementById('btnPjGateway').classList.add('hidden');
+      document.getElementById('btnExitPj').classList.remove('hidden');
+
+      document.getElementById('pjDateSetter').classList.remove('hidden');
+      document.getElementById('displayActiveDate').classList.add('hidden');
+      document.getElementById('pjDateSetterLabel').classList.remove('hidden');
+      document.getElementById('statusResetHpOption').classList.remove('hidden');
+      document.getElementById('statusGugurOption').classList.remove('hidden');
+      document.getElementById('btnPjPiketSettings').classList.remove('hidden');
+      document.getElementById('btnPjPiketClear').classList.remove('hidden');
+      document.getElementById('pjExportToolsPanel').classList.remove('hidden');
+      document.getElementById('colHeaderPjAction').classList.remove('hidden');
+      document.getElementById('btnPjExportHpPdf').classList.remove('hidden');
+      document.getElementById('colHeaderHpAction').classList.remove('hidden');
+      document.getElementById('tabBtn4').classList.remove('hidden'); 
+
+      renderLaporanTable();
+      renderHPTable();
+      renderIndividualHpList();
+      renderPiketSchedules();
+      updateHomeStatsGrid();
+
+      switchMainTab(2);
+      activateSubTab(4);
+    }
+
+    function exitPJMode() {
+      state.currentMode = "PESERTA";
+      saveState();
+
+      document.getElementById('btnPjGateway').classList.remove('hidden');
+      document.getElementById('btnExitPj').classList.add('hidden');
+
+      document.getElementById('pjDateSetter').classList.add('hidden');
+      document.getElementById('displayActiveDate').classList.remove('hidden');
+      document.getElementById('pjDateSetterLabel').classList.add('hidden');
+      document.getElementById('statusResetHpOption').classList.add('hidden');
+      document.getElementById('statusGugurOption').classList.add('hidden');
+      document.getElementById('btnPjPiketSettings').classList.add('hidden');
+      document.getElementById('btnPjPiketClear').classList.add('hidden');
+      document.getElementById('pjExportToolsPanel').classList.add('hidden');
+      document.getElementById('colHeaderPjAction').classList.add('hidden');
+      document.getElementById('btnPjExportHpPdf').classList.add('hidden');
+      document.getElementById('colHeaderHpAction').classList.add('hidden');
+      document.getElementById('tabBtn4').classList.add('hidden'); 
+
+      renderLaporanTable();
+      renderHPTable();
+      renderIndividualHpList();
+      renderPiketSchedules();
+      updateHomeStatsGrid();
+
+      switchMainTab(1);
+    }
+
+    function exportLaporanPDF() {
+      if (state.currentMode !== "PJ") return;
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('p', 'mm', 'a4');
+
+      const startVal = document.getElementById('pdfStartDate').value;
+      const endVal = document.getElementById('pdfEndDate').value;
+
+      let rawLogs = [...state.laporan];
+      let dateFilterTitle = "Seluruh Periode";
+
+      if (startVal && endVal) {
+        rawLogs = rawLogs.filter(log => log.date >= startVal && log.date <= endVal);
+        dateFilterTitle = `Periode ${startVal} s/d ${endVal}`;
+      } else if (startVal) {
+        rawLogs = rawLogs.filter(log => log.date >= startVal);
+        dateFilterTitle = `Mulai ${startVal}`;
+      } else if (endVal) {
+        rawLogs = rawLogs.filter(log => log.date <= endVal);
+        dateFilterTitle = `Hingga ${endVal}`;
+      }
+
+      const activePj = getActivePjName();
+
+      doc.setFillColor(251, 191, 36);
+      doc.rect(0, 0, 210, 32, 'F');
+
+      doc.setTextColor(30, 41, 59);
+      doc.setFont('Helvetica', 'bold');
+      doc.setFontSize(16);
+      doc.text("LAPORAN REKAPAN BULANAN - NEXT PAGE CHALLENGE", 14, 15);
+      
+      doc.setFont('Helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.text(`Kategori: ${dateFilterTitle}  |  Dibuat oleh Tim PJ Bertugas: ${activePj}`, 14, 23);
+
+      // Font bawaan PDF hanya mendukung karakter Latin, jadi karakter lain dibersihkan
+      const pdfSafe = function (txt) {
+        return String(txt || "")
+          .replace(/[\u2018\u2019]/g, "'")
+          .replace(/[\u201C\u201D]/g, '"')
+          .replace(/[\u2013\u2014]/g, "-")
+          .replace(/\u2026/g, "...")
+          .replace(/[^\x09\x0A\x0D\x20-\x7E\u00A0-\u00FF]/g, "")
+          .trim();
+      };
+
+      const tableRows = [];
+      rawLogs.forEach(log => {
+        tableRows.push([
+          log.date,
+          log.name,
+          log.status,
+          log.insight,
+          log.time,
+          pdfSafe(log.bookTitle) || "-",
+          pdfSafe(log.author) || "-",
+          pdfSafe(log.pageRange) || "-",
+          pdfSafe(log.insightText) || "-"
+        ]);
+      });
+
+      doc.autoTable({
+        startY: 40,
+        head: [['Tanggal', 'Nama Peserta', 'Status Laporan', 'Status Insight', 'Jam Setor', 'Judul Buku', 'Penulis', 'Halaman', 'Isi Insight']],
+        body: tableRows,
+        theme: 'striped',
+        headStyles: { fillColor: [245, 158, 11] },
+        styles: { font: 'Helvetica', fontSize: 8, cellPadding: 2, overflow: 'linebreak', valign: 'top' },
+        columnStyles: {
+          0: { cellWidth: 16 },
+          1: { cellWidth: 19 },
+          2: { cellWidth: 14 },
+          3: { cellWidth: 14 },
+          4: { cellWidth: 12 },
+          5: { cellWidth: 22 },
+          6: { cellWidth: 20 },
+          7: { cellWidth: 14 },
+          8: { cellWidth: 'auto' }
+        },
+        margin: { left: 8, right: 8 }
+      });
+
+      doc.save(`NPC-Rekap-Laporan-${getWIBDateString()}.pdf`);
+    }
+
+    function exportGrafikPDF() {
+      if (state.currentMode !== "PJ") return;
+      if (!statsChart) {
+        showCustomAlert("Gagal", "Grafik belum diinisialisasi atau data kosong!", "fa-solid fa-circle-exclamation", "text-rose-600", "bg-rose-100");
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('p', 'mm', 'a4');
+
+      const activePj = getActivePjName();
+
+      doc.setFillColor(15, 23, 42); 
+      doc.rect(0, 0, 210, 36, 'F');
+
+      doc.setTextColor(251, 191, 36); 
+      doc.setFont('Helvetica', 'bold');
+      doc.setFontSize(18);
+      doc.text("LAPORAN GRAFIK & ANALITIK KEAKTIFAN NPC", 14, 15);
+      
+      doc.setTextColor(241, 245, 249); 
+      doc.setFont('Helvetica', 'normal');
+      doc.setFontSize(10);
+      const scopeText = document.getElementById('chartScopeToggle').value === 'activeDate' ? `Tanggal Aktif: ${state.activeDate}` : "Seluruh Periode Tantangan";
+      doc.text(`Kategori Ekspor: ${scopeText}  |  Dibuat oleh Tim PJ Bertugas: ${activePj}`, 14, 24);
+
+      doc.setTextColor(30, 41, 59);
+      doc.setFont('Helvetica', 'bold');
+      doc.setFontSize(12);
+      doc.text("1. Ringkasan Parameter Statistik Keaktifan", 14, 48);
+
+      const rasioMelapor = document.getElementById('statPercentageLapor').innerText;
+      const totalLapor = document.getElementById('statTotalLapor').innerText;
+      const totalAlpa = document.getElementById('statTotalAlpa').innerText;
+
+      doc.autoTable({
+        startY: 54,
+        head: [['Metrik Pengukuran Keaktifan', 'Nilai Capaian']],
+        body: [
+          ['Rasio Keberhasilan Melapor (Konsistensi)', rasioMelapor],
+          ['Jumlah Anggota Melapor (Lapor)', `${totalLapor} Orang`],
+          ['Jumlah Anggota Lalai (Tidak Lapor / Alpa)', `${totalAlpa} Orang`]
+        ],
+        theme: 'striped',
+        headStyles: { fillColor: [245, 158, 11] },
+        styles: { font: 'Helvetica', fontSize: 10 }
+      });
+
+      const nextY = doc.previousAutoTable.finalY + 12;
+
+      doc.setFont('Helvetica', 'bold');
+      doc.setFontSize(12);
+      doc.text("2. Penjelasan Singkat Grafik", 14, nextY);
+
+      doc.setFont('Helvetica', 'normal');
+      doc.setFontSize(9.5);
+      doc.setTextColor(71, 85, 105);
+      
+      const explanationText = 
+        `Diagram lingkaran di bawah menyajikan distribusi komparatif antara peserta yang tertib mengirimkan laporan harian (Lapor) dengan peserta yang absen (Alpa). Rasio keberhasilan melapor yang tinggi mengindikasikan momentum membaca yang stabil di dalam klan. PJ wajib memantau grafik ini secara berkala untuk mendeteksi dini penurunan konsistensi membaca sebelum kuota Health Points (HP) peserta menyentuh batas eliminasi.`;
+      
+      const splitExplanation = doc.splitTextToSize(explanationText, 182);
+      doc.text(splitExplanation, 14, nextY + 6);
+
+      const chartY = nextY + 6 + (splitExplanation.length * 4.5) + 10;
+
+      doc.setTextColor(30, 41, 59);
+      doc.setFont('Helvetica', 'bold');
+      doc.setFontSize(12);
+      doc.text("3. Visualisasi Diagram Lingkaran (Doughnut Chart)", 14, chartY);
+
+      try {
+        const canvasEl = document.getElementById('statsChart');
+        const chartImg = canvasEl.toDataURL('image/png', 1.0);
+        const chartWidth = 90;
+        const chartHeight = 90;
+        const xPos = (210 - chartWidth) / 2;
+        doc.addImage(chartImg, 'PNG', xPos, chartY + 6, chartWidth, chartHeight);
+      } catch (err) {
+        console.error("Gagal merender gambar grafik ke PDF:", err);
+        doc.setFont('Helvetica', 'italic');
+        doc.setFontSize(10);
+        doc.setTextColor(156, 163, 175);
+        doc.text("[Gagal merender gambar visualisasi karena kendala iFrame sandbox browser]", 14, chartY + 10);
+      }
+
+      doc.save(`NPC-HighQuality-Analitik-${getWIBDateString()}.pdf`);
+    }
+
+    function exportPartnerHpPDF() {
+      if (state.currentMode !== "PJ") return;
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('p', 'mm', 'a4');
+
+      const activePj = getActivePjName();
+
+      doc.setFillColor(251, 191, 36);
+      doc.rect(0, 0, 210, 32, 'F');
+
+      doc.setTextColor(30, 41, 59);
+      doc.setFont('Helvetica', 'bold');
+      doc.setFontSize(16);
+      doc.text("MONITORING QUEST BOARD HEALTH POINTS (HP)", 14, 15);
+      
+      doc.setFont('Helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.text(`Batch Tanggal: ${getWIBDateString()}  |  Dibuat oleh Tim PJ Bertugas: ${activePj}`, 14, 23);
+
+      const tableRows = [];
+      state.partners.forEach(team => {
+        const nameText = team.type === "PARTNER" ? `${team.name1} & ${team.name2}` : team.name1;
+        const isInactive = team.active === false || team.active === "false" || team.active === "FALSE";
+        const statusText = !isInactive ? "AKTIF" : (team.notes || "GUGUR");
+        tableRows.push([
+          team.type,
+          nameText,
+          `${team.hp} HP`,
+          statusText
+        ]);
+      });
+
+      doc.autoTable({
+        startY: 40,
+        head: [['Jenis Kelompok', 'Nama Anggota Tim', 'Sisa Health Points', 'Status Keaktifan']],
+        body: tableRows,
+        theme: 'striped',
+        headStyles: { fillColor: [30, 41, 59] },
+        styles: { font: 'Helvetica', fontSize: 10 }
+      });
+
+      doc.save(`NPC-Quest-HP-Partner-${getWIBDateString()}.pdf`);
+    }
+
+    function showCustomAlert(title, message, iconClass = "fa-solid fa-circle-exclamation", iconColor = "text-amber-500", bgIcon = "bg-amber-100") {
+      document.getElementById('customAlertTitle').innerText = title;
+      document.getElementById('customAlertMsg').innerText = message;
+      
+      const iconContainer = document.getElementById('customAlertIconContainer');
+      iconContainer.className = `w-16 h-16 ${bgIcon} ${iconColor} rounded-full flex items-center justify-center text-3xl mx-auto mb-4`;
+      iconContainer.innerHTML = `<i class="${iconClass}"></i>`;
+      
+      document.getElementById('modalCustomAlert').classList.remove('hidden');
+    }
+    
+    function closeCustomAlert() {
+      document.getElementById('modalCustomAlert').classList.add('hidden');
+    }
+
+    let confirmCallback = null;
+    function showCustomConfirm(title, message, onConfirm, iconClass = "fa-solid fa-circle-question", iconColor = "text-amber-500", bgIcon = "bg-amber-100") {
+      document.getElementById('customConfirmTitle').innerText = title;
+      document.getElementById('customConfirmMsg').innerText = message;
+      
+      const iconContainer = document.getElementById('customConfirmIconContainer');
+      iconContainer.className = `w-16 h-16 ${bgIcon} ${iconColor} rounded-full flex items-center justify-center text-3xl mx-auto mb-4`;
+      iconContainer.innerHTML = `<i class="${iconClass}"></i>`;
+      
+      confirmCallback = onConfirm;
+      document.getElementById('modalCustomConfirm').classList.remove('hidden');
+    }
+    
+    function closeCustomConfirm(accepted) {
+      document.getElementById('modalCustomConfirm').classList.add('hidden');
+      if (accepted && confirmCallback) {
+        confirmCallback();
+      }
+      confirmCallback = null;
+    }
+
+    function renderBatchPeriodDisplay() {
+      const formatDate = (dateStr) => {
+        if (!dateStr) return "-";
+        const parts = dateStr.split("-");
+        if (parts.length !== 3) return dateStr;
+        const d = new Date(parts[0], parts[1]-1, parts[2]);
+        return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+      };
+      
+      const startFmt = formatDate(state.startDate);
+      const endFmt = formatDate(state.endDate);
+      document.getElementById('displayBatchRange').innerText = `Mulai: ${startFmt} s/d Selesai: ${endFmt}`;
+    }
+
+    function saveBatchDates() {
+      if (state.currentMode !== "PJ") return;
+      const startVal = document.getElementById('pjBatchStartDate').value;
+      const endVal = document.getElementById('pjBatchEndDate').value;
+      
+      if (startVal) state.startDate = startVal;
+      if (endVal) state.endDate = endVal;
+      
+      saveState();
+      renderBatchPeriodDisplay();
+    }
+
+    function addManualParticipant() {
+      if (state.currentMode !== "PJ") return;
+      const name = document.getElementById('manualParticipantName').value.trim();
+      if (!name) {
+        showCustomAlert("Nama Kosong", "Nama peserta tidak boleh kosong!", "fa-solid fa-exclamation", "text-rose-600", "bg-rose-100");
+        return;
+      }
+
+      if (state.participants.includes(name)) {
+        showCustomAlert("Sudah Terdaftar", "Peserta dengan nama tersebut sudah ada di dalam sistem.", "fa-solid fa-ban", "text-rose-600", "bg-rose-100");
+        return;
+      }
+
+      state.participants.push(name);
+      saveState();
+      populateParticipantDropdowns();
+      updateHomeStatsGrid();
+      document.getElementById('manualParticipantName').value = "";
+      showCustomAlert("Sukses", `Sukses menambahkan "${name}" ke dalam daftar peserta!`, "fa-solid fa-circle-check", "text-emerald-600", "bg-emerald-100");
+    }
+
+    function updatePjPin() {
+      if (state.currentMode !== "PJ") return;
+      const pin = document.getElementById('newSecurityPin').value;
+      if (pin.length < 4 || pin.length > 6) {
+        showCustomAlert("Kesalahan PIN", "PIN minimal terdiri dari 4 karakter dan maksimal 6 karakter!", "fa-solid fa-key", "text-rose-600", "bg-rose-100");
+        return;
+      }
+      state.securityPin = pin;
+      saveState();
+      document.getElementById('newSecurityPin').value = "";
+      showCustomAlert("PIN Berhasil Diubah", "PIN Keamanan PJ berhasil diperbarui!", "fa-solid fa-circle-check", "text-emerald-600", "bg-emerald-100");
+    }
+
+    function addManualPartnerPair() {
+      if (state.currentMode !== "PJ") return;
+      const p1 = document.getElementById('manualPartner1').value;
+      const p2 = document.getElementById('manualPartner2').value;
+
+      if (!p1 || !p2 || p1 === p2) {
+        showCustomAlert("Aksi Gagal", "Silakan pilih 2 nama peserta berbeda untuk dipasangkan bersama!", "fa-solid fa-triangle-exclamation", "text-amber-500", "bg-amber-100");
+        return;
+      }
+
+      const isAlreadyPaired = state.partners.some(p => p.name1 === p1 || p.name2 === p1 || p.name1 === p2 || p.name2 === p2);
+      if (isAlreadyPaired) {
+        showCustomAlert("Sudah Terdaftar", "Salah satu atau kedua peserta sudah memiliki kelompok partner aktif!", "fa-solid fa-ban", "text-rose-600", "bg-rose-100");
+        return;
+      }
+
+      const newPair = {
+        type: "PARTNER",
+        name1: p1,
+        name2: p2,
+        hp: 0,
+        active: true,
+        notes: ""
+      };
+
+      state.partners.push(newPair);
+      saveState();
+      renderHPTable();
+      renderIndividualHpList();
+      populateParticipantDropdowns();
+      updateHomeStatsGrid();
+      showCustomAlert("Partner Berhasil", `Sukses memasangkan manual: ${p1} & ${p2}!`, "fa-solid fa-circle-check", "text-emerald-600", "bg-emerald-100");
+    }
+
+    function shuffleAllPartners() {
+      if (state.currentMode !== "PJ") return;
+
+      showCustomConfirm("Acak Partner", "Tindakan ini akan mengacak seluruh nama peserta menjadi kelompok partner baru secara otomatis. Lanjutkan?", () => {
+        const items = [...state.participants];
+        for (let i = items.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [items[i], items[j]] = [items[j], items[i]];
+        }
+
+        const newPartners = [];
+        while (items.length > 0) {
+          if (items.length >= 2) {
+            const name1 = items.pop();
+            const name2 = items.pop();
+            newPartners.push({
+              type: "PARTNER",
+              name1: name1,
+              name2: name2,
+              hp: 0,
+              active: true,
+              notes: ""
+            });
+          } else {
+            const name1 = items.pop();
+            newPartners.push({
+              type: "SINGLE",
+              name1: name1,
+              name2: "-",
+              hp: 0,
+              active: true,
+              notes: ""
+            });
+          }
+        }
+
+        state.partners = newPartners;
+        saveState();
+        renderHPTable();
+        renderIndividualHpList();
+        populateParticipantDropdowns();
+        updateHomeStatsGrid();
+        showCustomAlert("Shuffling Selesai", "Sistem berhasil mengacak dan mendaftarkan partner baru untuk batch ini!", "fa-solid fa-dice", "text-emerald-600", "bg-emerald-100");
+      }, "fa-solid fa-shuffle", "text-amber-500", "bg-amber-100");
+    }
+
+    function resetPartnerDatabase() {
+      if (state.currentMode !== "PJ") return;
+
+      showCustomConfirm("Hapus Partner", "Apakah Anda yakin ingin menghapus seluruh data settingan partner harian untuk Batch ini?", () => {
+        state.partners = [];
+        saveState();
+        renderHPTable();
+        renderIndividualHpList();
+        populateParticipantDropdowns();
+        updateHomeStatsGrid();
+      }, "fa-solid fa-arrows-rotate", "text-rose-600", "bg-rose-100");
+    }
+
+    function openPiketSettings() {
+      if (state.currentMode !== "PJ") return;
+      document.getElementById('modalPiketSettings').classList.remove('hidden');
+    }
+
+    function closePiketSettings() {
+      document.getElementById('modalPiketSettings').classList.add('hidden');
+    }
+
+    function addPiketSchedule() {
+      if (state.currentMode !== "PJ") return;
+      const dateVal = document.getElementById('piketDate').value;
+      const name = document.getElementById('piketPjName').value.trim();
+
+      if (!dateVal) {
+        showCustomAlert("Formulir Kosong", "Silakan pilih tanggal piket terlebih dahulu!", "fa-solid fa-calendar-xmark", "text-rose-600", "bg-rose-100");
+        return;
+      }
+      if (!name) {
+        showCustomAlert("Formulir Kosong", "Nama pendamping PJ tidak boleh kosong!", "fa-solid fa-user-tag", "text-rose-600", "bg-rose-100");
+        return;
+      }
+
+      const dayName = getDayName(dateVal);
+
+      const newPj = {
+        id: Date.now(),
+        date: dateVal,
+        day: dayName,
+        name: name
+      };
+
+      state.piketPj.push(newPj);
+      state.piketPj.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      saveState();
+      renderPiketSchedules();
+      closePiketSettings();
+      document.getElementById('piketDate').value = "";
+      document.getElementById('piketPjName').value = "";
+      showPjDutyNotification();
+    }
+
+    function deletePjSchedule(id) {
+      if (state.currentMode !== "PJ") return;
+
+      showCustomConfirm("Hapus Piket", "Apakah Anda yakin ingin menghapus jadwal piket ini?", () => {
+        state.piketPj = state.piketPj.filter(p => p.id !== id);
+        saveState();
+        renderPiketSchedules();
+        showPjDutyNotification();
+      }, "fa-solid fa-trash-can", "text-rose-600", "bg-rose-100");
+    }
+
+    function clearPiketSchedules() {
+      if (state.currentMode !== "PJ") return;
+
+      showCustomConfirm("⚠️ Bersihkan Jadwal", "Apakah Anda yakin ingin mengosongkan seluruh jadwal piket tim PJ?", () => {
+        state.piketPj = [];
+        saveState();
+        renderPiketSchedules();
+        showPjDutyNotification();
+      }, "fa-solid fa-triangle-exclamation", "text-rose-600", "bg-rose-100");
+    }
+
+    function deleteLaporanRecord(id) {
+      if (state.currentMode !== "PJ") return;
+      
+      showCustomConfirm("Hapus Laporan", "Apakah Anda yakin ingin menghapus data laporan ini secara permanen?", () => {
+        state.laporan = state.laporan.filter(log => log.id !== id);
+        saveState();
+        renderLaporanTable();
+        renderIndividualHpList();
+        updateStatsChart(); 
+        renderBelumLaporUI();
+        populateParticipantDropdowns(); 
+        updateHomeStatsGrid();
+      }, "fa-solid fa-trash-can", "text-rose-600", "bg-rose-100");
+    }
+
+    function clearDatabaseDialog() {
+      if (state.currentMode !== "PJ") return;
+
+      showCustomConfirm("⚠️ Bersihkan Database", "Tindakan ini akan menghapus SELURUH rekapitulasi data laporan harian peserta. Apakah Anda yakin?", () => {
+        state.laporan = [];
+        saveState();
+        renderLaporanTable();
+        renderIndividualHpList();
+        updateStatsChart(); 
+        renderBelumLaporUI();
+        populateParticipantDropdowns();
+        updateHomeStatsGrid();
+      }, "fa-solid fa-triangle-exclamation", "text-rose-600", "bg-rose-100");
+    }
+
+    function updateStatsChart() {
+      const canvasEl = document.getElementById('statsChart');
+      if (!canvasEl) return;
+      
+      const ctx = canvasEl.getContext('2d');
+      let laporanCount = 0;
+      let tidakLaporanCount = 0;
+      let resetHpCount = 0;
+      let gugurCount = 0;
+      
+      const chartScope = document.getElementById('chartScopeToggle').value;
+      let targetLogs = state.laporan;
+      if (chartScope === 'activeDate') {
+        targetLogs = state.laporan.filter(log => log.date === state.activeDate);
+      }
+      
+      targetLogs.forEach(log => {
+        if (log.status === 'Laporan') laporanCount++;
+        else if (log.status === 'Tidak Laporan') tidakLaporanCount++;
+        else if (log.status === 'Reset HP') resetHpCount++;
+        else if (log.status === 'Gugur') gugurCount++;
+      });
+      
+      document.getElementById('statTotalSetoran').innerText = targetLogs.length;
+      document.getElementById('statTotalLapor').innerText = laporanCount;
+      document.getElementById('statTotalAlpa').innerText = tidakLaporanCount;
+      
+      const totalRelevant = laporanCount + tidakLaporanCount;
+      const percentage = totalRelevant > 0 ? Math.round((laporanCount / totalRelevant) * 100) : 0;
+      document.getElementById('statPercentageLapor').innerText = percentage + "%";
+
+      const dataValues = [laporanCount, tidakLaporanCount, resetHpCount, gugurCount];
+      const hasData = dataValues.some(val => val > 0);
+      const chartData = hasData ? dataValues : [1, 0, 0, 0];
+      const chartColors = hasData ? ['#10b981', '#f43f5e', '#3b82f6', (document.documentElement.classList.contains('dark') ? '#94a3b8' : '#475569')] : (document.documentElement.classList.contains('dark') ? ['#334155', '#334155', '#334155', '#334155'] : ['#e2e8f0', '#e2e8f0', '#e2e8f0', '#e2e8f0']);
+
+      if (statsChart) {
+        statsChart.data.datasets[0].data = chartData;
+        statsChart.data.datasets[0].backgroundColor = chartColors;
+        statsChart.update();
+      } else {
+        statsChart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Lapor', 'Alpa', 'Reset HP', 'Gugur'],
+            datasets: [{
+              label: 'Jumlah Anggota',
+              data: chartData,
+              backgroundColor: chartColors,
+              borderWidth: 0,
+              borderRadius: 8,
+              spacing: 6,
+              hoverOffset: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+              duration: 800,
+              easing: 'easeOutQuart'
+            },
+            plugins: {
+              legend: { 
+                display: true,
+                position: 'bottom',
+                labels: {
+                  boxWidth: 12,
+                  padding: 15,
+                  color: (document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#475569'),
+                  font: {
+                    family: 'Inter',
+                    size: 11,
+                    weight: 'bold'
+                  }
+                }
+              }
+            },
+            cutout: '75%' 
+          }
+        });
+      }
+    }
+
+    window.onload = function() {
+      try {
+        loadSavedState();
+        startClock();
+        startRealTimeSync();
+      } catch (e) {
+        console.error("Critical error on load: ", e);
+        localStorage.removeItem("npc_app_state");
+        window.location.reload();
+      }
+    };
+  </script>
+</body>
+</html>
