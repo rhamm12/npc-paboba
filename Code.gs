@@ -26,6 +26,22 @@ function doGet(e) {
     }
   }
 
+  if (action === "listBatches") {
+    try {
+      return jsonOutput({ ok: true, data: listBatches() });
+    } catch (err) {
+      return jsonOutput({ ok: false, error: String(err) });
+    }
+  }
+
+  if (action === "loadBatch") {
+    try {
+      return jsonOutput({ ok: true, data: loadBatch(e.parameter.id) });
+    } catch (err) {
+      return jsonOutput({ ok: false, error: String(err) });
+    }
+  }
+
   try {
     return HtmlService.createTemplateFromFile('index')
       .evaluate()
@@ -49,6 +65,11 @@ function doPost(e) {
 
     const raw = e && e.postData ? e.postData.contents : "";
     const body = JSON.parse(raw || "{}");
+
+    if (body.action === "backupBatch" && body.state) {
+      const result = backupBatchCore_(body.state, body.batchName);
+      return jsonOutput({ ok: true, data: result });
+    }
 
     if (body.action !== "save" || !body.state) {
       return jsonOutput({ ok: false, error: "Permintaan tidak valid" });
