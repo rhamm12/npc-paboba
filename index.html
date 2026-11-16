@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NEXT PAGE CHALLENGE - PABOBA</title>
   <script src="config.js"></script>
-  <link rel="icon" type="image/png" href="favicon.png?v=2">
-  <link rel="shortcut icon" href="favicon.png?v=2">
-  <link rel="apple-touch-icon" href="favicon.png?v=2">
+  <link rel="icon" type="image/png" href="favicon.png?v=1">
+  <link rel="shortcut icon" href="favicon.png?v=1">
+  <link rel="apple-touch-icon" href="favicon.png?v=1">
   <script>
     (function () {
       try {
@@ -124,6 +124,16 @@
       animation: rpgFall linear forwards;
       z-index: 50;
     }
+
+    /* ===== WARNA JUDUL MENGIKUTI KOTAK RUNNING TEKS ===== */
+    :root { --npc-marquee-color: #fbbf24; }
+    .npc-marquee-box { background-color: var(--npc-marquee-color); }
+    .npc-title-color {
+      color: var(--npc-marquee-color);
+      -webkit-text-stroke: 1.2px #1e293b;
+      paint-order: stroke fill;
+    }
+    html.dark .npc-title-color { -webkit-text-stroke: 0; }
 
     /* ===== THEME: LIGHT / NIGHT MODE ===== */
     html { color-scheme: light; }
@@ -256,7 +266,7 @@
           </svg>
         </div>
         <div>
-          <h1 class="font-title text-2xl md:text-3xl font-extrabold text-amber-600 tracking-tight flex items-center justify-center md:justify-start gap-1">
+          <h1 class="npc-title-color font-title text-2xl md:text-3xl font-extrabold tracking-tight flex items-center justify-center md:justify-start gap-1">
             NEXT PAGE CHALLENGE
           </h1>
           <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-0.5">
@@ -303,7 +313,7 @@
   </header>
 
   <!-- Marquee Berita -->
-  <div class="bg-amber-400 text-amber-950 font-semibold py-2 px-4 shadow-inner relative z-10">
+  <div class="npc-marquee-box text-amber-950 font-semibold py-2 px-4 shadow-inner relative z-10">
     <div class="max-w-6xl mx-auto flex items-center">
       <div class="bg-amber-950 text-amber-300 text-[10px] font-bold px-2.5 py-1 rounded uppercase tracking-wider mr-3 z-10 whitespace-nowrap flex items-center gap-1">
         <i class="fa-solid fa-bullhorn text-xs animate-bounce"></i> Info Guild
@@ -709,6 +719,18 @@
               </div>
             </div>
 
+            <!-- Pemilih Batch (arsip) -->
+            <div id="batchViewerBar" class="bg-slate-50 rounded-2xl p-4 mb-5 border border-slate-100 flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider"><i class="fa-solid fa-box-archive text-amber-500"></i> Lihat Batch:</span>
+                <select id="batchViewSelect" onchange="onBatchViewChange()" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 outline-none max-w-[260px]">
+                  <option value="">Batch Aktif (berjalan)</option>
+                </select>
+                <button onclick="refreshBatchList(true)" title="Muat ulang daftar batch" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-2.5 py-1.5 rounded-lg transition-all"><i class="fa-solid fa-rotate"></i></button>
+              </div>
+              <p id="batchViewInfo" class="text-xs font-semibold text-slate-400">Menampilkan data batch aktif.</p>
+            </div>
+
             <!-- Real Time Filter Tools & Export Controls -->
             <div id="pjExportToolsPanel" class="hidden bg-slate-50 rounded-2xl p-4 mb-5 border border-slate-100 grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
               <div class="md:col-span-8 flex flex-wrap gap-2 items-center">
@@ -870,6 +892,35 @@
             </div>
           </div>
 
+          <!-- Pengecekan HP Berkurang -->
+          <div id="hpReductionCard" class="bg-white rounded-3xl p-6 shadow-xl border border-rose-200/60">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-slate-100 pb-5 mb-5">
+              <div>
+                <h2 class="font-title text-xl font-bold text-slate-800"><i class="fa-solid fa-heart-crack text-rose-500"></i> Pengecekan HP Berkurang</h2>
+                <p class="text-xs text-slate-400">Daftar peserta yang HP-nya berkurang, termasuk yang sudah punya partner. HP partner dipotong bersama, jadi anggota yang rajin pun bisa ikut terkena.</p>
+              </div>
+              <div class="flex flex-wrap gap-2 w-full lg:w-auto">
+                <input type="text" id="hpCheckSearch" oninput="renderHpReductionCheck()" placeholder="Cari nama..." class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs outline-none focus:border-amber-400 transition-all w-full sm:w-36">
+                <select id="hpCheckType" onchange="renderHpReductionCheck()" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-700 outline-none">
+                  <option value="all">Semua Tipe</option>
+                  <option value="PARTNER">Sudah Berpartner</option>
+                  <option value="SINGLE">Single Fighter</option>
+                </select>
+                <select id="hpCheckStatus" onchange="renderHpReductionCheck()" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-700 outline-none">
+                  <option value="all">Aktif dan Gugur</option>
+                  <option value="aktif">Hanya Aktif</option>
+                  <option value="gugur">Hanya Gugur</option>
+                </select>
+              </div>
+            </div>
+            <div id="hpReductionSummary" class="flex flex-wrap gap-2 mb-4"></div>
+            <div id="hpReductionList" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[520px] overflow-y-auto pr-1"></div>
+            <div id="hpReductionEmpty" class="hidden text-center py-10">
+              <div class="text-slate-300 text-4xl mb-2"><i class="fa-solid fa-shield-heart"></i></div>
+              <p class="text-sm font-semibold text-slate-400">Tidak ada peserta dengan HP berkurang pada filter ini</p>
+            </div>
+          </div>
+
           <!-- Dewan Duka Cita (Fallen Warriors Elimination List) -->
           <div class="bg-slate-900 text-slate-100 rounded-3xl p-6 shadow-xl border border-slate-800">
             <div class="border-b border-slate-800 pb-4 mb-4">
@@ -939,6 +990,21 @@
                     <input type="date" id="pjBatchEndDate" onchange="saveBatchDates()" class="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-sm outline-none focus:border-amber-400 transition-all">
                   </div>
                 </div>
+              </div>
+
+              <!-- Panel: Backup Batch -->
+              <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 md:col-span-2">
+                <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-1 flex items-center gap-1.5 font-title">
+                  <i class="fa-solid fa-box-archive text-amber-500 font-normal"></i> Backup Batch
+                </h3>
+                <p class="text-xs text-slate-500 mb-3 leading-relaxed">Menyalin seluruh laporan batch aktif ke sheet Arsip di Google Sheets. Lakukan sebelum menekan tombol Bersihkan atau berganti batch. Hasilnya bisa dilihat per batch di tab Rekapan.</p>
+                <div class="flex flex-col sm:flex-row gap-3">
+                  <input type="text" id="pjBackupBatchName" maxlength="80" placeholder="Nama batch, contoh: Batch Mei 2026" class="flex-1 bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-sm outline-none focus:border-amber-400 transition-all">
+                  <button id="btnBackupBatch" onclick="backupCurrentBatch()" class="bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold py-2 px-4 text-xs rounded-xl transition-all shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Simpan Backup Batch Ini
+                  </button>
+                </div>
+                <p id="backupStatusText" class="text-[11px] font-bold text-slate-400 mt-2"></p>
               </div>
 
               <!-- Panel: Tambah Peserta Manual -->
@@ -1350,6 +1416,40 @@
             })
             .catch(function (err) { cb.fail(err); });
         },
+        listBatches: function () {
+          const sep = url.indexOf("?") === -1 ? "?" : "&";
+          fetch(url + sep + "action=listBatches&t=" + Date.now(), { method: "GET", redirect: "follow" })
+            .then(function (res) { return res.json(); })
+            .then(function (json) {
+              if (!json || json.ok !== true) throw new Error((json && json.error) || "Respons API tidak valid");
+              cb.ok(json.data);
+            })
+            .catch(function (err) { cb.fail(err); });
+        },
+        loadBatch: function (batchId) {
+          const sep = url.indexOf("?") === -1 ? "?" : "&";
+          fetch(url + sep + "action=loadBatch&id=" + encodeURIComponent(batchId) + "&t=" + Date.now(), { method: "GET", redirect: "follow" })
+            .then(function (res) { return res.json(); })
+            .then(function (json) {
+              if (!json || json.ok !== true) throw new Error((json && json.error) || "Respons API tidak valid");
+              cb.ok(json.data);
+            })
+            .catch(function (err) { cb.fail(err); });
+        },
+        backupBatchToArchive: function (st, batchName) {
+          fetch(url, {
+            method: "POST",
+            redirect: "follow",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: "backupBatch", state: st, batchName: batchName })
+          })
+            .then(function (res) { return res.json(); })
+            .then(function (json) {
+              if (!json || json.ok !== true) throw new Error((json && json.error) || "Backup ditolak server");
+              cb.ok(json.data);
+            })
+            .catch(function (err) { cb.fail(err); });
+        },
         saveStateToSheet: function (st) {
           fetch(url, {
             method: "POST",
@@ -1690,6 +1790,7 @@
 
         if (index === 2) {
           activateSubTab(2);
+          try { refreshBatchList(false); } catch (e) { console.warn("Daftar batch dilewati:", e); }
         } else if (index === 3) {
           activateSubTab(3);
         } else if (index === 4) {
@@ -1791,8 +1892,11 @@
       const label = document.getElementById('pageRangeInfo');
       if (!label) return;
       label.classList.remove('text-slate-400', 'text-rose-600', 'text-emerald-600');
-      if (info.valid) {
-        label.innerText = "Total " + info.total + " halaman (hal. " + info.text + ")";
+      if (info.valid && info.total < 10) {
+        label.innerText = "Total " + info.total + " halaman (hal. " + info.text + "). Kurang dari 10 halaman, belum memenuhi target harian.";
+        label.classList.add('text-rose-600');
+      } else if (info.valid) {
+        label.innerText = "Total " + info.total + " halaman (hal. " + info.text + "). Target 10 halaman terpenuhi.";
         label.classList.add('text-emerald-600');
       } else if (info.touched) {
         label.innerText = "Halaman akhir harus sama atau lebih besar dari halaman awal.";
@@ -1904,7 +2008,7 @@
             '</div>' +
             '<span class="text-amber-700 font-bold bg-amber-100 px-2 py-0.5 rounded-lg text-[10px] whitespace-nowrap">#' + (i + 1) + '</span>' +
           '</div>' +
-          (log.bookTitle ? '<p class="text-[11px] font-bold text-amber-600 truncate"><i class="fa-solid fa-book"></i> ' + escapeHtmlText(log.bookTitle) + (log.author ? ' oleh ' + escapeHtmlText(log.author) : '') + (log.pageRange ? ' &bull; Hal. ' + escapeHtmlText(log.pageRange) : '') + '</p>' : '') +
+          (log.bookTitle ? '<p class="text-[11px] font-bold text-amber-600 truncate"><i class="fa-solid fa-book"></i> ' + escapeHtmlText(log.bookTitle) + (log.author ? ' oleh ' + escapeHtmlText(log.author) : '') + (log.pageRange ? ' &bull; Hal. ' + escapeHtmlText(log.pageRange) + pageCountBadge(log.pageRange) : '') + '</p>' : '') +
           '<p class="top-insight-text line-clamp-5 text-sm text-slate-600 whitespace-pre-wrap break-words leading-relaxed">' + escapeHtmlText(log.insightText) + '</p>';
         list.appendChild(card);
       });
@@ -2127,6 +2231,16 @@
         .replace(/'/g, "&#39;");
     }
 
+    function pageCountBadge(range) {
+      const m = /^(\d+)-(\d+)$/.exec(String(range || ""));
+      if (!m) return "";
+      const total = parseInt(m[2], 10) - parseInt(m[1], 10) + 1;
+      if (total < 1) return "";
+      return total < 10
+        ? ' <span class="text-rose-600">(' + total + ' hal., kurang dari 10)</span>'
+        : ' (' + total + ' hal.)';
+    }
+
     function resetInsightFilters() {
       document.getElementById('insightFilterName').value = "";
       document.getElementById('insightFilterDate').value = "";
@@ -2148,7 +2262,7 @@
       const moreBox = document.getElementById('insightLoadMoreContainer');
       const remainEl = document.getElementById('insightRemainingCount');
 
-      const allWithText = (state.laporan || []).filter(log => log.insightText && String(log.insightText).trim() !== "");
+      const allWithText = (getViewLogs() || []).filter(log => log.insightText && String(log.insightText).trim() !== "");
 
       // Isi ulang daftar nama member (pilihan saat ini dipertahankan)
       const currentName = nameSel.value;
@@ -2204,12 +2318,163 @@
             '<div class="min-w-0">' +
               '<p class="font-bold text-sm text-slate-800 truncate">' + escapeHtmlText(log.name) + '</p>' +
               '<p class="text-[11px] text-slate-400 font-semibold">' + escapeHtmlText(dateLabel) + ' &bull; ' + escapeHtmlText(log.time || "") + '</p>' +
-              (log.bookTitle ? '<p class="text-[11px] font-bold text-amber-600 truncate"><i class="fa-solid fa-book"></i> ' + escapeHtmlText(log.bookTitle) + (log.author ? ' oleh ' + escapeHtmlText(log.author) : '') + (log.pageRange ? ' &bull; Hal. ' + escapeHtmlText(log.pageRange) : '') + '</p>' : '') +
+              (log.bookTitle ? '<p class="text-[11px] font-bold text-amber-600 truncate"><i class="fa-solid fa-book"></i> ' + escapeHtmlText(log.bookTitle) + (log.author ? ' oleh ' + escapeHtmlText(log.author) : '') + (log.pageRange ? ' &bull; Hal. ' + escapeHtmlText(log.pageRange) + pageCountBadge(log.pageRange) : '') + '</p>' : '') +
             '</div>' + badge +
           '</div>' +
           '<p class="text-sm text-slate-600 whitespace-pre-wrap break-words leading-relaxed">' + escapeHtmlText(log.insightText) + '</p>';
         list.appendChild(card);
       });
+    }
+
+    // ===== Arsip dan Backup Batch =====
+    let viewBatchId = "";
+    let viewBatchLogs = [];
+    let batchList = [];
+
+    function getViewLogs() {
+      return viewBatchId ? viewBatchLogs : state.laporan;
+    }
+
+    function viewBatchName() {
+      const found = batchList.filter(function (b) { return b.batchId === viewBatchId; })[0];
+      return found ? found.batchName : viewBatchId;
+    }
+
+    function setBatchViewInfo(text, tone) {
+      const el = document.getElementById('batchViewInfo');
+      if (!el) return;
+      el.classList.remove('text-slate-400', 'text-rose-600', 'text-emerald-600', 'text-amber-600');
+      el.classList.add(tone === 'rose' ? 'text-rose-600' : tone === 'green' ? 'text-emerald-600' : tone === 'amber' ? 'text-amber-600' : 'text-slate-400');
+      el.innerText = text;
+    }
+
+    function populateBatchSelect() {
+      const sel = document.getElementById('batchViewSelect');
+      if (!sel) return;
+      const current = viewBatchId;
+      sel.innerHTML = '<option value="">Batch Aktif (berjalan)</option>' +
+        batchList.map(function (b) {
+          const label = b.batchName + " (" + b.startDate + " s/d " + b.endDate + ", " + b.totalLaporan + " laporan)";
+          return '<option value="' + escapeHtmlText(b.batchId) + '">' + escapeHtmlText(label) + '</option>';
+        }).join("");
+      const stillExists = batchList.some(function (b) { return b.batchId === current; });
+      sel.value = stillExists ? current : "";
+      if (!stillExists && current) {
+        viewBatchId = "";
+        viewBatchLogs = [];
+      }
+    }
+
+    function refreshBatchList(manual) {
+      const sel = document.getElementById('batchViewSelect');
+      if (!sel) return;
+      if (!isGoogleEnv()) {
+        setBatchViewInfo("Arsip batch hanya tersedia saat aplikasi terhubung ke Google Sheets.", "amber");
+        return;
+      }
+      if (manual) setBatchViewInfo("Memuat daftar batch...", "slate");
+      getRunner()
+        .withSuccessHandler(function (list) {
+          batchList = Array.isArray(list) ? list : [];
+          populateBatchSelect();
+          if (viewBatchId) {
+            setBatchViewInfo("Menampilkan arsip: " + viewBatchName() + ". Hanya baca, data batch lain disembunyikan.", "amber");
+          } else if (manual) {
+            setBatchViewInfo("Ditemukan " + batchList.length + " batch tersimpan.", "green");
+          } else {
+            setBatchViewInfo("Menampilkan data batch aktif.", "slate");
+          }
+        })
+        .withFailureHandler(function (err) {
+          console.warn("Gagal memuat daftar batch:", err);
+          setBatchViewInfo("Gagal memuat daftar batch. Pastikan Backup.gs sudah dipasang dan dideploy.", "rose");
+        })
+        .listBatches();
+    }
+
+    function onBatchViewChange() {
+      const sel = document.getElementById('batchViewSelect');
+      const id = sel.value;
+      visibleLogsLimit = 50;
+      insightVisibleLimit = 12;
+
+      if (!id) {
+        viewBatchId = "";
+        viewBatchLogs = [];
+        setBatchViewInfo("Menampilkan data batch aktif.", "slate");
+        renderLaporanTable();
+        return;
+      }
+
+      setBatchViewInfo("Memuat arsip batch...", "slate");
+      sel.disabled = true;
+      getRunner()
+        .withSuccessHandler(function (res) {
+          sel.disabled = false;
+          viewBatchLogs = (res && Array.isArray(res.laporan)) ? res.laporan : [];
+          viewBatchId = id;
+          setBatchViewInfo("Menampilkan arsip: " + viewBatchName() + " (" + viewBatchLogs.length + " laporan). Hanya baca, data batch lain disembunyikan.", "amber");
+          renderLaporanTable();
+        })
+        .withFailureHandler(function (err) {
+          sel.disabled = false;
+          sel.value = viewBatchId;
+          console.warn("Gagal memuat arsip:", err);
+          setBatchViewInfo("Gagal memuat arsip batch. Coba lagi.", "rose");
+        })
+        .loadBatch(id);
+    }
+
+    function backupCurrentBatch() {
+      if (state.currentMode !== "PJ") return;
+      if (!isGoogleEnv()) {
+        showCustomAlert("Backup Tidak Tersedia", "Backup butuh koneksi ke Google Sheets. Isi URL API di config.js atau buka lewat Apps Script.", "fa-solid fa-cloud-slash", "text-rose-600", "bg-rose-100");
+        return;
+      }
+      if (!state.laporan || state.laporan.length === 0) {
+        showCustomAlert("Belum Ada Laporan", "Batch aktif belum punya laporan, jadi tidak ada yang perlu dibackup.", "fa-solid fa-circle-info", "text-amber-500", "bg-amber-100");
+        return;
+      }
+
+      const nameInput = document.getElementById('pjBackupBatchName');
+      const status = document.getElementById('backupStatusText');
+      const btn = document.getElementById('btnBackupBatch');
+      const startLabel = (typeof formatDateId === 'function' ? formatDateId(state.startDate) : "") || state.startDate;
+      const endLabel = (typeof formatDateId === 'function' ? formatDateId(state.endDate) : "") || state.endDate;
+      const batchName = (nameInput.value || "").trim() || ("Batch " + startLabel + " s/d " + endLabel);
+      const batchId = "B_" + state.startDate + "_" + state.endDate;
+      const alreadyExists = batchList.some(function (b) { return b.batchId === batchId; });
+
+      const run = function () {
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+        status.className = "text-[11px] font-bold text-slate-400 mt-2";
+        status.innerText = "Menyimpan backup ke Google Sheets...";
+
+        getRunner()
+          .withSuccessHandler(function (res) {
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            status.className = "text-[11px] font-bold text-emerald-600 mt-2";
+            status.innerText = "Backup tersimpan: " + (res && res.totalLaporan !== undefined ? res.totalLaporan : "?") + " laporan pada " + (res && res.savedAt ? res.savedAt : "");
+            refreshBatchList(false);
+            showCustomAlert("Backup Berhasil", "Laporan batch \"" + batchName + "\" sudah tersimpan di sheet Arsip. Lihat lewat tab Rekapan, pilihan Lihat Batch.", "fa-solid fa-circle-check", "text-emerald-600", "bg-emerald-100");
+          })
+          .withFailureHandler(function (err) {
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            status.className = "text-[11px] font-bold text-rose-600 mt-2";
+            status.innerText = "Backup gagal: " + ((err && err.message) ? err.message : "periksa koneksi dan deploy Backup.gs");
+            console.warn("Backup gagal:", err);
+          })
+          .backupBatchToArchive(state, batchName);
+      };
+
+      if (alreadyExists) {
+        showCustomConfirm("Timpa Backup Lama", "Backup untuk periode " + startLabel + " s/d " + endLabel + " sudah ada. Melanjutkan akan menimpa arsip batch itu dengan data terbaru. Lanjutkan?", run, "fa-solid fa-box-archive", "text-amber-500", "bg-amber-100");
+      } else {
+        run();
+      }
     }
 
     function renderLaporanTable() {
@@ -2222,7 +2487,7 @@
       try { renderInsightGallery(); } catch (e) { console.warn("Galeri insight dilewati:", e); }
       try { renderTopInsights(); } catch (e) { console.warn("Top insight dilewati:", e); }
 
-      let filteredLogs = [...state.laporan];
+      let filteredLogs = [...getViewLogs()];
 
       filteredLogs.sort((a, b) => {
         if (b.date !== a.date) {
@@ -2303,7 +2568,9 @@
 
         const textDecorClass = log.status === 'Gugur' ? 'line-through text-slate-400' : '';
 
-        const pjActionsHtml = state.currentMode === "PJ" 
+        const pjActionsHtml = (state.currentMode === "PJ" && viewBatchId)
+          ? '<td class="p-4 text-xs font-semibold text-slate-300">Arsip</td>'
+          : state.currentMode === "PJ" 
           ? `<td class="p-4"><button onclick="deleteLaporanRecord(${log.id})" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-2 py-1 rounded-md text-xs transition-all"><i class="fa-solid fa-trash"></i></button></td>`
           : "";
 
@@ -2319,7 +2586,133 @@
       });
     }
 
+    // ===== Pengecekan HP Berkurang =====
+    function isTeamInactiveForCheck(team) {
+      if (team.active === false || team.active === "false" || team.active === "FALSE") return true;
+      if (team.active === true || team.active === "true" || team.active === "TRUE") return false;
+      return !team.active;
+    }
+
+    function shortDateLabel(dateStr) {
+      const s = String(dateStr || "");
+      return s.length >= 10 ? s.slice(8, 10) + "/" + s.slice(5, 7) : s;
+    }
+
+    function renderHpReductionCheck() {
+      const list = document.getElementById('hpReductionList');
+      if (!list) return;
+      const emptyEl = document.getElementById('hpReductionEmpty');
+      const summaryEl = document.getElementById('hpReductionSummary');
+      const typeVal = document.getElementById('hpCheckType').value;
+      const statusVal = document.getElementById('hpCheckStatus').value;
+      const searchVal = document.getElementById('hpCheckSearch').value.trim().toLowerCase();
+      const logs = state.laporan || [];
+
+      let rows = [];
+      (state.partners || []).forEach(function (team) {
+        const hpOffset = Number(team.hp);
+        if (!(hpOffset < 0)) return;
+        const names = [team.name1, team.name2].filter(function (n) { return n && n !== "-"; });
+        if (names.length === 0) return;
+
+        const inactive = isTeamInactiveForCheck(team);
+        const maxHp = team.type === "PARTNER" ? 6 : 3;
+        const lost = -hpOffset;
+        const current = Math.max(0, maxHp + hpOffset);
+
+        // Titik reset terakhir milik salah satu anggota tim
+        let resetId = 0;
+        logs.forEach(function (l) {
+          if (l.status === 'Reset HP' && names.indexOf(l.name) !== -1 && Number(l.id) > resetId) resetId = Number(l.id);
+        });
+
+        const members = names.map(function (n) {
+          const missed = logs
+            .filter(function (l) { return l.name === n && l.status === 'Tidak Laporan' && Number(l.id) > resetId; })
+            .sort(function (a, b) { return String(a.date).localeCompare(String(b.date)); });
+          return { name: n, count: missed.length, dates: missed.map(function (l) { return shortDateLabel(l.date); }) };
+        });
+        const missedTotal = members.reduce(function (sum, m) { return sum + m.count; }, 0);
+
+        rows.push({ team: team, names: names, inactive: inactive, maxHp: maxHp, lost: lost, current: current, members: members, missedTotal: missedTotal });
+      });
+
+      rows = rows.filter(function (r) {
+        if (typeVal !== 'all' && r.team.type !== typeVal) return false;
+        if (statusVal === 'aktif' && r.inactive) return false;
+        if (statusVal === 'gugur' && !r.inactive) return false;
+        if (searchVal && r.names.join(" ").toLowerCase().indexOf(searchVal) === -1) return false;
+        return true;
+      });
+      rows.sort(function (a, b) {
+        if (b.lost !== a.lost) return b.lost - a.lost;
+        return String(a.names[0]).localeCompare(String(b.names[0]));
+      });
+
+      const partnerTeams = rows.filter(function (r) { return r.team.type === "PARTNER"; }).length;
+      const singleTeams = rows.length - partnerTeams;
+      const peopleCount = rows.reduce(function (sum, r) { return sum + r.names.length; }, 0);
+      summaryEl.innerHTML =
+        '<span class="bg-rose-50 text-rose-600 border border-rose-200 font-bold text-[11px] px-2.5 py-1 rounded-full"><i class="fa-solid fa-users"></i> ' + peopleCount + ' peserta terdampak</span>' +
+        '<span class="bg-amber-50 text-amber-700 border border-amber-200 font-bold text-[11px] px-2.5 py-1 rounded-full"><i class="fa-solid fa-people-group"></i> ' + partnerTeams + ' tim partner</span>' +
+        '<span class="bg-slate-100 text-slate-600 border border-slate-200 font-bold text-[11px] px-2.5 py-1 rounded-full"><i class="fa-solid fa-user"></i> ' + singleTeams + ' single</span>';
+
+      list.innerHTML = "";
+      if (rows.length === 0) {
+        emptyEl.classList.remove('hidden');
+        return;
+      }
+      emptyEl.classList.add('hidden');
+
+      rows.forEach(function (r) {
+        const pct = Math.max(0, Math.min(100, Math.round((r.current / r.maxHp) * 100)));
+        const barColor = pct >= 60 ? "bg-emerald-500" : pct >= 30 ? "bg-amber-400" : "bg-rose-500";
+        const isPartner = r.team.type === "PARTNER";
+
+        const memberLines = r.members.map(function (m) {
+          if (m.count > 0) {
+            return '<li class="flex items-start gap-1.5"><i class="fa-solid fa-circle-xmark text-rose-500 mt-0.5"></i><span><strong>' + escapeHtmlText(m.name) + '</strong>: ' + m.count + 'x tidak lapor <span class="text-slate-400">(' + escapeHtmlText(m.dates.join(", ")) + ')</span></span></li>';
+          }
+          return '<li class="flex items-start gap-1.5"><i class="fa-solid fa-circle-check text-emerald-500 mt-0.5"></i><span><strong>' + escapeHtmlText(m.name) + '</strong>: ' + (isPartner ? 'tidak ada catatan alpa sendiri, ikut terpotong karena HP dibagi dengan partner' : 'tidak ada catatan alpa') + '</span></li>';
+        }).join("");
+
+        const diff = r.lost - r.missedTotal;
+        const diffNote = diff !== 0
+          ? '<p class="text-[11px] text-amber-600 font-semibold mt-1.5"><i class="fa-solid fa-circle-info"></i> Selisih ' + Math.abs(diff) + ' HP dari catatan alpa, kemungkinan penyesuaian manual PJ atau reset sebagian.</p>'
+          : "";
+
+        const title = isPartner && r.names.length === 2
+          ? escapeHtmlText(r.names[0]) + ' &amp; ' + escapeHtmlText(r.names[1])
+          : escapeHtmlText(r.names[0]);
+        const typeBadge = isPartner
+          ? '<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap"><i class="fa-solid fa-people-group"></i> Sudah berpartner</span>'
+          : '<span class="bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap"><i class="fa-solid fa-user"></i> Single</span>';
+        const statusBadge = r.inactive
+          ? '<span class="bg-slate-800 text-white text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">Gugur</span>'
+          : "";
+
+        const card = document.createElement('div');
+        card.className = "bg-slate-50 border border-slate-100 rounded-2xl p-4 flex flex-col gap-2";
+        card.innerHTML =
+          '<div class="flex items-start justify-between gap-2">' +
+            '<p class="font-bold text-sm text-slate-800 break-words min-w-0">' + title + '</p>' +
+            '<div class="flex flex-wrap gap-1 justify-end">' + typeBadge + statusBadge + '</div>' +
+          '</div>' +
+          '<div>' +
+            '<div class="flex items-center justify-between text-[11px] font-bold mb-1">' +
+              '<span class="text-slate-600">HP ' + r.current + '/' + r.maxHp + '</span>' +
+              '<span class="text-rose-600">Berkurang ' + r.lost + ' HP</span>' +
+            '</div>' +
+            '<div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden"><div class="' + barColor + ' h-2 rounded-full" style="width:' + pct + '%"></div></div>' +
+          '</div>' +
+          '<ul class="text-xs text-slate-600 space-y-1 mt-1">' + memberLines + '</ul>' +
+          diffNote;
+        list.appendChild(card);
+      });
+    }
+
     function renderIndividualHpList() {
+      try { renderHpReductionCheck(); } catch (e) { console.warn("Pengecekan HP dilewati:", e); }
       const container = document.getElementById('individualHpContainer');
       const elimContainer = document.getElementById('eliminationListContainer');
       if (!container) return;
@@ -2760,6 +3153,8 @@
       applyThemeToChart();
     }
 
+    let shortPagesConfirmed = false;
+
     function submitDailyLog() {
       if (isSubmitting) return;
       
@@ -2783,6 +3178,21 @@
         } else {
           showCustomAlert("Insight Belum Cukup", "Tulis minimal 3 kalimat insight dan akhiri setiap kalimat dengan tanda titik sebelum mengirim laporan.", "fa-solid fa-pen-to-square", "text-amber-500", "bg-amber-100");
         }
+        return;
+      }
+
+      const pageInfoNow = getPageRangeInfo();
+      const statusNowVal = document.getElementById('selectStatus').value;
+      if (statusNowVal === 'Laporan' && pageInfoNow.valid && pageInfoNow.total < 10 && !shortPagesConfirmed) {
+        showCustomConfirm(
+          "Halaman Kurang Dari 10",
+          "Kamu mengisi " + pageInfoNow.total + " halaman (hal. " + pageInfoNow.text + "). Target harian minimal 10 halaman. Tetap kirim laporan ini?",
+          function () {
+            shortPagesConfirmed = true;
+            try { submitDailyLog(); } finally { shortPagesConfirmed = false; }
+          },
+          "fa-solid fa-book-open", "text-amber-500", "bg-amber-100"
+        );
         return;
       }
 
@@ -3170,8 +3580,8 @@
       const startVal = document.getElementById('pdfStartDate').value;
       const endVal = document.getElementById('pdfEndDate').value;
 
-      let rawLogs = [...state.laporan];
-      let dateFilterTitle = "Seluruh Periode";
+      let rawLogs = [...getViewLogs()];
+      let dateFilterTitle = viewBatchId ? ("Arsip: " + viewBatchName()) : "Seluruh Periode";
 
       if (startVal && endVal) {
         rawLogs = rawLogs.filter(log => log.date >= startVal && log.date <= endVal);
@@ -3637,6 +4047,10 @@
 
     function deleteLaporanRecord(id) {
       if (state.currentMode !== "PJ") return;
+      if (viewBatchId) {
+        showCustomAlert("Mode Arsip", "Arsip batch hanya bisa dibaca. Kembali ke Batch Aktif untuk menghapus laporan.", "fa-solid fa-box-archive", "text-amber-500", "bg-amber-100");
+        return;
+      }
       
       showCustomConfirm("Hapus Laporan", "Apakah Anda yakin ingin menghapus data laporan ini secara permanen?", () => {
         state.laporan = state.laporan.filter(log => log.id !== id);
@@ -3652,8 +4066,12 @@
 
     function clearDatabaseDialog() {
       if (state.currentMode !== "PJ") return;
+      if (viewBatchId) {
+        showCustomAlert("Mode Arsip", "Kembali ke Batch Aktif dulu sebelum membersihkan database.", "fa-solid fa-box-archive", "text-amber-500", "bg-amber-100");
+        return;
+      }
 
-      showCustomConfirm("⚠️ Bersihkan Database", "Tindakan ini akan menghapus SELURUH rekapitulasi data laporan harian peserta. Apakah Anda yakin?", () => {
+      showCustomConfirm("⚠️ Bersihkan Database", "Tindakan ini akan menghapus SELURUH rekapitulasi data laporan harian peserta. Pastikan Anda sudah menekan Simpan Backup Batch di panel PJ. Apakah Anda yakin?", () => {
         state.laporan = [];
         saveState();
         renderLaporanTable();
