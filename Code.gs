@@ -146,7 +146,7 @@ function getDatabase() {
     let sheetLaporan = ss.getSheetByName("Laporan");
     if (!sheetLaporan) {
       sheetLaporan = ss.insertSheet("Laporan");
-      sheetLaporan.appendRow(["id", "date", "name", "status", "insight", "time", "insightText", "bookTitle", "pageRange", "author"]);
+      sheetLaporan.appendRow(["id", "date", "name", "status", "insight", "time", "insightText", "bookTitle", "pageRange", "author", "insightType", "editCount"]);
     }
     const dataLaporan = sheetLaporan.getDataRange().getValues();
     for (let i = 1; i < dataLaporan.length; i++) {
@@ -161,7 +161,9 @@ function getDatabase() {
           insightText: dataLaporan[i][6] ? String(dataLaporan[i][6]) : "",
           bookTitle: dataLaporan[i][7] ? String(dataLaporan[i][7]) : "",
           pageRange: (dataLaporan[i][8] && !(dataLaporan[i][8] instanceof Date)) ? String(dataLaporan[i][8]) : "",
-          author: dataLaporan[i][9] ? String(dataLaporan[i][9]) : ""
+          author: dataLaporan[i][9] ? String(dataLaporan[i][9]) : "",
+          insightType: dataLaporan[i][10] ? String(dataLaporan[i][10]) : "",
+          editCount: Number(dataLaporan[i][11]) || 0
         });
       }
     }
@@ -260,10 +262,10 @@ function saveStateToSheet(state) {
   // 2. Perbarui Sheet "Laporan"
   let sheetLaporan = ss.getSheetByName("Laporan") || ss.insertSheet("Laporan");
   sheetLaporan.clearContents();
-  let rowsLaporan = [["id", "date", "name", "status", "insight", "time", "insightText", "bookTitle", "pageRange", "author"]];
+  let rowsLaporan = [["id", "date", "name", "status", "insight", "time", "insightText", "bookTitle", "pageRange", "author", "insightType", "editCount"]];
   state.laporan.forEach(log => {
     if (log.id) {
-      rowsLaporan.push([log.id, log.date, log.name, log.status, log.insight, log.time, log.insightText || "", log.bookTitle || "", log.pageRange || "", log.author || ""]);
+      rowsLaporan.push([log.id, log.date, log.name, log.status, log.insight, log.time, log.insightText || "", log.bookTitle || "", log.pageRange || "", log.author || "", log.insightType || "", Number(log.editCount) || 0]);
     }
   });
   // Kolom "pageRange" (kolom 9) dipaksa berformat teks agar "10-20" tidak berubah jadi tanggal
