@@ -186,6 +186,13 @@
     html.dark table, html.dark thead, html.dark tbody, html.dark tr { border-color: #334155; }
     html.dark .ambient-decor { opacity: .15; }
 
+    /* Pilihan jenis insight */
+    .type-option-box { background: #f8fafc; border: 2px solid #f1f5f9; color: #475569; }
+    .type-option-input:checked + .type-option-box { background: #fbbf24; border-color: #f59e0b; color: #451a03; }
+    .type-option-input:focus-visible + .type-option-box { outline: 2px solid #f59e0b; outline-offset: 2px; }
+    html.dark .type-option-box { background: #0f172a; border-color: #334155; color: #cbd5e1; }
+    html.dark .type-option-input:checked + .type-option-box { background: #fbbf24; border-color: #f59e0b; color: #451a03; }
+
     /* Tombol tema */
     #btnThemeToggle .icon-sun { display: none; }
     html.dark #btnThemeToggle .icon-sun { display: inline-block; }
@@ -213,57 +220,8 @@
       
       <!-- Brand Logo & Subtitle (Clean & Borderless Concept) -->
       <div class="flex items-center gap-3 text-center md:text-left">
-        <div class="flex items-center justify-center transform hover:scale-105 transition-transform duration-300 w-16 h-16 md:w-20 md:h-20">
-          <svg class="w-full h-full animate-logo-float" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
-            <!-- Sparkles (From reference file ChatGPT Image 16 Jun 2026, 20.18.41.png) -->
-            <path class="animate-sparkle-1" d="M 145 25 Q 145 35 155 35 Q 145 35 145 45 Q 145 35 135 35 Q 145 35 145 25" fill="#FBBF24" />
-            <path class="animate-sparkle-2" d="M 158 48 Q 158 55 165 55 Q 158 55 158 62 Q 158 55 151 55 Q 158 55 158 48" fill="#F59E0B" />
-            
-            <!-- Document Paper Background -->
-            <g transform="rotate(-3, 90, 85)">
-              <rect x="48" y="28" width="84" height="98" rx="12" fill="#FEF3C7" stroke="#1E293B" stroke-width="4.5" />
-              <!-- Document Lines -->
-              <line x1="62" y1="46" x2="118" y2="46" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" />
-              <line x1="62" y1="58" x2="110" y2="58" stroke="#FBBF24" stroke-width="3" stroke-linecap="round" />
-              <line x1="62" y1="70" x2="118" y2="70" stroke="#F59E0B" stroke-width="3" stroke-linecap="round" />
-              <!-- Red Bookmark Ribbon -->
-              <path class="animate-ribbon" d="M 58 28 L 58 58 L 68 50 L 78 58 L 78 28 Z" fill="#F59E0B" stroke="#1E293B" stroke-width="3.5" stroke-linejoin="round" />
-            </g>
-
-            <!-- Book Pages Laying Open At Bottom -->
-            <g class="animate-pages">
-              <!-- Back Layers (3D stacked pages look) -->
-              <path d="M 90 128 C 115 128 148 108 166 118 L 166 138 C 148 128 115 148 90 148 Z" fill="#D97706" stroke="#1E293B" stroke-width="4.5" stroke-linejoin="round" />
-              <path d="M 90 128 C 65 128 32 108 14 118 L 14 138 C 32 128 65 148 90 148 Z" fill="#D97706" stroke="#1E293B" stroke-width="4.5" stroke-linejoin="round" />
-
-              <!-- Front main page -->
-              <path d="M 90 123 C 115 123 152 103 170 113 L 170 133 C 152 123 115 143 90 143 Z" fill="#FFFBEB" stroke="#1E293B" stroke-width="4.5" stroke-linejoin="round" />
-              <path d="M 90 123 C 65 123 28 103 10 113 L 10 133 C 28 123 65 143 90 143 Z" fill="#FFFBEB" stroke="#1E293B" stroke-width="4.5" stroke-linejoin="round" />
-              
-              <!-- Page detail lines -->
-              <path d="M 25 125 Q 55 115 80 130" fill="none" stroke="#FCD34D" stroke-width="2.5" stroke-linecap="round" />
-              <path d="M 155 125 Q 125 115 100 130" fill="none" stroke="#FCD34D" stroke-width="2.5" stroke-linecap="round" />
-            </g>
-
-            <!-- Bold 3D NPC Text (Fredoka style) -->
-            <!-- Back Shadow -->
-            <text x="93" y="112" font-family="'Fredoka', 'Inter', sans-serif" font-weight="950" font-size="62" fill="#1E293B" text-anchor="middle" transform="skewX(-6) rotate(-2)">NPC</text>
-            <!-- Front Gold Text with Thick Outline -->
-            <text x="90" y="108" font-family="'Fredoka', 'Inter', sans-serif" font-weight="950" font-size="62" fill="#FBBF24" stroke="#1E293B" stroke-width="4.5" stroke-linejoin="round" text-anchor="middle" transform="skewX(-6) rotate(-2)">NPC</text>
-
-            <!-- Curved Banner Ribbon At Bottom -->
-            <!-- Shadow -->
-            <path d="M 12 143 Q 90 125 168 143 L 163 158 Q 90 140 17 158 Z" fill="#1E293B" />
-            <!-- Main Gold Ribbon -->
-            <path d="M 10 140 Q 90 122 170 140 L 165 155 Q 90 137 15 155 Z" fill="#FBBF24" stroke="#1E293B" stroke-width="4.5" stroke-linejoin="round" />
-            <!-- Left Folding Edge -->
-            <path d="M 10 140 L 2 147 L 15 155 Z" fill="#D97706" stroke="#1E293B" stroke-width="4.5" stroke-linejoin="round" />
-            <!-- Right Folding Edge -->
-            <path d="M 170 140 L 178 147 L 165 155 Z" fill="#D97706" stroke="#1E293B" stroke-width="4.5" stroke-linejoin="round" />
-
-            <!-- Text on Banner -->
-            <text x="90" y="149" font-family="'Inter', sans-serif" font-weight="900" font-size="7.5" fill="#1E293B" text-anchor="middle" letter-spacing="0.4" transform="rotate(-1, 90, 149)">NEXT PAGE CHALLENGE</text>
-          </svg>
+        <div class="flex items-center justify-center transform hover:scale-105 transition-transform duration-300 flex-shrink-0">
+          <img src="data:image/png;base64,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rGncw7ZtIbgfgjG51Hnk7YyMsaGhRBD0RXETkUnJGRN9/QNbt25/5zvPA4AoqO/evefFFze7rpvOZM4950wAiMe8sxaf/sILL3ueu2HDS729/eXlpUQk8iPDBgaGOjq6c+trEaSUrusseed5t956y+zZMyMaX7lqrTE6m9VLl16wYMEcrXVZWcm7373k9dffcF1n/frcfUfy9wiaivKyv/vkR2IxV2vDELu6e594/KmmnS133/3rph3N99zzw3g8VlxcKCVHxMRwor9/cNrYrGzk6O8fyGR8BBRCFhYWwMhSTUTf96+99srzz397KpXmnAdBsGbNxpUr12zYsOlDH/6He371g2XL3qW1Ykw8//yGrq4ey5IV5eWXXro0uvP73nf5/fc/rLRqbm7btOm1ZcuW5NBBxDAM3/nO8972tjMDPwBAyxJl5aXz580+/fR5juNorTnnzc2tL7zwsm1bEYH98cHHk8lUzPMy6bTjOEKI5ubWlzZtvmTZhcYQ5zDi58XFRR+84X3xuDdiPpdfdtFHbvwHy5LPrFzz0ENP3HjjdbNPnRGLeUQwODj80qZXTztt3khYzYckYgxe2bwlmUrFYm48HpszZ1auqkBARK31uecuvub979VaM8YR4eM33fDpz3zpscdWaK1+dc+9F110gRACAFatXqu1JhKFBbE1azeuW/8iACiliooKevv6s9nM8hUrly1bkvOsCJ1ly9718ZtuiIAYt1BevmJVR0dXUVGB4/An//zMw488iQzJkCWltCQQ+L7/xONPX7LswjHfAQCgtE6lUp7nRpkFY2z27JmNDXWdnd2Ms82btwDA/Hmz582d/fIrr1mW/O1v77/88osqK8qV0lF2a4wRQuzb1/nA/Y84jp3J+EuWvKOxse6AmkuFCgDCUHFOSoWu6557zuIHH3w8Ho+1te3t7x+sqCjb0dS8YcNLtm0xxrq6er7yldtHlqS7rovIbdtetWpNe3tnbW31/oju+8FIXRsdJmICAM55GIZPPPEXKQUABEGgtJZCCMalEMaYbMYnMq7rrFq9rq1tbzREkJ/05Zx5nscYSimE4ELw7dt37ty127ItMiYWiwGA67lXX315EISu627fvvPWW+8cGk4IwTH3VaKip6f3C1/8WnNLm2VJztkHb7h6nPJQiiivE0K4rgsAz6/ZKIQwRtu2HY36Y4891dXVExUDmazPGRecC84Z45lMVmtlWbK9vWvFU8+O0XeiQeCcHxAsjDGI+NJLr27fvtNxnCAIr7vuqmUXL8lkfMYwSvaamprv/smvAVRvb//Tf3nu5o9/MLKcKConhpOPPb6iIB6Piqbunr7f/e6P/f2Dtm1ZUl544TsiC73hhqtXrlqzfPmq0tLiP//5maamlmuvuWLWrEYiamraff/9j+xubYvHvb6+wY985NqLL16yn5gIorph8ytbSktKUqkUY1xr/dTTq59++tmCgnh//+DChfNKS4uz2ezKlc/btuUH/sIF8z79qRv3F5yIvh/8x49+uWfPPs7ZqlVrPvbR68R+BeWwSdXq1etSqXQs5rqO87GPXj/CC1ETlyw5789PPrN163bO2V/+8txHPnyNZUVxB6UUPb29//Ivd4wEMj/wJReM876+/k984kMROgDgus5//viOL3zx6489tiIW83btav7mHT+MiqNs1pdSMMYGBoY/9KH3f/P2r4zRJRCJwLbt+/7wp3t//2Du61G01lo7jj3QPzB9esNnPvMxANi06fWmpmbXdZPJ1GWXLb3qqktH2C368Mrm13/5y98VFMQ2v7Jlx45m5vu+7/uZjK+iAEkHKiNRpFy+YqUxenBweO7cU+fPnx2pU5H3hWHoee7b3744kUgCwMaNL7+yeUuUYft+1vf9IAi01sZoYzQZ7Tp2LB475ZT62279/De+/qWRfhJRSUnxT+7+1m23fr6+fhrnAoBSqXQkYliWnDFj+p13fvX73/96RPARNETg+0HUC6WUMSZ6EOcYi7llZSVXXHHJb//vjxcumAMAy1es7O3p9/2s6zoXvOOcERC11kppALj43UuEYGEY7tm7b/mKVfjHPz6OiKEKz1i0ICoxDtZBBgeHV658HgCDIJg7d9YZZywcfVr0ubV174YNL0kpg1CdfdaimTMbX3tt69atTVLKKD0bORzHKS8vmzmzsays5ODHRbpEd3fvyy+/vnNnS29fH2OsvKxszpyZZ5yxsLS0eCTwRdcmk6lVq9b6fnCA/XPOi0uKGuqn1ddPEyKXwT/73Prurl7GmOe5F1+8JKLR0UcQhk+tWJXNBtqY2pqqN3N1U5RVH6wNRgBNXE48ojB4mBse/vhfcxw3TzuK+ZkAAAAASUVORK5CYII=" alt="Logo PABOBA" width="95" height="112" class="h-14 md:h-16 w-auto rounded-xl bg-white p-1 shadow-sm border border-amber-200/60">
         </div>
         <div>
           <h1 class="npc-title-color font-title text-2xl md:text-3xl font-extrabold tracking-tight flex items-center justify-center md:justify-start gap-1">
@@ -615,6 +573,21 @@
               <p id="pageRangeInfo" class="text-[11px] font-bold text-slate-400 mt-1.5">Isi halaman awal dan akhir, contoh 10 - 20.</p>
             </div>
 
+            <!-- Jenis Insight -->
+            <div>
+              <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Jenis Insight</span>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <label class="cursor-pointer block">
+                  <input type="radio" name="insightType" value="Buku" class="type-option-input sr-only" onchange="detectInsightSentences()">
+                  <span class="type-option-box rounded-xl px-3 py-2.5 text-xs font-bold transition-all flex items-center gap-2"><i class="fa-solid fa-book"></i> Sumber langsung dari Buku</span>
+                </label>
+                <label class="cursor-pointer block">
+                  <input type="radio" name="insightType" value="Parafrase" class="type-option-input sr-only" onchange="detectInsightSentences()">
+                  <span class="type-option-box rounded-xl px-3 py-2.5 text-xs font-bold transition-all flex items-center gap-2"><i class="fa-solid fa-lightbulb"></i> Parafrase atau Insight Pribadi</span>
+                </label>
+              </div>
+            </div>
+
             <!-- Kolom Insight + Pendeteksi Kalimat (hanya titik) -->
             <div>
               <label for="insightText" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Insight Bacaan (Min. 3 Kalimat)</label>
@@ -629,7 +602,7 @@
             <button onclick="submitDailyLog()" id="btnSubmitLog" class="w-full bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold py-3.5 rounded-xl transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2 mt-2">
               <i class="fa-solid fa-paper-plane"></i> Kirim Laporan
             </button>
-            <p id="submitGateHint" class="hidden text-center text-[11px] font-bold text-rose-600"><i class="fa-solid fa-lock"></i> Tombol terbuka setelah judul buku, penulis, jumlah halaman, dan insight (minimal 3 kalimat bertitik) terisi.</p>
+            <p id="submitGateHint" class="hidden text-center text-[11px] font-bold text-rose-600"><i class="fa-solid fa-lock"></i> Tombol terbuka setelah judul buku, penulis, jumlah halaman, jenis insight, dan insight (minimal 3 kalimat bertitik) terisi.</p>
           </div>
 
         </div>
@@ -802,9 +775,17 @@
                 <option value="kurang">Hanya Yang Kurang Dari 3 Kalimat</option>
               </select>
               <input type="text" id="insightFilterKeyword" oninput="insightVisibleLimit = 12; renderInsightGallery();" placeholder="Cari kata kunci, judul, penulis..." class="md:col-span-3 bg-white border border-slate-200 rounded-lg px-2.5 py-2 text-xs outline-none text-slate-700">
-              <div class="md:col-span-12 flex items-center justify-between gap-2">
+              <div class="md:col-span-12 flex flex-wrap items-center justify-between gap-2">
                 <span id="insightGalleryCount" class="text-xs font-bold text-slate-500">0 insight</span>
-                <button onclick="resetInsightFilters()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3 py-1.5 rounded-lg transition-all"><i class="fa-solid fa-rotate-left"></i> Reset Filter</button>
+                <div class="flex flex-wrap items-center gap-2">
+                  <select id="insightFilterType" onchange="insightVisibleLimit = 12; renderInsightGallery();" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-700 outline-none">
+                    <option value="">Semua Jenis Insight</option>
+                    <option value="Buku">Sumber langsung dari Buku</option>
+                    <option value="Parafrase">Parafrase atau Insight Pribadi</option>
+                  </select>
+                  <button id="btnCopyFilteredInsights" onclick="copyFilteredInsights()" class="bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold text-xs px-3 py-1.5 rounded-lg transition-all shadow-sm"><i class="fa-regular fa-copy"></i> Salin Hasil Filter</button>
+                  <button onclick="resetInsightFilters()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3 py-1.5 rounded-lg transition-all"><i class="fa-solid fa-rotate-left"></i> Reset Filter</button>
+                </div>
               </div>
             </div>
 
@@ -892,32 +873,27 @@
             </div>
           </div>
 
-          <!-- Pengecekan HP Berkurang -->
-          <div id="hpReductionCard" class="bg-white rounded-3xl p-6 shadow-xl border border-rose-200/60">
+          <!-- Monitoring HP Keseluruhan -->
+          <div id="hpMonitorCard" class="bg-white rounded-3xl p-6 shadow-xl border border-rose-200/60">
             <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-slate-100 pb-5 mb-5">
               <div>
-                <h2 class="font-title text-xl font-bold text-slate-800"><i class="fa-solid fa-heart-crack text-rose-500"></i> Pengecekan HP Berkurang</h2>
-                <p class="text-xs text-slate-400">Daftar peserta yang HP-nya berkurang, termasuk yang sudah punya partner. HP partner dipotong bersama, jadi anggota yang rajin pun bisa ikut terkena.</p>
+                <h2 class="font-title text-xl font-bold text-slate-800"><i class="fa-solid fa-heart-pulse text-rose-500"></i> Monitoring HP Keseluruhan</h2>
+                <p class="text-xs text-slate-400">Siapa saja yang HP-nya hampir habis atau habis, dan siapa yang paling banyak memakan HP partnernya.</p>
               </div>
               <div class="flex flex-wrap gap-2 w-full lg:w-auto">
-                <input type="text" id="hpCheckSearch" oninput="renderHpReductionCheck()" placeholder="Cari nama..." class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs outline-none focus:border-amber-400 transition-all w-full sm:w-36">
-                <select id="hpCheckType" onchange="renderHpReductionCheck()" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-700 outline-none">
-                  <option value="all">Semua Tipe</option>
-                  <option value="PARTNER">Sudah Berpartner</option>
-                  <option value="SINGLE">Single Fighter</option>
-                </select>
-                <select id="hpCheckStatus" onchange="renderHpReductionCheck()" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-700 outline-none">
-                  <option value="all">Aktif dan Gugur</option>
-                  <option value="aktif">Hanya Aktif</option>
-                  <option value="gugur">Hanya Gugur</option>
+                <input type="text" id="hpMonSearch" oninput="renderHpMonitor()" placeholder="Cari nama..." class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs outline-none focus:border-amber-400 transition-all w-full sm:w-36">
+                <select id="hpMonView" onchange="renderHpMonitor()" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-700 outline-none">
+                  <option value="kritis">Hampir Habis, Habis, Gugur</option>
+                  <option value="berkurang">Semua yang HP-nya berkurang</option>
+                  <option value="semua">Semua tim</option>
                 </select>
               </div>
             </div>
-            <div id="hpReductionSummary" class="flex flex-wrap gap-2 mb-4"></div>
-            <div id="hpReductionList" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[520px] overflow-y-auto pr-1"></div>
-            <div id="hpReductionEmpty" class="hidden text-center py-10">
+            <div id="hpMonSummary" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4"></div>
+            <div id="hpMonList" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[560px] overflow-y-auto pr-1"></div>
+            <div id="hpMonEmpty" class="hidden text-center py-10">
               <div class="text-slate-300 text-4xl mb-2"><i class="fa-solid fa-shield-heart"></i></div>
-              <p class="text-sm font-semibold text-slate-400">Tidak ada peserta dengan HP berkurang pada filter ini</p>
+              <p id="hpMonEmptyText" class="text-sm font-semibold text-slate-400">Tidak ada tim pada filter ini</p>
             </div>
           </div>
 
@@ -1196,6 +1172,58 @@
       <button onclick="closeSpamModal()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 rounded-xl text-sm shadow-md transition-all">
         Mengerti & Kembali
       </button>
+    </div>
+  </div>
+
+  <!-- MODAL: Edit Resume Laporan -->
+  <div id="modalEditLog" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 shadow-2xl max-w-lg w-full border border-slate-200 relative max-h-[92vh] overflow-y-auto">
+      <h3 class="font-title text-xl font-bold text-slate-800 mb-1"><i class="fa-solid fa-pen-to-square text-amber-500"></i> Edit Resume Laporan</h3>
+      <p id="editLogMeta" class="text-xs text-slate-400 mb-1"></p>
+      <p id="editQuotaInfo" class="text-xs font-bold mb-4"></p>
+
+      <div class="space-y-3">
+        <div>
+          <label for="editBookTitle" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Judul Buku</label>
+          <input type="text" id="editBookTitle" maxlength="150" class="w-full bg-slate-50 border-2 border-slate-100 focus:border-amber-400 outline-none rounded-xl px-3.5 py-2 text-sm text-slate-700">
+        </div>
+        <div>
+          <label for="editBookAuthor" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Penulis</label>
+          <input type="text" id="editBookAuthor" maxlength="120" class="w-full bg-slate-50 border-2 border-slate-100 focus:border-amber-400 outline-none rounded-xl px-3.5 py-2 text-sm text-slate-700">
+        </div>
+        <div>
+          <label for="editPageStart" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Jumlah Halaman</label>
+          <div class="flex items-center gap-2">
+            <input type="number" id="editPageStart" min="1" step="1" inputmode="numeric" oninput="updateEditCounter()" placeholder="Dari hal." class="w-full bg-slate-50 border-2 border-slate-100 focus:border-amber-400 outline-none rounded-xl px-3.5 py-2 text-sm text-slate-700">
+            <span class="text-slate-400 font-bold">-</span>
+            <input type="number" id="editPageEnd" min="1" step="1" inputmode="numeric" oninput="updateEditCounter()" placeholder="Sampai hal." class="w-full bg-slate-50 border-2 border-slate-100 focus:border-amber-400 outline-none rounded-xl px-3.5 py-2 text-sm text-slate-700">
+          </div>
+          <p id="editPageInfo" class="text-[11px] font-bold text-slate-400 mt-1"></p>
+        </div>
+        <div>
+          <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Jenis Insight</span>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <label class="cursor-pointer block">
+              <input type="radio" name="editInsightType" value="Buku" class="type-option-input sr-only">
+              <span class="type-option-box rounded-xl px-3 py-2 text-xs font-bold transition-all flex items-center gap-2"><i class="fa-solid fa-book"></i> Sumber langsung dari Buku</span>
+            </label>
+            <label class="cursor-pointer block">
+              <input type="radio" name="editInsightType" value="Parafrase" class="type-option-input sr-only">
+              <span class="type-option-box rounded-xl px-3 py-2 text-xs font-bold transition-all flex items-center gap-2"><i class="fa-solid fa-lightbulb"></i> Parafrase atau Insight Pribadi</span>
+            </label>
+          </div>
+        </div>
+        <div>
+          <label for="editInsightText" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Insight (Min. 3 Kalimat Bertitik)</label>
+          <textarea id="editInsightText" rows="5" oninput="updateEditCounter()" class="w-full bg-slate-50 border-2 border-slate-100 focus:border-amber-400 outline-none rounded-xl px-3.5 py-2 text-sm text-slate-700 resize-y"></textarea>
+          <p id="editInsightCounter" class="text-[11px] font-bold text-slate-400 mt-1"></p>
+        </div>
+      </div>
+
+      <div class="flex gap-2 mt-5">
+        <button onclick="closeEditLog()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-all">Batal</button>
+        <button id="btnSaveEditLog" onclick="saveEditLog()" class="flex-1 bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold py-2.5 rounded-xl text-xs transition-all shadow-sm"><i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan</button>
+      </div>
     </div>
   </div>
 
@@ -1873,6 +1901,11 @@
       }
     }
 
+    function getInsightType() {
+      const checked = document.querySelector('input[name="insightType"]:checked');
+      return checked ? checked.value : "";
+    }
+
     // Rentang halaman (awal - akhir)
     function getPageRangeInfo() {
       const sEl = document.getElementById('pageStart');
@@ -1915,9 +1948,10 @@
       if (statusEl.value !== 'Laporan') return true;
       const titleEl = document.getElementById('bookTitle');
       const titleOk = !titleEl || titleEl.value.trim() !== "";
+      const typeOk = getInsightType() !== "";
       const authorEl = document.getElementById('bookAuthor');
       const authorOk = !authorEl || authorEl.value.trim() !== "";
-      return titleOk && authorOk && getPageRangeInfo().valid && countInsightSentences(areaEl.value) >= 3;
+      return titleOk && authorOk && typeOk && getPageRangeInfo().valid && countInsightSentences(areaEl.value) >= 3;
     }
 
     function refreshSubmitGate() {
@@ -2009,6 +2043,7 @@
             '<span class="text-amber-700 font-bold bg-amber-100 px-2 py-0.5 rounded-lg text-[10px] whitespace-nowrap">#' + (i + 1) + '</span>' +
           '</div>' +
           (log.bookTitle ? '<p class="text-[11px] font-bold text-amber-600 truncate"><i class="fa-solid fa-book"></i> ' + escapeHtmlText(log.bookTitle) + (log.author ? ' oleh ' + escapeHtmlText(log.author) : '') + (log.pageRange ? ' &bull; Hal. ' + escapeHtmlText(log.pageRange) + pageCountBadge(log.pageRange) : '') + '</p>' : '') +
+          (log.insightType ? '<div>' + insightTypeBadge(log.insightType) + '</div>' : '') +
           '<p class="top-insight-text line-clamp-5 text-sm text-slate-600 whitespace-pre-wrap break-words leading-relaxed">' + escapeHtmlText(log.insightText) + '</p>';
         list.appendChild(card);
       });
@@ -2221,6 +2256,7 @@
 
     // ===== Galeri Insight Member =====
     let insightVisibleLimit = 12;
+    let lastGalleryFiltered = [];
 
     function escapeHtmlText(str) {
       return String(str === undefined || str === null ? "" : str)
@@ -2229,6 +2265,69 @@
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#39;");
+    }
+
+    function insightTypeLabel(t) {
+      if (t === "Buku") return "Kutipan Buku";
+      if (t === "Parafrase") return "Parafrase / Insight Pribadi";
+      return "";
+    }
+
+    function insightTypeBadge(t) {
+      if (t === "Buku") {
+        return '<span class="text-blue-700 font-bold bg-blue-100 px-2 py-0.5 rounded-lg text-[10px] whitespace-nowrap"><i class="fa-solid fa-book"></i> Kutipan Buku</span>';
+      }
+      if (t === "Parafrase") {
+        return '<span class="text-emerald-700 font-bold bg-emerald-100 px-2 py-0.5 rounded-lg text-[10px] whitespace-nowrap"><i class="fa-solid fa-lightbulb"></i> Parafrase / Pribadi</span>';
+      }
+      return "";
+    }
+
+    function formatInsightForCopy(log) {
+      let src = log.bookTitle ? String(log.bookTitle) : "";
+      if (log.author) src += (src ? " oleh " : "") + log.author;
+      if (log.pageRange) src += " (Hal. " + log.pageRange + ")";
+      const label = insightTypeLabel(log.insightType);
+      return '"' + String(log.insightText || "").trim() + '"\n- ' + log.name + (src ? ", " + src : "") + (label ? " [" + label + "]" : "");
+    }
+
+    function copyTextToClipboard(text, btn) {
+      const done = function () {
+        if (!btn) return;
+        const old = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Tersalin';
+        setTimeout(function () { btn.innerHTML = old; }, 1500);
+      };
+      const fallback = function () {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          done();
+        } catch (e) {
+          showCustomAlert("Gagal Menyalin", "Browser menolak akses salin otomatis. Blok teksnya lalu salin manual.", "fa-solid fa-copy", "text-rose-600", "bg-rose-100");
+        }
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(fallback);
+      } else {
+        fallback();
+      }
+    }
+
+    function copyFilteredInsights() {
+      if (!lastGalleryFiltered || lastGalleryFiltered.length === 0) {
+        showCustomAlert("Belum Ada Insight", "Tidak ada insight pada filter ini untuk disalin.", "fa-regular fa-comment-dots", "text-amber-500", "bg-amber-100");
+        return;
+      }
+      const text = lastGalleryFiltered.map(formatInsightForCopy).join("\n\n");
+      copyTextToClipboard(text, document.getElementById('btnCopyFilteredInsights'));
     }
 
     function pageCountBadge(range) {
@@ -2246,6 +2345,7 @@
       document.getElementById('insightFilterDate').value = "";
       document.getElementById('insightFilterQuality').value = "all";
       document.getElementById('insightFilterKeyword').value = "";
+      document.getElementById('insightFilterType').value = "";
       insightVisibleLimit = 12;
       renderInsightGallery();
     }
@@ -2256,6 +2356,7 @@
       const nameSel = document.getElementById('insightFilterName');
       const dateVal = document.getElementById('insightFilterDate').value;
       const qualityVal = document.getElementById('insightFilterQuality').value;
+      const typeVal = document.getElementById('insightFilterType').value;
       const keyword = document.getElementById('insightFilterKeyword').value.trim().toLowerCase();
       const countEl = document.getElementById('insightGalleryCount');
       const emptyEl = document.getElementById('insightGalleryEmpty');
@@ -2277,6 +2378,7 @@
         if (dateVal && log.date !== dateVal) return false;
         if (qualityVal === 'valid' && log.insight !== 'Insight') return false;
         if (qualityVal === 'kurang' && log.insight === 'Insight') return false;
+        if (typeVal && log.insightType !== typeVal) return false;
         if (keyword && (String(log.insightText) + " " + String(log.name) + " " + String(log.bookTitle || "") + " " + String(log.author || "")).toLowerCase().indexOf(keyword) === -1) return false;
         return true;
       });
@@ -2286,6 +2388,7 @@
         return b.id - a.id;
       });
 
+      lastGalleryFiltered = logs.slice();
       const total = logs.length;
       countEl.innerText = total + " insight ditemukan";
       list.innerHTML = "";
@@ -2321,7 +2424,12 @@
               (log.bookTitle ? '<p class="text-[11px] font-bold text-amber-600 truncate"><i class="fa-solid fa-book"></i> ' + escapeHtmlText(log.bookTitle) + (log.author ? ' oleh ' + escapeHtmlText(log.author) : '') + (log.pageRange ? ' &bull; Hal. ' + escapeHtmlText(log.pageRange) + pageCountBadge(log.pageRange) : '') + '</p>' : '') +
             '</div>' + badge +
           '</div>' +
+          '<div class="flex items-center justify-between gap-2">' + (insightTypeBadge(log.insightType) || '<span></span>') +
+            '<button type="button" class="btn-copy-insight bg-slate-100 hover:bg-amber-100 text-slate-600 hover:text-amber-950 text-[10px] font-bold px-2 py-1 rounded-lg transition-all whitespace-nowrap"><i class="fa-regular fa-copy"></i> Salin</button>' +
+          '</div>' +
           '<p class="text-sm text-slate-600 whitespace-pre-wrap break-words leading-relaxed">' + escapeHtmlText(log.insightText) + '</p>';
+        const copyBtn = card.querySelector('.btn-copy-insight');
+        if (copyBtn) copyBtn.onclick = function () { copyTextToClipboard(formatInsightForCopy(log), copyBtn); };
         list.appendChild(card);
       });
     }
@@ -2477,6 +2585,150 @@
       }
     }
 
+    // ===== Edit Resume Laporan =====
+    const MAX_PESERTA_EDIT = 3;
+    let editingLogId = null;
+
+    function getEditUsage(name) {
+      const used = (state.laporan || [])
+        .filter(function (l) { return l.name === name; })
+        .reduce(function (sum, l) { return sum + (Number(l.editCount) || 0); }, 0);
+      return { used: used, left: Math.max(0, MAX_PESERTA_EDIT - used) };
+    }
+
+    function parsePageRangeValues(sRaw, eRaw) {
+      const sT = String(sRaw).trim();
+      const eT = String(eRaw).trim();
+      const s = parseInt(sT, 10);
+      const e = parseInt(eT, 10);
+      const touched = sT !== "" || eT !== "";
+      const valid = !isNaN(s) && !isNaN(e) && s >= 1 && e >= s;
+      return { valid: valid, text: valid ? (s + "-" + e) : "", total: valid ? (e - s + 1) : 0, touched: touched };
+    }
+
+    function getEditInsightType() {
+      const checked = document.querySelector('input[name="editInsightType"]:checked');
+      return checked ? checked.value : "";
+    }
+
+    function updateEditCounter() {
+      const total = countInsightSentences(document.getElementById('editInsightText').value);
+      const counter = document.getElementById('editInsightCounter');
+      counter.className = "text-[11px] font-bold mt-1 " + (total >= 3 ? "text-emerald-600" : "text-rose-600");
+      counter.innerText = total >= 3
+        ? "Terdeteksi " + total + " kalimat, status Insight."
+        : "Baru " + total + " kalimat bertitik. Kurang " + (3 - total) + " lagi.";
+
+      const pg = parsePageRangeValues(document.getElementById('editPageStart').value, document.getElementById('editPageEnd').value);
+      const info = document.getElementById('editPageInfo');
+      if (pg.valid && pg.total < 10) {
+        info.className = "text-[11px] font-bold mt-1 text-rose-600";
+        info.innerText = "Total " + pg.total + " halaman. Kurang dari 10 halaman.";
+      } else if (pg.valid) {
+        info.className = "text-[11px] font-bold mt-1 text-emerald-600";
+        info.innerText = "Total " + pg.total + " halaman.";
+      } else if (pg.touched) {
+        info.className = "text-[11px] font-bold mt-1 text-rose-600";
+        info.innerText = "Halaman akhir harus sama atau lebih besar dari halaman awal.";
+      } else {
+        info.className = "text-[11px] font-bold mt-1 text-slate-400";
+        info.innerText = "Isi halaman awal dan akhir.";
+      }
+    }
+
+    function openEditLog(id) {
+      if (viewBatchId) return;
+      const log = (state.laporan || []).find(function (l) { return String(l.id) === String(id); });
+      if (!log) return;
+      const isPJ = state.currentMode === "PJ";
+
+      if (!isPJ) {
+        const picked = document.getElementById('selectParticipant').value;
+        if (picked !== log.name) {
+          showCustomAlert("Bukan Laporan Kamu", "Pilih namamu terlebih dahulu di form Setor Laporan, lalu klik tombol edit pada laporanmu sendiri.", "fa-solid fa-user-lock", "text-amber-500", "bg-amber-100");
+          return;
+        }
+        if (getEditUsage(log.name).left <= 0) {
+          showCustomAlert("Kesempatan Edit Habis", "Batas edit " + MAX_PESERTA_EDIT + " kali per batch sudah terpakai. Hubungi PJ jika masih ada yang perlu diperbaiki.", "fa-solid fa-ban", "text-rose-600", "bg-rose-100");
+          return;
+        }
+      }
+
+      editingLogId = log.id;
+      document.getElementById('editLogMeta').innerText = log.name + " | " + log.date + " | " + (log.time || "");
+      const quota = document.getElementById('editQuotaInfo');
+      if (isPJ) {
+        quota.className = "text-xs font-bold mb-4 text-emerald-600";
+        quota.innerText = "Mode PJ: edit tanpa batas dan tidak mengurangi kesempatan peserta.";
+      } else {
+        const left = getEditUsage(log.name).left;
+        quota.className = "text-xs font-bold mb-4 " + (left <= 1 ? "text-rose-600" : "text-amber-600");
+        quota.innerText = "Sisa kesempatan edit: " + left + " dari " + MAX_PESERTA_EDIT + " (per batch).";
+      }
+
+      document.getElementById('editBookTitle').value = log.bookTitle || "";
+      document.getElementById('editBookAuthor').value = log.author || "";
+      const m = /^(\d+)-(\d+)$/.exec(String(log.pageRange || ""));
+      document.getElementById('editPageStart').value = m ? m[1] : "";
+      document.getElementById('editPageEnd').value = m ? m[2] : "";
+      document.querySelectorAll('input[name="editInsightType"]').forEach(function (r) { r.checked = (r.value === log.insightType); });
+      document.getElementById('editInsightText').value = log.insightText || "";
+      updateEditCounter();
+      document.getElementById('modalEditLog').classList.remove('hidden');
+    }
+
+    function closeEditLog() {
+      editingLogId = null;
+      document.getElementById('modalEditLog').classList.add('hidden');
+    }
+
+    function saveEditLog() {
+      const log = (state.laporan || []).find(function (l) { return String(l.id) === String(editingLogId); });
+      if (!log) { closeEditLog(); return; }
+      const isPJ = state.currentMode === "PJ";
+
+      if (!isPJ && getEditUsage(log.name).left <= 0) {
+        closeEditLog();
+        showCustomAlert("Kesempatan Edit Habis", "Batas edit " + MAX_PESERTA_EDIT + " kali per batch sudah terpakai.", "fa-solid fa-ban", "text-rose-600", "bg-rose-100");
+        return;
+      }
+
+      const title = document.getElementById('editBookTitle').value.trim();
+      const author = document.getElementById('editBookAuthor').value.trim();
+      const pg = parsePageRangeValues(document.getElementById('editPageStart').value, document.getElementById('editPageEnd').value);
+      const type = getEditInsightType();
+      const text = document.getElementById('editInsightText').value.trim();
+
+      let problem = "";
+      if (!title) problem = "Judul buku belum diisi.";
+      else if (!author) problem = "Penulis belum diisi.";
+      else if (!pg.valid) problem = "Jumlah halaman belum valid. Halaman akhir harus sama atau lebih besar dari halaman awal.";
+      else if (!type) problem = "Jenis insight belum dipilih.";
+      else if (countInsightSentences(text) < 3) problem = "Insight minimal 3 kalimat dan setiap kalimat diakhiri titik.";
+      if (problem) {
+        showCustomAlert("Data Belum Lengkap", problem, "fa-solid fa-pen-to-square", "text-amber-500", "bg-amber-100");
+        return;
+      }
+
+      log.bookTitle = title;
+      log.author = author;
+      log.pageRange = pg.text;
+      log.insightType = type;
+      log.insightText = text;
+      log.insight = "Insight";
+      if (!isPJ) log.editCount = (Number(log.editCount) || 0) + 1;
+
+      saveState();
+      closeEditLog();
+      renderLaporanTable();
+      updateHomeStatsGrid();
+
+      const msg = isPJ
+        ? "Perubahan laporan tersimpan."
+        : "Perubahan tersimpan. Sisa kesempatan edit kamu: " + getEditUsage(log.name).left + " dari " + MAX_PESERTA_EDIT + ".";
+      showCustomAlert("Laporan Diperbarui", msg, "fa-solid fa-circle-check", "text-emerald-600", "bg-emerald-100");
+    }
+
     function renderLaporanTable() {
       const tbody = document.getElementById('laporanTableBody');
       const emptyState = document.getElementById('emptyTableState');
@@ -2574,9 +2826,15 @@
           ? `<td class="p-4"><button onclick="deleteLaporanRecord(${log.id})" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-2 py-1 rounded-md text-xs transition-all"><i class="fa-solid fa-trash"></i></button></td>`
           : "";
 
+        let editControlHtml = "";
+        if (log.status === 'Laporan' && !viewBatchId) {
+          const editedTag = Number(log.editCount) > 0 ? `<span class="block text-[10px] font-semibold text-slate-400">diedit ${Number(log.editCount)}x</span>` : "";
+          editControlHtml = ` <button onclick="openEditLog(${log.id})" title="Edit resume laporan" class="ml-1 bg-amber-100 hover:bg-amber-200 text-amber-700 px-1.5 py-0.5 rounded-md text-[10px] transition-all"><i class="fa-solid fa-pen"></i></button>${editedTag}`;
+        }
+
         tr.innerHTML = `
           <td class="p-4 font-semibold text-xs text-slate-400 whitespace-nowrap">${log.date}</td>
-          <td class="p-4 font-bold text-slate-800 ${textDecorClass}">${log.name}</td>
+          <td class="p-4 font-bold text-slate-800 ${textDecorClass}">${log.name}${editControlHtml}</td>
           <td class="p-4"><span class="${statusBadgeClass} text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap inline-flex items-center gap-1">${statusSymbol} ${log.status}</span></td>
           <td class="p-4 text-xs font-semibold whitespace-nowrap">${insightBadge}</td>
           <td class="p-4 text-xs font-mono text-slate-400 font-bold whitespace-nowrap">${log.time}</td>
@@ -2586,133 +2844,254 @@
       });
     }
 
-    // ===== Pengecekan HP Berkurang =====
-    function isTeamInactiveForCheck(team) {
-      if (team.active === false || team.active === "false" || team.active === "FALSE") return true;
-      if (team.active === true || team.active === "true" || team.active === "TRUE") return false;
-      return !team.active;
-    }
-
+    // ===== Minus HP per anggota dan partner =====
     function shortDateLabel(dateStr) {
       const s = String(dateStr || "");
       return s.length >= 10 ? s.slice(8, 10) + "/" + s.slice(5, 7) : s;
     }
 
-    function renderHpReductionCheck() {
-      const list = document.getElementById('hpReductionList');
-      if (!list) return;
-      const emptyEl = document.getElementById('hpReductionEmpty');
-      const summaryEl = document.getElementById('hpReductionSummary');
-      const typeVal = document.getElementById('hpCheckType').value;
-      const statusVal = document.getElementById('hpCheckStatus').value;
-      const searchVal = document.getElementById('hpCheckSearch').value.trim().toLowerCase();
+    // Hitung berapa kali tiap anggota tim tidak lapor sejak reset HP terakhir
+    function getTeamMissStats(team) {
       const logs = state.laporan || [];
+      const names = [team.name1, team.name2].filter(function (n) { return n && n !== "-"; });
 
-      let rows = [];
-      (state.partners || []).forEach(function (team) {
-        const hpOffset = Number(team.hp);
-        if (!(hpOffset < 0)) return;
-        const names = [team.name1, team.name2].filter(function (n) { return n && n !== "-"; });
-        if (names.length === 0) return;
-
-        const inactive = isTeamInactiveForCheck(team);
-        const maxHp = team.type === "PARTNER" ? 6 : 3;
-        const lost = -hpOffset;
-        const current = Math.max(0, maxHp + hpOffset);
-
-        // Titik reset terakhir milik salah satu anggota tim
-        let resetId = 0;
-        logs.forEach(function (l) {
-          if (l.status === 'Reset HP' && names.indexOf(l.name) !== -1 && Number(l.id) > resetId) resetId = Number(l.id);
-        });
-
-        const members = names.map(function (n) {
-          const missed = logs
-            .filter(function (l) { return l.name === n && l.status === 'Tidak Laporan' && Number(l.id) > resetId; })
-            .sort(function (a, b) { return String(a.date).localeCompare(String(b.date)); });
-          return { name: n, count: missed.length, dates: missed.map(function (l) { return shortDateLabel(l.date); }) };
-        });
-        const missedTotal = members.reduce(function (sum, m) { return sum + m.count; }, 0);
-
-        rows.push({ team: team, names: names, inactive: inactive, maxHp: maxHp, lost: lost, current: current, members: members, missedTotal: missedTotal });
+      let resetId = 0;
+      logs.forEach(function (l) {
+        if (l.status === 'Reset HP' && names.indexOf(l.name) !== -1 && Number(l.id) > resetId) resetId = Number(l.id);
       });
 
-      rows = rows.filter(function (r) {
-        if (typeVal !== 'all' && r.team.type !== typeVal) return false;
-        if (statusVal === 'aktif' && r.inactive) return false;
-        if (statusVal === 'gugur' && !r.inactive) return false;
+      const members = names.map(function (n) {
+        const missed = logs
+          .filter(function (l) { return l.name === n && l.status === 'Tidak Laporan' && Number(l.id) > resetId; })
+          .sort(function (a, b) { return String(a.date).localeCompare(String(b.date)); });
+        return { name: n, count: missed.length, dates: missed.map(function (l) { return shortDateLabel(l.date); }) };
+      });
+      const missedTotal = members.reduce(function (sum, m) { return sum + m.count; }, 0);
+      return { members: members, missedTotal: missedTotal };
+    }
+
+    // Rincian di kartu: HP dan minus diri sendiri serta partner
+    function buildHpBreakdownHtml(p) {
+      if (!p.members || p.members.length === 0) return "";
+      const isPartner = p.type === "PARTNER" && p.members.length > 1;
+      if (!isPartner && p.lost === 0) return "";
+
+      const minusLabel = p.lost > 0
+        ? '<span class="text-rose-600">-' + p.lost + '</span>'
+        : '<span class="text-emerald-600">aman</span>';
+
+      const orderedMembers = p.members.slice().sort(function (a, b) {
+        return (b.name === p.name ? 1 : 0) - (a.name === p.name ? 1 : 0);
+      });
+
+      const rows = orderedMembers.map(function (m) {
+        const isSelf = m.name === p.name;
+        const who = escapeHtmlText(m.name) + ' <span class="text-slate-400 font-semibold">(' + (isSelf ? "kamu" : "mitra") + ')</span>';
+        let icon, note;
+        if (m.count > 0) {
+          icon = '<i class="fa-solid fa-circle-xmark text-rose-500"></i>';
+          note = 'Tidak lapor ' + m.count + 'x (' + escapeHtmlText(m.dates.join(", ")) + ')';
+        } else if (p.lost > 0) {
+          icon = '<i class="fa-solid fa-link text-amber-500"></i>';
+          note = isPartner ? 'Tidak ada alpa sendiri, ikut minus karena HP dibagi dengan mitra' : 'Tidak ada catatan alpa';
+        } else {
+          icon = '<i class="fa-solid fa-circle-check text-emerald-500"></i>';
+          note = 'Belum ada alpa';
+        }
+        return '<div class="flex items-start justify-between gap-2">' +
+          '<span class="min-w-0 break-words">' + icon + ' <strong class="text-slate-700">' + who + '</strong>' +
+            '<span class="block text-[10px] text-slate-400 font-semibold">' + note + '</span></span>' +
+          '<span class="font-bold whitespace-nowrap text-slate-600">' + minusLabel + ' <span class="text-slate-400 font-semibold">|</span> HP ' + p.hp + '/' + p.maxHp + '</span>' +
+        '</div>';
+      }).join("");
+
+      const diff = p.lost - p.missedTotal;
+      const diffNote = (p.lost > 0 && diff !== 0)
+        ? '<p class="text-[10px] text-amber-600 font-semibold"><i class="fa-solid fa-circle-info"></i> Selisih ' + Math.abs(diff) + ' HP dari catatan alpa, kemungkinan penyesuaian manual PJ.</p>'
+        : "";
+
+      return '<div class="mt-3 pt-2.5 border-t border-slate-200/70 space-y-1.5 text-[11px]">' + buildIndividualHpBanner(p) + rows + diffNote + '</div>';
+    }
+
+    // ===== Monitoring HP keseluruhan =====
+    function isTeamInactiveFlag(team) {
+      if (team.active === false || team.active === "false" || team.active === "FALSE") return true;
+      if (team.active === true || team.active === "true" || team.active === "TRUE") return false;
+      return !team.active;
+    }
+
+    // gugur, habis, kritis (hampir habis), waspada, aman
+    function getHpSeverity(current, maxHp, inactive) {
+      if (inactive) return "gugur";
+      if (current <= 0) return "habis";
+      const pct = Math.round((current / maxHp) * 100);
+      if (pct <= 33) return "kritis";
+      if (pct <= 66) return "waspada";
+      return "aman";
+    }
+
+    function getTopContributors(members) {
+      const max = members.reduce(function (m, x) { return Math.max(m, x.count); }, 0);
+      if (max <= 0) return { max: 0, names: [] };
+      return { max: max, names: members.filter(function (x) { return x.count === max; }).map(function (x) { return x.name; }) };
+    }
+
+    function buildIndividualHpBanner(p) {
+      if (!(p.lost > 0) || (p.sev !== "kritis" && p.sev !== "habis")) return "";
+      const top = getTopContributors(p.members);
+      const sisa = p.remaining > 0 ? " Sisa " + p.remaining + " alpa lagi sebelum gugur." : "";
+      const hpText = "HP tim " + p.hp + "/" + p.maxHp + ".";
+      const isSelfTop = top.names.indexOf(p.name) !== -1;
+
+      if (p.type === "PARTNER" && p.members.length > 1) {
+        if (isSelfTop) {
+          return '<div class="mb-2 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl px-2.5 py-2 text-[11px] font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Peringatan gugur individu: kamu penyumbang minus terbanyak (' + top.max + ' dari ' + p.missedTotal + ' alpa). ' + hpText + sisa + '</div>';
+        }
+        if (top.names.length > 0) {
+          return '<div class="mb-2 bg-amber-50 border border-amber-200 text-amber-700 rounded-xl px-2.5 py-2 text-[11px] font-bold"><i class="fa-solid fa-triangle-exclamation"></i> HP tim ' + (p.sev === "habis" ? "habis" : "hampir habis") + ' terutama karena ' + escapeHtmlText(top.names.join(" dan ")) + ' (' + top.max + 'x alpa). ' + hpText + sisa + '</div>';
+        }
+      }
+      return '<div class="mb-2 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl px-2.5 py-2 text-[11px] font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Peringatan gugur: HP ' + (p.sev === "habis" ? "habis" : "hampir habis") + '. ' + hpText + sisa + '</div>';
+    }
+
+    function renderHpMonitor() {
+      const list = document.getElementById('hpMonList');
+      if (!list) return;
+      const summaryEl = document.getElementById('hpMonSummary');
+      const emptyEl = document.getElementById('hpMonEmpty');
+      const emptyText = document.getElementById('hpMonEmptyText');
+      const viewVal = document.getElementById('hpMonView').value;
+      const searchVal = document.getElementById('hpMonSearch').value.trim().toLowerCase();
+
+      const counts = { aman: 0, waspada: 0, kritis: 0, habis: 0, gugur: 0 };
+      const inTeam = {};
+      let teams = [];
+
+      (state.partners || []).forEach(function (team) {
+        const names = [team.name1, team.name2].filter(function (n) { return n && n !== "-"; });
+        if (names.length === 0) return;
+        names.forEach(function (n) { inTeam[n] = true; });
+
+        const hpOffset = Number(team.hp) || 0;
+        const maxHp = team.type === "PARTNER" ? 6 : 3;
+        const lost = hpOffset < 0 ? -hpOffset : 0;
+        const current = Math.min(maxHp, Math.max(0, maxHp + hpOffset));
+        const inactive = isTeamInactiveFlag(team);
+        const sev = getHpSeverity(current, maxHp, inactive);
+        const gugurAt = team.type === "PARTNER" ? 7 : 4;
+        const remaining = inactive ? 0 : Math.max(1, gugurAt - lost);
+        const stats = getTeamMissStats(team);
+
+        counts[sev] += names.length;
+        teams.push({ team: team, names: names, maxHp: maxHp, lost: lost, current: current, inactive: inactive, sev: sev, remaining: remaining, members: stats.members, missedTotal: stats.missedTotal });
+      });
+      counts.aman += (state.participants || []).filter(function (n) { return !inTeam[n]; }).length;
+
+      const tile = function (label, value, cls, icon) {
+        return '<div class="' + cls + ' border rounded-2xl p-3 text-center"><div class="text-2xl font-black">' + value + '</div><div class="text-[10px] font-bold uppercase tracking-wider"><i class="' + icon + '"></i> ' + label + '</div></div>';
+      };
+      summaryEl.innerHTML =
+        tile("Aman", counts.aman, "bg-emerald-50 text-emerald-700 border-emerald-200", "fa-solid fa-heart") +
+        tile("Waspada", counts.waspada, "bg-amber-50 text-amber-700 border-amber-200", "fa-solid fa-heart-circle-exclamation") +
+        tile("Hampir Habis", counts.kritis, "bg-rose-50 text-rose-700 border-rose-200", "fa-solid fa-heart-crack") +
+        tile("Habis / Gugur", counts.habis + counts.gugur, "bg-slate-800 text-white border-slate-700", "fa-solid fa-skull");
+
+      teams = teams.filter(function (r) {
+        if (viewVal === "kritis" && ["gugur", "habis", "kritis"].indexOf(r.sev) === -1) return false;
+        if (viewVal === "berkurang" && !(r.lost > 0)) return false;
         if (searchVal && r.names.join(" ").toLowerCase().indexOf(searchVal) === -1) return false;
         return true;
       });
-      rows.sort(function (a, b) {
+
+      const order = { gugur: 0, habis: 1, kritis: 2, waspada: 3, aman: 4 };
+      teams.sort(function (a, b) {
+        if (order[a.sev] !== order[b.sev]) return order[a.sev] - order[b.sev];
         if (b.lost !== a.lost) return b.lost - a.lost;
         return String(a.names[0]).localeCompare(String(b.names[0]));
       });
 
-      const partnerTeams = rows.filter(function (r) { return r.team.type === "PARTNER"; }).length;
-      const singleTeams = rows.length - partnerTeams;
-      const peopleCount = rows.reduce(function (sum, r) { return sum + r.names.length; }, 0);
-      summaryEl.innerHTML =
-        '<span class="bg-rose-50 text-rose-600 border border-rose-200 font-bold text-[11px] px-2.5 py-1 rounded-full"><i class="fa-solid fa-users"></i> ' + peopleCount + ' peserta terdampak</span>' +
-        '<span class="bg-amber-50 text-amber-700 border border-amber-200 font-bold text-[11px] px-2.5 py-1 rounded-full"><i class="fa-solid fa-people-group"></i> ' + partnerTeams + ' tim partner</span>' +
-        '<span class="bg-slate-100 text-slate-600 border border-slate-200 font-bold text-[11px] px-2.5 py-1 rounded-full"><i class="fa-solid fa-user"></i> ' + singleTeams + ' single</span>';
-
       list.innerHTML = "";
-      if (rows.length === 0) {
+      if (teams.length === 0) {
+        emptyText.innerText = viewVal === "kritis"
+          ? "Belum ada peserta dengan HP hampir habis, habis, atau gugur. Semua masih aman."
+          : "Tidak ada tim pada filter ini.";
         emptyEl.classList.remove('hidden');
         return;
       }
       emptyEl.classList.add('hidden');
 
-      rows.forEach(function (r) {
+      const sevBadge = {
+        gugur: '<span class="bg-slate-800 text-white text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">Gugur</span>',
+        habis: '<span class="bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">HP Habis</span>',
+        kritis: '<span class="bg-rose-100 text-rose-700 border border-rose-200 text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">Hampir Habis</span>',
+        waspada: '<span class="bg-amber-100 text-amber-700 border border-amber-200 text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">Waspada</span>',
+        aman: '<span class="bg-emerald-100 text-emerald-700 border border-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">Aman</span>'
+      };
+
+      teams.forEach(function (r) {
+        const isPartner = r.team.type === "PARTNER" && r.names.length > 1;
         const pct = Math.max(0, Math.min(100, Math.round((r.current / r.maxHp) * 100)));
-        const barColor = pct >= 60 ? "bg-emerald-500" : pct >= 30 ? "bg-amber-400" : "bg-rose-500";
-        const isPartner = r.team.type === "PARTNER";
+        const barColor = pct > 66 ? "bg-emerald-500" : pct > 33 ? "bg-amber-400" : "bg-rose-500";
+        const top = getTopContributors(r.members);
 
         const memberLines = r.members.map(function (m) {
+          const isTop = top.names.indexOf(m.name) !== -1 && isPartner;
+          const share = r.missedTotal > 0 ? Math.round((m.count / r.missedTotal) * 100) : 0;
+          const topTag = isTop ? ' <span class="bg-rose-100 text-rose-700 text-[9px] font-bold px-1.5 py-0.5 rounded-md">penguras HP terbanyak</span>' : '';
+          let detail;
           if (m.count > 0) {
-            return '<li class="flex items-start gap-1.5"><i class="fa-solid fa-circle-xmark text-rose-500 mt-0.5"></i><span><strong>' + escapeHtmlText(m.name) + '</strong>: ' + m.count + 'x tidak lapor <span class="text-slate-400">(' + escapeHtmlText(m.dates.join(", ")) + ')</span></span></li>';
+            detail = m.count + 'x alpa' + (isPartner && r.missedTotal > 0 ? ' (' + share + '% dari minus tim)' : '') + ' <span class="text-slate-400">(' + escapeHtmlText(m.dates.join(", ")) + ')</span>';
+          } else {
+            detail = r.lost > 0 && isPartner ? 'Tidak ada alpa sendiri, ikut terpotong' : 'Belum ada alpa';
           }
-          return '<li class="flex items-start gap-1.5"><i class="fa-solid fa-circle-check text-emerald-500 mt-0.5"></i><span><strong>' + escapeHtmlText(m.name) + '</strong>: ' + (isPartner ? 'tidak ada catatan alpa sendiri, ikut terpotong karena HP dibagi dengan partner' : 'tidak ada catatan alpa') + '</span></li>';
+          return '<li class="flex items-start gap-1.5"><i class="fa-solid ' + (m.count > 0 ? 'fa-circle-xmark text-rose-500' : 'fa-circle-check text-emerald-500') + ' mt-0.5"></i><span><strong class="text-slate-700">' + escapeHtmlText(m.name) + '</strong>' + topTag + '<span class="block text-[10px] text-slate-500 font-semibold">' + detail + '</span></span></li>';
         }).join("");
 
-        const diff = r.lost - r.missedTotal;
-        const diffNote = diff !== 0
-          ? '<p class="text-[11px] text-amber-600 font-semibold mt-1.5"><i class="fa-solid fa-circle-info"></i> Selisih ' + Math.abs(diff) + ' HP dari catatan alpa, kemungkinan penyesuaian manual PJ atau reset sebagian.</p>'
-          : "";
+        let warning = "";
+        if (r.sev === "gugur" || r.sev === "habis" || r.sev === "kritis") {
+          const who = top.names.map(escapeHtmlText).join(" dan ");
+          let text;
+          if (isPartner) {
+            if (top.names.length > 0) {
+              const sama = top.names.length > 1 ? " sama-sama paling banyak memakan HP partner" : " paling banyak memakan HP partner";
+              text = (r.sev === "gugur" ? "Tim gugur. " : "Peringatan gugur individu: ") + '<strong>' + who + '</strong>' + sama + ' (' + top.max + ' dari ' + r.missedTotal + ' alpa).';
+            } else {
+              text = (r.sev === "gugur" ? "Tim gugur. " : "Peringatan gugur. ") + 'Minus berasal dari penyesuaian manual PJ.';
+            }
+          } else {
+            text = (r.sev === "gugur" ? "Gugur: " : "Peringatan gugur: ") + '<strong>' + escapeHtmlText(r.names[0]) + '</strong>' + (r.sev === "gugur" ? "." : ", HP " + (r.sev === "habis" ? "habis" : "hampir habis") + ".");
+          }
+          const sisa = r.sev !== "gugur" ? ' Sisa ' + r.remaining + ' alpa lagi sebelum gugur.' : '';
+          const cls = r.sev === "gugur" ? "bg-slate-800 text-white border-slate-700" : "bg-rose-50 border-rose-200 text-rose-700";
+          warning = '<div class="' + cls + ' border rounded-xl px-2.5 py-2 text-[11px] font-bold"><i class="fa-solid fa-triangle-exclamation"></i> ' + text + sisa + '</div>';
+        }
 
-        const title = isPartner && r.names.length === 2
+        const title = isPartner
           ? escapeHtmlText(r.names[0]) + ' &amp; ' + escapeHtmlText(r.names[1])
           : escapeHtmlText(r.names[0]);
         const typeBadge = isPartner
-          ? '<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap"><i class="fa-solid fa-people-group"></i> Sudah berpartner</span>'
-          : '<span class="bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap"><i class="fa-solid fa-user"></i> Single</span>';
-        const statusBadge = r.inactive
-          ? '<span class="bg-slate-800 text-white text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">Gugur</span>'
-          : "";
+          ? '<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">Partner</span>'
+          : '<span class="bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">Single</span>';
 
         const card = document.createElement('div');
         card.className = "bg-slate-50 border border-slate-100 rounded-2xl p-4 flex flex-col gap-2";
         card.innerHTML =
           '<div class="flex items-start justify-between gap-2">' +
             '<p class="font-bold text-sm text-slate-800 break-words min-w-0">' + title + '</p>' +
-            '<div class="flex flex-wrap gap-1 justify-end">' + typeBadge + statusBadge + '</div>' +
+            '<div class="flex flex-wrap gap-1 justify-end">' + typeBadge + sevBadge[r.sev] + '</div>' +
           '</div>' +
           '<div>' +
-            '<div class="flex items-center justify-between text-[11px] font-bold mb-1">' +
-              '<span class="text-slate-600">HP ' + r.current + '/' + r.maxHp + '</span>' +
-              '<span class="text-rose-600">Berkurang ' + r.lost + ' HP</span>' +
-            '</div>' +
+            '<div class="flex items-center justify-between text-[11px] font-bold mb-1"><span class="text-slate-600">HP ' + r.current + '/' + r.maxHp + '</span><span class="' + (r.lost > 0 ? "text-rose-600" : "text-emerald-600") + '">' + (r.lost > 0 ? "Minus -" + r.lost : "Penuh") + '</span></div>' +
             '<div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden"><div class="' + barColor + ' h-2 rounded-full" style="width:' + pct + '%"></div></div>' +
           '</div>' +
-          '<ul class="text-xs text-slate-600 space-y-1 mt-1">' + memberLines + '</ul>' +
-          diffNote;
+          '<ul class="text-xs text-slate-600 space-y-1.5 mt-1">' + memberLines + '</ul>' +
+          warning;
         list.appendChild(card);
       });
     }
 
     function renderIndividualHpList() {
-      try { renderHpReductionCheck(); } catch (e) { console.warn("Pengecekan HP dilewati:", e); }
+      try { renderHpMonitor(); } catch (e) { console.warn("Monitoring HP dilewati:", e); }
       const container = document.getElementById('individualHpContainer');
       const elimContainer = document.getElementById('eliminationListContainer');
       if (!container) return;
@@ -2743,6 +3122,13 @@
             notes: team.notes || "",
             partner: team.type === "PARTNER" ? (team.name1 === name ? team.name2 : team.name1) : "Single Fighter"
           };
+          const hpOffsetNow = Number(team.hp) || 0;
+          const missStats = getTeamMissStats(team);
+          pInfo.lost = hpOffsetNow < 0 ? -hpOffsetNow : 0;
+          pInfo.members = missStats.members;
+          pInfo.missedTotal = missStats.missedTotal;
+          pInfo.sev = getHpSeverity(Math.min(maxHp, actualHp), maxHp, false);
+          pInfo.remaining = Math.max(1, (team.type === "PARTNER" ? 7 : 4) - pInfo.lost);
 
           let isInactive = false;
           if (team.active === false || team.active === "false" || team.active === "FALSE") {
@@ -2823,6 +3209,7 @@
               <span>${p.type}</span>
               <span>${percentage}% NYAWA</span>
             </div>
+            ${buildHpBreakdownHtml(p)}
           `;
           container.appendChild(card);
         });
@@ -3173,6 +3560,8 @@
           showCustomAlert("Judul Buku Kosong", "Isi judul buku yang kamu baca terlebih dahulu sebelum mengirim laporan.", "fa-solid fa-book", "text-amber-500", "bg-amber-100");
         } else if (document.getElementById('bookAuthor') && document.getElementById('bookAuthor').value.trim() === "") {
           showCustomAlert("Penulis Kosong", "Isi nama penulis buku terlebih dahulu sebelum mengirim laporan.", "fa-solid fa-user-pen", "text-amber-500", "bg-amber-100");
+        } else if (getInsightType() === "") {
+          showCustomAlert("Jenis Insight Belum Dipilih", "Pilih dulu apakah insight kamu bersumber langsung dari buku atau berupa parafrase atau insight pribadi.", "fa-solid fa-lightbulb", "text-amber-500", "bg-amber-100");
         } else if (!getPageRangeInfo().valid) {
           showCustomAlert("Jumlah Halaman Belum Valid", "Isi halaman awal dan halaman akhir dengan benar. Halaman akhir harus sama atau lebih besar dari halaman awal.", "fa-solid fa-book-open", "text-amber-500", "bg-amber-100");
         } else {
@@ -3224,7 +3613,9 @@
         insightText: (document.getElementById('insightText').value || "").trim(),
         bookTitle: (document.getElementById('bookTitle').value || "").trim(),
         pageRange: getPageRangeInfo().text,
-        author: (document.getElementById('bookAuthor').value || "").trim()
+        author: (document.getElementById('bookAuthor').value || "").trim(),
+        insightType: getInsightType(),
+        editCount: 0
       };
 
       state.laporan.unshift(newLog);
@@ -3259,6 +3650,7 @@
       if (bookBox) bookBox.value = "";
       const authorBox = document.getElementById('bookAuthor');
       if (authorBox) authorBox.value = "";
+      document.querySelectorAll('input[name="insightType"]').forEach(function (r) { r.checked = false; });
       const pStart = document.getElementById('pageStart');
       const pEnd = document.getElementById('pageEnd');
       if (pStart) pStart.value = "";
@@ -3630,7 +4022,7 @@
           pdfSafe(log.bookTitle) || "-",
           pdfSafe(log.author) || "-",
           pdfSafe(log.pageRange) || "-",
-          pdfSafe(log.insightText) || "-"
+          (log.insightType ? "[" + insightTypeLabel(log.insightType) + "] " : "") + (pdfSafe(log.insightText) || "-")
         ]);
       });
 
