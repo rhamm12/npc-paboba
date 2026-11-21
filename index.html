@@ -891,12 +891,15 @@
                 <input type="text" id="hpMonSearch" oninput="renderHpMonitor()" placeholder="Cari nama..." class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs outline-none focus:border-amber-400 transition-all w-full sm:w-36">
                 <select id="hpMonView" onchange="renderHpMonitor()" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-700 outline-none">
                   <option value="kritis">Hampir Habis, Habis, Gugur</option>
+                  <option value="individu">HP individu habis (masih punya partner)</option>
                   <option value="berkurang">Semua yang HP-nya berkurang</option>
                   <option value="semua">Semua tim</option>
                 </select>
               </div>
             </div>
-            <div id="hpMonSummary" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4"></div>
+            <div id="hpMonSummary" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-2"></div>
+            <p class="text-[11px] text-slate-400 mb-4">Kotak di atas dihitung per individu (HP pribadi maksimal 3). Kartu di bawah menampilkan HP tim: partner maksimal 6, single maksimal 3.</p>
+            <div id="hpMonIndividualOut"></div>
             <div id="hpMonList" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[560px] overflow-y-auto pr-1"></div>
             <div id="hpMonEmpty" class="hidden text-center py-10">
               <div class="text-slate-300 text-4xl mb-2"><i class="fa-solid fa-shield-heart"></i></div>
@@ -2880,12 +2883,8 @@
     // Rincian di kartu: HP dan minus diri sendiri serta partner
     function buildHpBreakdownHtml(p) {
       if (!p.members || p.members.length === 0) return "";
-      const isPartner = p.type === "PARTNER" && p.members.length > 1;
-      if (!isPartner && p.lost === 0) return "";
-
-      const minusLabel = p.lost > 0
-        ? '<span class="text-rose-600">-' + p.lost + '</span>'
-        : '<span class="text-emerald-600">aman</span>';
+      const isPair = !!p.isPair;
+      if (!isPair && p.lost === 0) return "";
 
       const orderedMembers = p.members.slice().sort(function (a, b) {
         return (b.name === p.name ? 1 : 0) - (a.name === p.name ? 1 : 0);
@@ -2893,31 +2892,48 @@
 
       const rows = orderedMembers.map(function (m) {
         const isSelf = m.name === p.name;
+        const personalHp = isPair ? Math.max(0, 3 - m.count) : p.hp;
+        const personalMax = isPair ? 3 : p.maxHp;
+        const pct = Math.round((personalHp / personalMax) * 100);
+        const hpColor = pct <= 33 ? "text-rose-600" : pct <= 66 ? "text-amber-600" : "text-emerald-600";
         const who = escapeHtmlText(m.name) + ' <span class="text-slate-400 font-semibold">(' + (isSelf ? "kamu" : "mitra") + ')</span>';
+
         let icon, note;
         if (m.count > 0) {
           icon = '<i class="fa-solid fa-circle-xmark text-rose-500"></i>';
           note = 'Tidak lapor ' + m.count + 'x (' + escapeHtmlText(m.dates.join(", ")) + ')';
-        } else if (p.lost > 0) {
+        } else if (isPair && p.lost > 0) {
           icon = '<i class="fa-solid fa-link text-amber-500"></i>';
-          note = isPartner ? 'Tidak ada alpa sendiri, ikut minus karena HP dibagi dengan mitra' : 'Tidak ada catatan alpa';
+          note = 'Tidak ada alpa sendiri, ikut minus tim -' + p.lost + ' karena HP tim dibagi dengan mitra';
         } else {
           icon = '<i class="fa-solid fa-circle-check text-emerald-500"></i>';
           note = 'Belum ada alpa';
         }
+
+        const minusPart = (isPair ? m.count : p.lost) > 0
+          ? '<span class="text-rose-600">-' + (isPair ? m.count : p.lost) + '</span> <span class="text-slate-400 font-semibold">|</span> '
+          : '';
         return '<div class="flex items-start justify-between gap-2">' +
           '<span class="min-w-0 break-words">' + icon + ' <strong class="text-slate-700">' + who + '</strong>' +
             '<span class="block text-[10px] text-slate-400 font-semibold">' + note + '</span></span>' +
-          '<span class="font-bold whitespace-nowrap text-slate-600">' + minusLabel + ' <span class="text-slate-400 font-semibold">|</span> HP ' + p.hp + '/' + p.maxHp + '</span>' +
+          '<span class="font-bold whitespace-nowrap">' + minusPart + '<span class="' + hpColor + '">HP ' + personalHp + '/' + personalMax + '</span></span>' +
         '</div>';
       }).join("");
 
+      const teamLine = isPair
+        ? '<div class="flex items-center justify-between gap-2 pt-1.5 mt-1 border-t border-dashed border-slate-200/70">' +
+            '<span class="font-bold text-slate-500"><i class="fa-solid fa-people-group"></i> HP tim</span>' +
+            '<span class="font-bold whitespace-nowrap">' + (p.lost > 0 ? '<span class="text-rose-600">-' + p.lost + '</span> <span class="text-slate-400 font-semibold">|</span> ' : '') +
+            '<span class="text-slate-600">HP ' + p.teamHp + '/' + p.teamMax + '</span></span>' +
+          '</div>'
+        : '';
+
       const diff = p.lost - p.missedTotal;
       const diffNote = (p.lost > 0 && diff !== 0)
-        ? '<p class="text-[10px] text-amber-600 font-semibold"><i class="fa-solid fa-circle-info"></i> Selisih ' + Math.abs(diff) + ' HP dari catatan alpa, kemungkinan penyesuaian manual PJ.</p>'
+        ? '<p class="text-[10px] text-amber-600 font-semibold"><i class="fa-solid fa-circle-info"></i> Selisih ' + Math.abs(diff) + ' HP tim dari catatan alpa, kemungkinan penyesuaian manual PJ. HP pribadi dihitung dari catatan alpa.</p>'
         : "";
 
-      return '<div class="mt-3 pt-2.5 border-t border-slate-200/70 space-y-1.5 text-[11px]">' + buildIndividualHpBanner(p) + rows + diffNote + '</div>';
+      return '<div class="mt-3 pt-2.5 border-t border-slate-200/70 space-y-1.5 text-[11px]">' + buildIndividualHpBanner(p) + rows + teamLine + diffNote + '</div>';
     }
 
     // ===== Monitoring HP keseluruhan =====
@@ -2937,6 +2953,12 @@
       return "aman";
     }
 
+    // HP pribadi: pada tim partner tiap orang punya 3 HP dan hanya berkurang oleh alpa miliknya sendiri.
+    // Single fighter memakai HP timnya.
+    function getPersonalHp(isPair, ownAlpaCount, teamCurrent) {
+      return isPair ? Math.max(0, 3 - ownAlpaCount) : teamCurrent;
+    }
+
     function getTopContributors(members) {
       const max = members.reduce(function (m, x) { return Math.max(m, x.count); }, 0);
       if (max <= 0) return { max: 0, names: [] };
@@ -2944,27 +2966,58 @@
     }
 
     function buildIndividualHpBanner(p) {
-      if (!(p.lost > 0) || (p.sev !== "kritis" && p.sev !== "habis")) return "";
-      const top = getTopContributors(p.members);
+      const boxRose = "mb-2 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl px-2.5 py-2 text-[11px] font-bold";
+      const boxAmber = "mb-2 bg-amber-50 border border-amber-200 text-amber-700 rounded-xl px-2.5 py-2 text-[11px] font-bold";
+      const warn = '<i class="fa-solid fa-triangle-exclamation"></i> ';
       const sisa = p.remaining > 0 ? " Sisa " + p.remaining + " alpa lagi sebelum gugur." : "";
-      const hpText = "HP tim " + p.hp + "/" + p.maxHp + ".";
-      const isSelfTop = top.names.indexOf(p.name) !== -1;
+      let html = "";
 
-      if (p.type === "PARTNER" && p.members.length > 1) {
-        if (isSelfTop) {
-          return '<div class="mb-2 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl px-2.5 py-2 text-[11px] font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Peringatan gugur individu: kamu penyumbang minus terbanyak (' + top.max + ' dari ' + p.missedTotal + ' alpa). ' + hpText + sisa + '</div>';
+      if (!(p.members && p.members.length)) return "";
+
+      if (p.isPair) {
+        const own = p.members.filter(function (m) { return m.name === p.name; })[0];
+        const other = p.members.filter(function (m) { return m.name !== p.name; })[0];
+        const ownCount = own ? own.count : 0;
+        const otherHp = other ? Math.max(0, 3 - other.count) : 3;
+
+        // 1) HP pribadi
+        if (p.sev === "habis") {
+          html += '<div class="' + boxRose + '">' + warn + 'Peringatan gugur individu: HP pribadi kamu habis (0/3)' +
+            (ownCount > 0 ? ' karena ' + ownCount + ' alpa' : '') + '. ' +
+            (other ? 'Mitra ' + escapeHtmlText(other.name) + (otherHp > 0 ? ' masih punya HP ' + otherHp + '/3.' : ' juga sudah habis HP pribadinya.') : '') + '</div>';
+        } else if (p.sev === "kritis") {
+          html += '<div class="' + boxAmber + '">' + warn + 'HP pribadi kamu hampir habis (' + p.hp + '/3).</div>';
         }
-        if (top.names.length > 0) {
-          return '<div class="mb-2 bg-amber-50 border border-amber-200 text-amber-700 rounded-xl px-2.5 py-2 text-[11px] font-bold"><i class="fa-solid fa-triangle-exclamation"></i> HP tim ' + (p.sev === "habis" ? "habis" : "hampir habis") + ' terutama karena ' + escapeHtmlText(top.names.join(" dan ")) + ' (' + top.max + 'x alpa). ' + hpText + sisa + '</div>';
+
+        // 2) HP tim
+        if (p.lost > 0 && (p.teamSev === "kritis" || p.teamSev === "habis")) {
+          const top = getTopContributors(p.members);
+          const teamWord = p.teamSev === "habis" ? "habis" : "hampir habis";
+          const hpText = "HP tim " + p.teamHp + "/" + p.teamMax + ".";
+          if (top.names.length > 0) {
+            if (top.names.indexOf(p.name) !== -1) {
+              html += '<div class="' + boxRose + '">' + warn + 'Kamu penyumbang minus tim terbanyak (' + top.max + ' dari ' + p.missedTotal + ' alpa). HP tim ' + teamWord + '. ' + hpText + sisa + '</div>';
+            } else {
+              html += '<div class="' + boxAmber + '">' + warn + 'HP tim ' + teamWord + ' terutama karena ' + escapeHtmlText(top.names.join(" dan ")) + ' (' + top.max + 'x alpa). ' + hpText + sisa + '</div>';
+            }
+          } else {
+            html += '<div class="' + boxRose + '">' + warn + 'Peringatan gugur: HP tim ' + teamWord + '. ' + hpText + ' Minus berasal dari penyesuaian PJ.' + sisa + '</div>';
+          }
         }
+        return html;
       }
-      return '<div class="mb-2 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl px-2.5 py-2 text-[11px] font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Peringatan gugur: HP ' + (p.sev === "habis" ? "habis" : "hampir habis") + '. ' + hpText + sisa + '</div>';
+
+      if (p.lost > 0 && (p.sev === "kritis" || p.sev === "habis")) {
+        return '<div class="' + boxRose + '">' + warn + 'Peringatan gugur: HP ' + (p.sev === "habis" ? "habis" : "hampir habis") + '. HP ' + p.hp + '/' + p.maxHp + '.' + sisa + '</div>';
+      }
+      return "";
     }
 
     function renderHpMonitor() {
       const list = document.getElementById('hpMonList');
       if (!list) return;
       const summaryEl = document.getElementById('hpMonSummary');
+      const outBox = document.getElementById('hpMonIndividualOut');
       const emptyEl = document.getElementById('hpMonEmpty');
       const emptyText = document.getElementById('hpMonEmptyText');
       const viewVal = document.getElementById('hpMonView').value;
@@ -2972,6 +3025,8 @@
 
       const counts = { aman: 0, waspada: 0, kritis: 0, habis: 0, gugur: 0 };
       const inTeam = {};
+      const outList = [];
+      const lowList = [];
       let teams = [];
 
       (state.partners || []).forEach(function (team) {
@@ -2988,12 +3043,33 @@
         const gugurAt = team.type === "PARTNER" ? 7 : 4;
         const remaining = inactive ? 0 : Math.max(1, gugurAt - lost);
         const stats = getTeamMissStats(team);
+        const isPair = team.type === "PARTNER" && stats.members.length > 1;
+        const persMax = isPair ? 3 : maxHp;
 
-        counts[sev] += names.length;
-        teams.push({ team: team, names: names, maxHp: maxHp, lost: lost, current: current, inactive: inactive, sev: sev, remaining: remaining, members: stats.members, missedTotal: stats.missedTotal });
+        const members = stats.members.map(function (m) {
+          const hp = getPersonalHp(isPair, m.count, current);
+          return { name: m.name, count: m.count, dates: m.dates, hp: hp, sev: inactive ? "gugur" : getHpSeverity(hp, persMax, false) };
+        });
+        members.forEach(function (m) { counts[m.sev] += 1; });
+
+        let indOut = 0;
+        if (isPair && !inactive) {
+          members.forEach(function (m) {
+            const mate = members.filter(function (x) { return x.name !== m.name; })[0];
+            if (m.hp === 0) {
+              indOut += 1;
+              outList.push({ name: m.name, mate: mate ? mate.name : "", mateHp: mate ? mate.hp : 0 });
+            } else if (m.sev === "kritis") {
+              lowList.push({ name: m.name, hp: m.hp, mate: mate ? mate.name : "", mateHp: mate ? mate.hp : 0 });
+            }
+          });
+        }
+
+        teams.push({ team: team, names: names, isPair: isPair, persMax: persMax, maxHp: maxHp, lost: lost, current: current, inactive: inactive, sev: sev, remaining: remaining, members: members, missedTotal: stats.missedTotal, indOut: indOut });
       });
       counts.aman += (state.participants || []).filter(function (n) { return !inTeam[n]; }).length;
 
+      // Tile ringkasan (per individu)
       const tile = function (label, value, cls, icon) {
         return '<div class="' + cls + ' border rounded-2xl p-3 text-center"><div class="text-2xl font-black">' + value + '</div><div class="text-[10px] font-bold uppercase tracking-wider"><i class="' + icon + '"></i> ' + label + '</div></div>';
       };
@@ -3003,15 +3079,46 @@
         tile("Hampir Habis", counts.kritis, "bg-rose-50 text-rose-700 border-rose-200", "fa-solid fa-heart-crack") +
         tile("Habis / Gugur", counts.habis + counts.gugur, "bg-slate-800 text-white border-slate-700", "fa-solid fa-skull");
 
+      // Daftar kehabisan HP individu padahal masih punya partner
+      if (outBox) {
+        let outHtml = "";
+        if (outList.length > 0) {
+          outHtml += '<div class="bg-rose-50 border border-rose-200 rounded-2xl p-3 mb-3">' +
+            '<p class="text-xs font-bold text-rose-700 mb-2"><i class="fa-solid fa-user-xmark"></i> Kehabisan HP individu, masih punya partner (' + outList.length + ')</p>' +
+            '<div class="flex flex-wrap gap-2">' +
+            outList.map(function (o) {
+              return '<span class="bg-white border border-rose-200 text-rose-700 text-[11px] font-bold px-2.5 py-1 rounded-full">' + escapeHtmlText(o.name) + ' 0/3 <span class="text-slate-400 font-semibold">bersama ' + escapeHtmlText(o.mate) + ' ' + o.mateHp + '/3</span></span>';
+            }).join("") +
+            '</div></div>';
+        }
+        if (lowList.length > 0) {
+          outHtml += '<div class="bg-amber-50 border border-amber-200 rounded-2xl p-3 mb-3">' +
+            '<p class="text-xs font-bold text-amber-700 mb-2"><i class="fa-solid fa-heart-crack"></i> HP individu hampir habis, masih punya partner (' + lowList.length + ')</p>' +
+            '<div class="flex flex-wrap gap-2">' +
+            lowList.map(function (o) {
+              return '<span class="bg-white border border-amber-200 text-amber-700 text-[11px] font-bold px-2.5 py-1 rounded-full">' + escapeHtmlText(o.name) + ' ' + o.hp + '/3 <span class="text-slate-400 font-semibold">bersama ' + escapeHtmlText(o.mate) + ' ' + o.mateHp + '/3</span></span>';
+            }).join("") +
+            '</div></div>';
+        }
+        outBox.innerHTML = outHtml;
+      }
+
       teams = teams.filter(function (r) {
-        if (viewVal === "kritis" && ["gugur", "habis", "kritis"].indexOf(r.sev) === -1) return false;
-        if (viewVal === "berkurang" && !(r.lost > 0)) return false;
+        if (viewVal === "kritis") {
+          const teamLow = ["gugur", "habis", "kritis"].indexOf(r.sev) !== -1;
+          const memberLow = !r.inactive && r.members.some(function (m) { return m.sev === "habis" || m.sev === "kritis"; });
+          if (!teamLow && !memberLow) return false;
+        }
+        if (viewVal === "individu" && !(r.indOut > 0)) return false;
+        if (viewVal === "berkurang" && !(r.lost > 0 || r.members.some(function (m) { return m.count > 0; }))) return false;
         if (searchVal && r.names.join(" ").toLowerCase().indexOf(searchVal) === -1) return false;
         return true;
       });
 
       const order = { gugur: 0, habis: 1, kritis: 2, waspada: 3, aman: 4 };
+      const rank = function (r) { return Math.min(order[r.sev], r.indOut > 0 ? 1 : 9); };
       teams.sort(function (a, b) {
+        if (rank(a) !== rank(b)) return rank(a) - rank(b);
         if (order[a.sev] !== order[b.sev]) return order[a.sev] - order[b.sev];
         if (b.lost !== a.lost) return b.lost - a.lost;
         return String(a.names[0]).localeCompare(String(b.names[0]));
@@ -3021,7 +3128,9 @@
       if (teams.length === 0) {
         emptyText.innerText = viewVal === "kritis"
           ? "Belum ada peserta dengan HP hampir habis, habis, atau gugur. Semua masih aman."
-          : "Tidak ada tim pada filter ini.";
+          : viewVal === "individu"
+            ? "Belum ada peserta yang kehabisan HP individu padahal masih punya partner."
+            : "Tidak ada tim pada filter ini.";
         emptyEl.classList.remove('hidden');
         return;
       }
@@ -3029,54 +3138,73 @@
 
       const sevBadge = {
         gugur: '<span class="bg-slate-800 text-white text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">Gugur</span>',
-        habis: '<span class="bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">HP Habis</span>',
-        kritis: '<span class="bg-rose-100 text-rose-700 border border-rose-200 text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">Hampir Habis</span>',
+        habis: '<span class="bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">HP Tim Habis</span>',
+        kritis: '<span class="bg-rose-100 text-rose-700 border border-rose-200 text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">HP Tim Hampir Habis</span>',
         waspada: '<span class="bg-amber-100 text-amber-700 border border-amber-200 text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">Waspada</span>',
         aman: '<span class="bg-emerald-100 text-emerald-700 border border-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">Aman</span>'
       };
 
       teams.forEach(function (r) {
-        const isPartner = r.team.type === "PARTNER" && r.names.length > 1;
         const pct = Math.max(0, Math.min(100, Math.round((r.current / r.maxHp) * 100)));
         const barColor = pct > 66 ? "bg-emerald-500" : pct > 33 ? "bg-amber-400" : "bg-rose-500";
         const top = getTopContributors(r.members);
 
         const memberLines = r.members.map(function (m) {
-          const isTop = top.names.indexOf(m.name) !== -1 && isPartner;
+          const isTop = r.isPair && top.names.indexOf(m.name) !== -1;
           const share = r.missedTotal > 0 ? Math.round((m.count / r.missedTotal) * 100) : 0;
           const topTag = isTop ? ' <span class="bg-rose-100 text-rose-700 text-[9px] font-bold px-1.5 py-0.5 rounded-md">penguras HP terbanyak</span>' : '';
+          const outTag = (r.isPair && !r.inactive && m.hp === 0) ? ' <span class="bg-rose-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md">HP individu habis</span>' : '';
           let detail;
           if (m.count > 0) {
-            detail = m.count + 'x alpa' + (isPartner && r.missedTotal > 0 ? ' (' + share + '% dari minus tim)' : '') + ' <span class="text-slate-400">(' + escapeHtmlText(m.dates.join(", ")) + ')</span>';
+            detail = m.count + 'x alpa' + (r.isPair && r.missedTotal > 0 ? ' (' + share + '% dari minus tim)' : '') + ' <span class="text-slate-400">(' + escapeHtmlText(m.dates.join(", ")) + ')</span>';
           } else {
-            detail = r.lost > 0 && isPartner ? 'Tidak ada alpa sendiri, ikut terpotong' : 'Belum ada alpa';
+            detail = r.lost > 0 && r.isPair ? 'Tidak ada alpa sendiri, ikut terpotong di HP tim' : 'Belum ada alpa';
           }
-          return '<li class="flex items-start gap-1.5"><i class="fa-solid ' + (m.count > 0 ? 'fa-circle-xmark text-rose-500' : 'fa-circle-check text-emerald-500') + ' mt-0.5"></i><span><strong class="text-slate-700">' + escapeHtmlText(m.name) + '</strong>' + topTag + '<span class="block text-[10px] text-slate-500 font-semibold">' + detail + '</span></span></li>';
+          const hpColor = m.sev === "kritis" || m.sev === "habis" || m.sev === "gugur" ? "text-rose-600" : m.sev === "waspada" ? "text-amber-600" : "text-emerald-600";
+          const hpRight = r.isPair ? '<span class="font-bold whitespace-nowrap ' + hpColor + '">HP ' + m.hp + '/3</span>' : '';
+          return '<li class="flex items-start justify-between gap-2"><span class="flex items-start gap-1.5 min-w-0"><i class="fa-solid ' + (m.count > 0 ? 'fa-circle-xmark text-rose-500' : 'fa-circle-check text-emerald-500') + ' mt-0.5"></i><span><strong class="text-slate-700">' + escapeHtmlText(m.name) + '</strong>' + topTag + outTag + '<span class="block text-[10px] text-slate-500 font-semibold">' + detail + '</span></span></span>' + hpRight + '</li>';
         }).join("");
 
+        const warnBox = function (cls, text) {
+          return '<div class="' + cls + ' border rounded-xl px-2.5 py-2 text-[11px] font-bold"><i class="fa-solid fa-triangle-exclamation"></i> ' + text + '</div>';
+        };
+        const roseCls = "bg-rose-50 border-rose-200 text-rose-700";
+        const amberCls = "bg-amber-50 border-amber-200 text-amber-700";
         let warning = "";
+
+        if (r.isPair && !r.inactive) {
+          r.members.forEach(function (m) {
+            const mate = r.members.filter(function (x) { return x.name !== m.name; })[0];
+            if (m.hp === 0) {
+              warning += warnBox(roseCls, 'Peringatan gugur individu: <strong>' + escapeHtmlText(m.name) + '</strong> kehabisan HP individu (0/3)' +
+                (mate ? (mate.hp > 0 ? ' padahal partner (<strong>' + escapeHtmlText(mate.name) + '</strong>) masih punya HP ' + mate.hp + '/3.' : ', partner (<strong>' + escapeHtmlText(mate.name) + '</strong>) juga sudah habis.') : '.') +
+                ' HP tim ' + r.current + '/' + r.maxHp + '.');
+            } else if (m.sev === "kritis") {
+              warning += warnBox(amberCls, 'HP individu <strong>' + escapeHtmlText(m.name) + '</strong> hampir habis (' + m.hp + '/3).');
+            }
+          });
+        }
+
         if (r.sev === "gugur" || r.sev === "habis" || r.sev === "kritis") {
-          const who = top.names.map(escapeHtmlText).join(" dan ");
           let text;
-          if (isPartner) {
+          if (r.isPair) {
             if (top.names.length > 0) {
               const sama = top.names.length > 1 ? " sama-sama paling banyak memakan HP partner" : " paling banyak memakan HP partner";
-              text = (r.sev === "gugur" ? "Tim gugur. " : "Peringatan gugur individu: ") + '<strong>' + who + '</strong>' + sama + ' (' + top.max + ' dari ' + r.missedTotal + ' alpa).';
+              text = (r.sev === "gugur" ? "Tim gugur. " : "HP tim " + (r.sev === "habis" ? "habis" : "hampir habis") + ". ") + '<strong>' + top.names.map(escapeHtmlText).join(" dan ") + '</strong>' + sama + ' (' + top.max + ' dari ' + r.missedTotal + ' alpa).';
             } else {
-              text = (r.sev === "gugur" ? "Tim gugur. " : "Peringatan gugur. ") + 'Minus berasal dari penyesuaian manual PJ.';
+              text = (r.sev === "gugur" ? "Tim gugur. " : "HP tim " + (r.sev === "habis" ? "habis" : "hampir habis") + ". ") + 'Minus berasal dari penyesuaian manual PJ.';
             }
           } else {
             text = (r.sev === "gugur" ? "Gugur: " : "Peringatan gugur: ") + '<strong>' + escapeHtmlText(r.names[0]) + '</strong>' + (r.sev === "gugur" ? "." : ", HP " + (r.sev === "habis" ? "habis" : "hampir habis") + ".");
           }
           const sisa = r.sev !== "gugur" ? ' Sisa ' + r.remaining + ' alpa lagi sebelum gugur.' : '';
-          const cls = r.sev === "gugur" ? "bg-slate-800 text-white border-slate-700" : "bg-rose-50 border-rose-200 text-rose-700";
-          warning = '<div class="' + cls + ' border rounded-xl px-2.5 py-2 text-[11px] font-bold"><i class="fa-solid fa-triangle-exclamation"></i> ' + text + sisa + '</div>';
+          warning += warnBox(r.sev === "gugur" ? "bg-slate-800 text-white border-slate-700" : roseCls, text + sisa);
         }
 
-        const title = isPartner
+        const title = r.isPair
           ? escapeHtmlText(r.names[0]) + ' &amp; ' + escapeHtmlText(r.names[1])
           : escapeHtmlText(r.names[0]);
-        const typeBadge = isPartner
+        const typeBadge = r.isPair
           ? '<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">Partner</span>'
           : '<span class="bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">Single</span>';
 
@@ -3088,7 +3216,7 @@
             '<div class="flex flex-wrap gap-1 justify-end">' + typeBadge + sevBadge[r.sev] + '</div>' +
           '</div>' +
           '<div>' +
-            '<div class="flex items-center justify-between text-[11px] font-bold mb-1"><span class="text-slate-600">HP ' + r.current + '/' + r.maxHp + '</span><span class="' + (r.lost > 0 ? "text-rose-600" : "text-emerald-600") + '">' + (r.lost > 0 ? "Minus -" + r.lost : "Penuh") + '</span></div>' +
+            '<div class="flex items-center justify-between text-[11px] font-bold mb-1"><span class="text-slate-600">HP ' + (r.isPair ? 'Tim ' : '') + r.current + '/' + r.maxHp + '</span><span class="' + (r.lost > 0 ? "text-rose-600" : "text-emerald-600") + '">' + (r.lost > 0 ? "Minus -" + r.lost : "Penuh") + '</span></div>' +
             '<div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden"><div class="' + barColor + ' h-2 rounded-full" style="width:' + pct + '%"></div></div>' +
           '</div>' +
           '<ul class="text-xs text-slate-600 space-y-1.5 mt-1">' + memberLines + '</ul>' +
@@ -3134,7 +3262,18 @@
           pInfo.lost = hpOffsetNow < 0 ? -hpOffsetNow : 0;
           pInfo.members = missStats.members;
           pInfo.missedTotal = missStats.missedTotal;
-          pInfo.sev = getHpSeverity(Math.min(maxHp, actualHp), maxHp, false);
+
+          const teamCurrent = Math.min(maxHp, actualHp);
+          const isPair = team.type === "PARTNER" && missStats.members.length > 1;
+          const ownStat = missStats.members.filter(function (m) { return m.name === name; })[0];
+          pInfo.isPair = isPair;
+          pInfo.teamHp = teamCurrent;
+          pInfo.teamMax = maxHp;
+          pInfo.teamSev = getHpSeverity(teamCurrent, maxHp, false);
+          // HP yang tampil di kartu individu adalah HP pribadi (maksimal 3 pada tim partner)
+          pInfo.hp = getPersonalHp(isPair, ownStat ? ownStat.count : 0, teamCurrent);
+          pInfo.maxHp = isPair ? 3 : maxHp;
+          pInfo.sev = getHpSeverity(pInfo.hp, pInfo.maxHp, false);
           pInfo.remaining = Math.max(1, (team.type === "PARTNER" ? 7 : 4) - pInfo.lost);
 
           let isInactive = false;
