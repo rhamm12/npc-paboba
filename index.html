@@ -434,7 +434,7 @@
             </div>
 
             <p class="text-sm text-slate-300 mb-4 font-semibold leading-relaxed">
-              Yo Pejuang Literasi PABOBA! 😎 Biar petualangan membaca kamu makin mulus tanpa kena penalti HP, nih dengerin panduan santai berikut:
+              Yo Pejuang Literasi PABOBA! 😎 Biar petualangan membaca kamu makin mulus tanpa kena penalti HP (Health Point), nih dengerin panduan santai berikut:
             </p>
 
             <ul class="space-y-4 text-xs text-slate-300">
@@ -463,7 +463,7 @@
                 <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center flex-shrink-0">4</span>
                 <div>
                   <strong class="text-white block mb-0.5">Tenggat Waktu Jam 22:00 WIB ⏰</strong>
-                  Ini penting banget! Lewat dari jam 10 malam, robot kami bakal otomatis nyatet kamu alpa. Alpa berarti HP regu kamu langsung bocor!
+                  Ini penting banget! Lewat dari jam 10 malam, robot kami bakal otomatis nyatet kamu alpa. Alpa berarti HP (Health Point) regu kamu langsung bocor!
                 </div>
               </li>
             </ul>
@@ -518,7 +518,7 @@
               <div class="text-xs mt-1 font-semibold flex items-center justify-center gap-1"><span class="w-2.5 h-2.5 bg-rose-500 rounded-full inline-block"></span> Alpa</div>
             </div>
             <div class="bg-blue-500/10 border border-blue-500/20 text-blue-700 p-2 rounded-xl text-center">
-              <div class="text-[10px] font-bold uppercase text-blue-600">Reset HP</div>
+              <div class="text-[10px] font-bold uppercase text-blue-600">Reset HP (Health Point)</div>
               <div class="text-xs mt-1 font-semibold flex items-center justify-center gap-1"><span class="w-2.5 h-2.5 bg-blue-500 rounded-full inline-block"></span> Reset</div>
             </div>
           </div>
@@ -552,7 +552,7 @@
               <select id="selectStatus" onchange="detectInsightSentences()" class="w-full bg-slate-50 border-2 border-slate-100 focus:border-amber-400 focus:bg-white outline-none rounded-xl px-4 py-2.5 text-sm font-medium transition-all text-slate-700 shadow-sm">
                 <option value="Laporan" class="text-green-600 font-semibold">🟢 Laporan (Min. 10 Halaman)</option>
                 <option value="Tidak Laporan" class="text-rose-600 font-semibold">🔴 Tidak Laporan</option>
-                <option value="Reset HP" id="statusResetHpOption" class="hidden text-blue-600 font-semibold">🔵 Reset HP</option>
+                <option value="Reset HP" id="statusResetHpOption" class="hidden text-blue-600 font-semibold">🔵 Reset HP (Health Point)</option>
                 <option value="Gugur" id="statusGugurOption" class="hidden text-slate-900 font-semibold">⚫ Gugur</option>
               </select>
             </div>
@@ -674,7 +674,7 @@
             <i class="fa-solid fa-table"></i> Laporan Rekapan
           </button>
           <button id="tabBtn3" onclick="switchMainTab(3)" class="flex-1 whitespace-nowrap text-sm font-bold px-4 py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 text-slate-500 hover:bg-slate-50">
-            <i class="fa-solid fa-heart-pulse"></i> Partner & HP
+            <i class="fa-solid fa-heart-pulse"></i> Partner & HP (Health Point)
           </button>
           <!-- Tab Kontrol PJ (Hanya Terbuka untuk Mode PJ) -->
           <button id="tabBtn4" onclick="switchMainTab(4)" class="hidden flex-1 whitespace-nowrap text-sm font-bold px-4 py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 text-slate-500 hover:bg-slate-50">
@@ -829,20 +829,20 @@
               <div class="hidden lg:flex items-center text-amber-400 text-sm"><i class="fa-solid fa-chevron-right"></i></div>
               <div class="flex-1 bg-white rounded-2xl p-4 border border-amber-100 shadow-sm flex flex-col items-center text-center hover:scale-[1.02] transition-all">
                 <span class="w-8 h-8 bg-amber-500 text-white font-bold rounded-full flex items-center justify-center text-xs shadow-md mb-2 animate-pulse">2</span>
-                <h4 class="font-title text-xs font-bold text-slate-700 uppercase tracking-wide">✍️ Setor Log</h4>
+                <h4 class="font-title text-xs font-bold text-slate-700 uppercase tracking-wide">✍️ Setor Insight</h4>
                 <p class="text-[10px] text-slate-400 mt-1 leading-relaxed">Sertakan insight berbobot minimal <strong>3-5 kalimat</strong>.</p>
               </div>
               <div class="hidden lg:flex items-center text-amber-400 text-sm"><i class="fa-solid fa-chevron-right"></i></div>
               <div class="flex-1 bg-white rounded-2xl p-4 border border-amber-100 shadow-sm flex flex-col items-center text-center hover:scale-[1.02] transition-all">
                 <span class="w-8 h-8 bg-emerald-500 text-white font-bold rounded-full flex items-center justify-center text-xs shadow-md mb-2">3</span>
-                <h4 class="font-title text-xs font-bold text-slate-700 uppercase tracking-wide">⚖️ Kalkulasi HP</h4>
-                <p class="text-[10px] text-slate-400 mt-1 leading-relaxed">Lapor = Nyawa Aman.<br>Alpa = HP Regu dipotong -1.</p>
+                <h4 class="font-title text-xs font-bold text-slate-700 uppercase tracking-wide">⚖️ Kalkulasi HP (Health Point)</h4>
+                <p class="text-[10px] text-slate-400 mt-1 leading-relaxed">Lapor = Nyawa Aman.<br>Alpa = HP (Health Point) Regu dipotong -1.</p>
               </div>
               <div class="hidden lg:flex items-center text-amber-400 text-sm"><i class="fa-solid fa-chevron-right"></i></div>
               <div class="flex-1 bg-white rounded-2xl p-4 border border-amber-100 shadow-sm flex flex-col items-center text-center hover:scale-[1.02] transition-all">
                 <span class="w-8 h-8 bg-slate-800 text-amber-400 font-bold rounded-full flex items-center justify-center text-xs shadow-md mb-2">4</span>
                 <h4 class="font-title text-xs font-bold text-slate-700 uppercase tracking-wide">🛡️ Keaktifan</h4>
-                <p class="text-[10px] text-slate-400 mt-1 leading-relaxed">Jika partner &lt;= -7 HP / Single &lt;= -4 HP = <strong>Gugur Bersama</strong>.</p>
+                <p class="text-[10px] text-slate-400 mt-1 leading-relaxed">Jika partner &lt;= -7 HP (Health Point) / Single &lt;= -4 HP = <strong>Gugur Bersama</strong>.</p>
               </div>
             </div>
           </div>
@@ -851,11 +851,11 @@
           <div class="bg-amber-50 rounded-2xl p-4 border border-amber-200/50 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <span class="bg-emerald-100 text-emerald-800 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider"><i class="fa-solid fa-people-group"></i> Kuota Partner</span>
-              <p class="text-xs text-slate-600 mt-1.5 leading-relaxed"><strong>Sistem Partner:</strong> Memulai dengan 0 HP. Jika menyentuh <strong class="text-rose-600">-7 HP</strong>, maka kedua partner dinyatakan gugur bersama.</p>
+              <p class="text-xs text-slate-600 mt-1.5 leading-relaxed"><strong>Sistem Partner:</strong> Memulai dengan 0 HP (Health Point). Jika menyentuh <strong class="text-rose-600">-7 HP</strong>, maka kedua partner dinyatakan gugur bersama.</p>
             </div>
             <div>
               <span class="bg-amber-100 text-amber-800 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider"><i class="fa-solid fa-user"></i> Single Fighter</span>
-              <p class="text-xs text-slate-600 mt-1.5 leading-relaxed"><strong>Sistem Single:</strong> Memulai dengan 0 HP. Jika menyentuh <strong class="text-rose-600">-4 HP</strong>, maka Anda gugur secara individu.</p>
+              <p class="text-xs text-slate-600 mt-1.5 leading-relaxed"><strong>Sistem Single:</strong> Memulai dengan 0 HP (Health Point). Jika menyentuh <strong class="text-rose-600">-4 HP</strong>, maka Anda gugur secara individu.</p>
             </div>
           </div>
 
@@ -863,7 +863,7 @@
           <div class="bg-white rounded-3xl p-6 shadow-xl border border-amber-200/50">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-5 mb-5">
               <div>
-                <h2 class="font-title text-xl font-bold text-slate-800">Status HP Per Anggota (Individu)</h2>
+                <h2 class="font-title text-xl font-bold text-slate-800">Status HP (Health Point) Per Anggota (Individu)</h2>
                 <p class="text-xs text-slate-400">Peta pertahanan nyawa real-time untuk masing-masing peserta</p>
               </div>
               <div class="flex gap-2 w-full sm:w-auto">
@@ -884,21 +884,21 @@
           <div id="hpMonitorCard" class="bg-white rounded-3xl p-6 shadow-xl border border-rose-200/60">
             <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-slate-100 pb-5 mb-5">
               <div>
-                <h2 class="font-title text-xl font-bold text-slate-800"><i class="fa-solid fa-heart-pulse text-rose-500"></i> Monitoring HP Keseluruhan</h2>
-                <p class="text-xs text-slate-400">Siapa saja yang HP-nya hampir habis atau habis, dan siapa yang paling banyak memakan HP partnernya.</p>
+                <h2 class="font-title text-xl font-bold text-slate-800"><i class="fa-solid fa-heart-pulse text-rose-500"></i> Monitoring HP (Health Point) Keseluruhan</h2>
+                <p class="text-xs text-slate-400">Siapa saja yang HP (Health Point) miliknya hampir habis atau habis, dan siapa yang paling banyak memakan HP partnernya.</p>
               </div>
               <div class="flex flex-wrap gap-2 w-full lg:w-auto">
                 <input type="text" id="hpMonSearch" oninput="renderHpMonitor()" placeholder="Cari nama..." class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs outline-none focus:border-amber-400 transition-all w-full sm:w-36">
                 <select id="hpMonView" onchange="renderHpMonitor()" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-semibold text-slate-700 outline-none">
                   <option value="kritis">Hampir Habis, Habis, Gugur</option>
-                  <option value="individu">HP individu habis (masih punya partner)</option>
-                  <option value="berkurang">Semua yang HP-nya berkurang</option>
+                  <option value="individu">HP (Health Point) individu habis (masih punya partner)</option>
+                  <option value="berkurang">Semua yang HP (Health Point) miliknya berkurang</option>
                   <option value="semua">Semua tim</option>
                 </select>
               </div>
             </div>
             <div id="hpMonSummary" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-2"></div>
-            <p class="text-[11px] text-slate-400 mb-4">Kotak di atas dihitung per individu (HP pribadi maksimal 3). Kartu di bawah menampilkan HP tim: partner maksimal 6, single maksimal 3.</p>
+            <p class="text-[11px] text-slate-400 mb-4">Kotak di atas dihitung per individu, dengan HP (Health Point) pribadi maksimal 3. Kartu di bawah menampilkan HP tim: partner maksimal 6, single maksimal 3.</p>
             <div id="hpMonIndividualOut"></div>
             <div id="hpMonList" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[560px] overflow-y-auto pr-1"></div>
             <div id="hpMonEmpty" class="hidden text-center py-10">
@@ -928,7 +928,7 @@
                 <p class="text-xs text-slate-400">Tabel monitoring sisa kuota nyawa partner harian</p>
               </div>
               <button id="btnPjExportHpPdf" onclick="exportPartnerHpPDF()" class="hidden bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-3.5 py-2 rounded-xl shadow transition-all flex items-center gap-1">
-                <i class="fa-solid fa-file-pdf text-amber-400"></i> Ekspor PDF Quest HP
+                <i class="fa-solid fa-file-pdf text-amber-400"></i> Ekspor PDF Quest HP (Health Point)
               </button>
             </div>
 
@@ -1047,7 +1047,7 @@
                       <i class="fa-solid fa-user-slash"></i> Proses Resign
                     </button>
                   </div>
-                  <p class="text-[9px] text-slate-400 leading-relaxed"><i class="fa-solid fa-circle-info"></i> Peserta yang resign akan otomatis dipisahkan dari pasangannya, partner yang ditinggalkan beralih menjadi <strong>Single Fighter (HP di-reset ke 0)</strong>, dan peserta yang resign otomatis tercatat permanen di <strong>Sheet "Gugur"</strong> dengan status "Mengundurkan Diri".</p>
+                  <p class="text-[9px] text-slate-400 leading-relaxed"><i class="fa-solid fa-circle-info"></i> Peserta yang resign akan otomatis dipisahkan dari pasangannya, partner yang ditinggalkan beralih menjadi <strong>Single Fighter dengan HP (Health Point) di-reset ke 0</strong>, dan peserta yang resign otomatis tercatat permanen di <strong>Sheet "Gugur"</strong> dengan status "Mengundurkan Diri".</p>
                 </div>
 
                 <!-- Quick Shuffle Actions -->
@@ -1322,7 +1322,7 @@
         "GG WP {name}! Progres membacamu hari ini dapet medali emas. Partner kamu auto senyum-senyum bangga nih! 🥇😎",
         "Mantul banget, {name}! Konsistensi kamu hari ini bener-bener menyala abangku! Buku tamat, ilmu melekat! 🚀✨",
         "Suhu {name} emang gak ada lawan! Ringkasan insight-nya gila sih, berbobot parah. Sungkem dulu! 🙇‍♂️📖",
-        "Misi harian beres, {name}! HP regu aman terkendali, naga kemalasan auto nangis di pojokan! 🐉🛡️",
+        "Misi harian beres, {name}! HP (Health Point) regu aman terkendali, naga kemalasan auto nangis di pojokan! 🐉🛡️",
         "Satu kata buat {name}: LEGENDARIS! Lembaran baru dibaca, wawasan baru tercipta. Teruskan tren positif ini! 🌟",
         "Gak sia-sia dapet sebutan MVP hari ini, {name}! Membaca minimal 10 halaman mah kecil buat kamu! 🤝👑",
         "Wih, {name} lagi mode serius nih! Buku mana lagi yang mau kamu taklukkan berikutnya? Gas terus! ⛽💥",
@@ -1331,14 +1331,14 @@
       ],
       absentMotivations: [
         "Aduh {name}, hari ini mager melanda ya? Gak apa-apa, rehat dulu. Besok kita bales dendam baca lagi! 💤💛",
-        "HP bocor dikit gak ngaruh, {name}! Yang penting besok harus bangkit lagi, jangan biarkan regumu runtuh! 💪💥",
+        "HP (Health Point) bocor dikit gak ngaruh, {name}! Yang penting besok harus bangkit lagi, jangan biarkan regumu runtuh! 💪💥",
         "Sayang banget hari ini absen, {name}. Yuk, kumpulin niat buat tebus kekosongan hari esok! ⏳📖",
         "Kemalasan lagi nge-buff ya {name}? Jangan kelamaan tidurnya, lembaran buku setebal 10 halaman sudah rindu disentuh! 🌧️🕯️",
         "Hari ini bolos quest dulu ya, {name}? Ingat, partner-mu lagi cemas nungguin kamu di arena! 🤝🛡️",
-        "Waduh, HP tim berkurang 1 gara-gara kamu absen, {name}. Besok wajib tebus dosa ya! 🥀⚡",
+        "Waduh, HP (Health Point) tim berkurang 1 gara-gara kamu absen, {name}. Besok wajib tebus dosa ya! 🥀⚡",
         "Lagi sibuk dunia nyata ya, {name}? Santai, besok kita atur strategi lagi buat gempur lembaran buku! 🏹🏹",
         "Rehat sejenak boleh, tapi jangan kebablasan ya {name}! Lilin literasimu jangan sampai padam! 🕯️⏳",
-        "Napas dulu, {name}. Besok kita kejar setoran bareng-bareng biar HP kembali stabil! 🛡️🌄",
+        "Napas dulu, {name}. Besok kita kejar setoran bareng-bareng biar HP (Health Point) kembali stabil! 🛡️🌄",
         "Petualangan terhenti sementara karena {name} lagi mode AFK. Besok balik lagi dengan kekuatan penuh ya! 🎮"
       ],
       mourningMotivations: [
@@ -2904,7 +2904,7 @@
           note = 'Tidak lapor ' + m.count + 'x (' + escapeHtmlText(m.dates.join(", ")) + ')';
         } else if (isPair && p.lost > 0) {
           icon = '<i class="fa-solid fa-link text-amber-500"></i>';
-          note = 'Tidak ada alpa sendiri, ikut minus tim -' + p.lost + ' karena HP tim dibagi dengan mitra';
+          note = 'Tidak ada alpa sendiri, ikut minus tim -' + p.lost + ' karena HP (Health Point) tim dibagi dengan mitra';
         } else {
           icon = '<i class="fa-solid fa-circle-check text-emerald-500"></i>';
           note = 'Belum ada alpa';
@@ -2930,7 +2930,7 @@
 
       const diff = p.lost - p.missedTotal;
       const diffNote = (p.lost > 0 && diff !== 0)
-        ? '<p class="text-[10px] text-amber-600 font-semibold"><i class="fa-solid fa-circle-info"></i> Selisih ' + Math.abs(diff) + ' HP tim dari catatan alpa, kemungkinan penyesuaian manual PJ. HP pribadi dihitung dari catatan alpa.</p>'
+        ? '<p class="text-[10px] text-amber-600 font-semibold"><i class="fa-solid fa-circle-info"></i> Selisih ' + Math.abs(diff) + ' HP (Health Point) tim dari catatan alpa, kemungkinan penyesuaian manual PJ. HP pribadi dihitung dari catatan alpa.</p>'
         : "";
 
       return '<div class="mt-3 pt-2.5 border-t border-slate-200/70 space-y-1.5 text-[11px]">' + buildIndividualHpBanner(p) + rows + teamLine + diffNote + '</div>';
@@ -2982,11 +2982,11 @@
 
         // 1) HP pribadi
         if (p.sev === "habis") {
-          html += '<div class="' + boxRose + '">' + warn + 'Peringatan gugur individu: HP pribadi kamu habis (0/3)' +
+          html += '<div class="' + boxRose + '">' + warn + 'Peringatan gugur individu: HP (Health Point) pribadi kamu habis (0/3)' +
             (ownCount > 0 ? ' karena ' + ownCount + ' alpa' : '') + '. ' +
-            (other ? 'Mitra ' + escapeHtmlText(other.name) + (otherHp > 0 ? ' masih punya HP ' + otherHp + '/3.' : ' juga sudah habis HP pribadinya.') : '') + '</div>';
+            (other ? 'Mitra ' + escapeHtmlText(other.name) + (otherHp > 0 ? ' masih punya HP ' + otherHp + '/3.' : ' juga sudah habis HP (Health Point) pribadinya.') : '') + '</div>';
         } else if (p.sev === "kritis") {
-          html += '<div class="' + boxAmber + '">' + warn + 'HP pribadi kamu hampir habis (' + p.hp + '/3).</div>';
+          html += '<div class="' + boxAmber + '">' + warn + 'HP (Health Point) pribadi kamu hampir habis (' + p.hp + '/3).</div>';
         }
 
         // 2) HP tim
@@ -2996,19 +2996,19 @@
           const hpText = "HP tim " + p.teamHp + "/" + p.teamMax + ".";
           if (top.names.length > 0) {
             if (top.names.indexOf(p.name) !== -1) {
-              html += '<div class="' + boxRose + '">' + warn + 'Kamu penyumbang minus tim terbanyak (' + top.max + ' dari ' + p.missedTotal + ' alpa). HP tim ' + teamWord + '. ' + hpText + sisa + '</div>';
+              html += '<div class="' + boxRose + '">' + warn + 'Kamu penyumbang minus tim terbanyak (' + top.max + ' dari ' + p.missedTotal + ' alpa). HP (Health Point) tim ' + teamWord + '. ' + hpText + sisa + '</div>';
             } else {
-              html += '<div class="' + boxAmber + '">' + warn + 'HP tim ' + teamWord + ' terutama karena ' + escapeHtmlText(top.names.join(" dan ")) + ' (' + top.max + 'x alpa). ' + hpText + sisa + '</div>';
+              html += '<div class="' + boxAmber + '">' + warn + 'HP (Health Point) tim ' + teamWord + ' terutama karena ' + escapeHtmlText(top.names.join(" dan ")) + ' (' + top.max + 'x alpa). ' + hpText + sisa + '</div>';
             }
           } else {
-            html += '<div class="' + boxRose + '">' + warn + 'Peringatan gugur: HP tim ' + teamWord + '. ' + hpText + ' Minus berasal dari penyesuaian PJ.' + sisa + '</div>';
+            html += '<div class="' + boxRose + '">' + warn + 'Peringatan gugur: HP (Health Point) tim ' + teamWord + '. ' + hpText + ' Minus berasal dari penyesuaian PJ.' + sisa + '</div>';
           }
         }
         return html;
       }
 
       if (p.lost > 0 && (p.sev === "kritis" || p.sev === "habis")) {
-        return '<div class="' + boxRose + '">' + warn + 'Peringatan gugur: HP ' + (p.sev === "habis" ? "habis" : "hampir habis") + '. HP ' + p.hp + '/' + p.maxHp + '.' + sisa + '</div>';
+        return '<div class="' + boxRose + '">' + warn + 'Peringatan gugur: HP (Health Point) ' + (p.sev === "habis" ? "habis" : "hampir habis") + '. HP ' + p.hp + '/' + p.maxHp + '.' + sisa + '</div>';
       }
       return "";
     }
@@ -3084,7 +3084,7 @@
         let outHtml = "";
         if (outList.length > 0) {
           outHtml += '<div class="bg-rose-50 border border-rose-200 rounded-2xl p-3 mb-3">' +
-            '<p class="text-xs font-bold text-rose-700 mb-2"><i class="fa-solid fa-user-xmark"></i> Kehabisan HP individu, masih punya partner (' + outList.length + ')</p>' +
+            '<p class="text-xs font-bold text-rose-700 mb-2"><i class="fa-solid fa-user-xmark"></i> Kehabisan HP (Health Point) individu, masih punya partner (' + outList.length + ')</p>' +
             '<div class="flex flex-wrap gap-2">' +
             outList.map(function (o) {
               return '<span class="bg-white border border-rose-200 text-rose-700 text-[11px] font-bold px-2.5 py-1 rounded-full">' + escapeHtmlText(o.name) + ' 0/3 <span class="text-slate-400 font-semibold">bersama ' + escapeHtmlText(o.mate) + ' ' + o.mateHp + '/3</span></span>';
@@ -3093,7 +3093,7 @@
         }
         if (lowList.length > 0) {
           outHtml += '<div class="bg-amber-50 border border-amber-200 rounded-2xl p-3 mb-3">' +
-            '<p class="text-xs font-bold text-amber-700 mb-2"><i class="fa-solid fa-heart-crack"></i> HP individu hampir habis, masih punya partner (' + lowList.length + ')</p>' +
+            '<p class="text-xs font-bold text-amber-700 mb-2"><i class="fa-solid fa-heart-crack"></i> HP (Health Point) individu hampir habis, masih punya partner (' + lowList.length + ')</p>' +
             '<div class="flex flex-wrap gap-2">' +
             lowList.map(function (o) {
               return '<span class="bg-white border border-amber-200 text-amber-700 text-[11px] font-bold px-2.5 py-1 rounded-full">' + escapeHtmlText(o.name) + ' ' + o.hp + '/3 <span class="text-slate-400 font-semibold">bersama ' + escapeHtmlText(o.mate) + ' ' + o.mateHp + '/3</span></span>';
@@ -3127,9 +3127,9 @@
       list.innerHTML = "";
       if (teams.length === 0) {
         emptyText.innerText = viewVal === "kritis"
-          ? "Belum ada peserta dengan HP hampir habis, habis, atau gugur. Semua masih aman."
+          ? "Belum ada peserta dengan HP (Health Point) hampir habis, habis, atau gugur. Semua masih aman."
           : viewVal === "individu"
-            ? "Belum ada peserta yang kehabisan HP individu padahal masih punya partner."
+            ? "Belum ada peserta yang kehabisan HP (Health Point) individu padahal masih punya partner."
             : "Tidak ada tim pada filter ini.";
         emptyEl.classList.remove('hidden');
         return;
@@ -3158,7 +3158,7 @@
           if (m.count > 0) {
             detail = m.count + 'x alpa' + (r.isPair && r.missedTotal > 0 ? ' (' + share + '% dari minus tim)' : '') + ' <span class="text-slate-400">(' + escapeHtmlText(m.dates.join(", ")) + ')</span>';
           } else {
-            detail = r.lost > 0 && r.isPair ? 'Tidak ada alpa sendiri, ikut terpotong di HP tim' : 'Belum ada alpa';
+            detail = r.lost > 0 && r.isPair ? 'Tidak ada alpa sendiri, ikut terpotong di HP (Health Point) tim' : 'Belum ada alpa';
           }
           const hpColor = m.sev === "kritis" || m.sev === "habis" || m.sev === "gugur" ? "text-rose-600" : m.sev === "waspada" ? "text-amber-600" : "text-emerald-600";
           const hpRight = r.isPair ? '<span class="font-bold whitespace-nowrap ' + hpColor + '">HP ' + m.hp + '/3</span>' : '';
@@ -3176,11 +3176,11 @@
           r.members.forEach(function (m) {
             const mate = r.members.filter(function (x) { return x.name !== m.name; })[0];
             if (m.hp === 0) {
-              warning += warnBox(roseCls, 'Peringatan gugur individu: <strong>' + escapeHtmlText(m.name) + '</strong> kehabisan HP individu (0/3)' +
+              warning += warnBox(roseCls, 'Peringatan gugur individu: <strong>' + escapeHtmlText(m.name) + '</strong> kehabisan HP (Health Point) individu (0/3)' +
                 (mate ? (mate.hp > 0 ? ' padahal partner (<strong>' + escapeHtmlText(mate.name) + '</strong>) masih punya HP ' + mate.hp + '/3.' : ', partner (<strong>' + escapeHtmlText(mate.name) + '</strong>) juga sudah habis.') : '.') +
                 ' HP tim ' + r.current + '/' + r.maxHp + '.');
             } else if (m.sev === "kritis") {
-              warning += warnBox(amberCls, 'HP individu <strong>' + escapeHtmlText(m.name) + '</strong> hampir habis (' + m.hp + '/3).');
+              warning += warnBox(amberCls, 'HP (Health Point) individu <strong>' + escapeHtmlText(m.name) + '</strong> hampir habis (' + m.hp + '/3).');
             }
           });
         }
@@ -3189,13 +3189,13 @@
           let text;
           if (r.isPair) {
             if (top.names.length > 0) {
-              const sama = top.names.length > 1 ? " sama-sama paling banyak memakan HP partner" : " paling banyak memakan HP partner";
-              text = (r.sev === "gugur" ? "Tim gugur. " : "HP tim " + (r.sev === "habis" ? "habis" : "hampir habis") + ". ") + '<strong>' + top.names.map(escapeHtmlText).join(" dan ") + '</strong>' + sama + ' (' + top.max + ' dari ' + r.missedTotal + ' alpa).';
+              const sama = top.names.length > 1 ? " sama-sama paling banyak memakan HP (Health Point) partner" : " paling banyak memakan HP (Health Point) partner";
+              text = (r.sev === "gugur" ? "Tim gugur. " : "HP (Health Point) tim " + (r.sev === "habis" ? "habis" : "hampir habis") + ". ") + '<strong>' + top.names.map(escapeHtmlText).join(" dan ") + '</strong>' + sama + ' (' + top.max + ' dari ' + r.missedTotal + ' alpa).';
             } else {
-              text = (r.sev === "gugur" ? "Tim gugur. " : "HP tim " + (r.sev === "habis" ? "habis" : "hampir habis") + ". ") + 'Minus berasal dari penyesuaian manual PJ.';
+              text = (r.sev === "gugur" ? "Tim gugur. " : "HP (Health Point) tim " + (r.sev === "habis" ? "habis" : "hampir habis") + ". ") + 'Minus berasal dari penyesuaian manual PJ.';
             }
           } else {
-            text = (r.sev === "gugur" ? "Gugur: " : "Peringatan gugur: ") + '<strong>' + escapeHtmlText(r.names[0]) + '</strong>' + (r.sev === "gugur" ? "." : ", HP " + (r.sev === "habis" ? "habis" : "hampir habis") + ".");
+            text = (r.sev === "gugur" ? "Gugur: " : "Peringatan gugur: ") + '<strong>' + escapeHtmlText(r.names[0]) + '</strong>' + (r.sev === "gugur" ? "." : ", HP (Health Point) " + (r.sev === "habis" ? "habis" : "hampir habis") + ".");
           }
           const sisa = r.sev !== "gugur" ? ' Sisa ' + r.remaining + ' alpa lagi sebelum gugur.' : '';
           warning += warnBox(r.sev === "gugur" ? "bg-slate-800 text-white border-slate-700" : roseCls, text + sisa);
@@ -3434,8 +3434,8 @@
         if (state.currentMode === "PJ") {
           actionsHtml = `
             <td class="p-4 flex flex-wrap gap-1">
-              <button onclick="modifyHPDirect(${index}, 1)" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-700 px-2 py-1 rounded text-xs font-bold" title="Tambah 1 HP">+1</button>
-              <button onclick="modifyHPDirect(${index}, -1)" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-2 py-1 rounded text-xs font-bold" title="Kurangi 1 HP">-1</button>
+              <button onclick="modifyHPDirect(${index}, 1)" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-700 px-2 py-1 rounded text-xs font-bold" title="Tambah 1 HP (Health Point)">+1</button>
+              <button onclick="modifyHPDirect(${index}, -1)" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-2 py-1 rounded text-xs font-bold" title="Kurangi 1 HP (Health Point)">-1</button>
               ${team.type === "PARTNER" ? `<button onclick="partnerResign(${index})" class="bg-amber-100 hover:bg-amber-200 text-amber-800 px-2 py-1 rounded text-xs font-semibold" title="Mitra Mundur">Mitra Mundur</button>` : ""}
             </td>
           `;
@@ -3819,7 +3819,7 @@
           
           setTimeout(() => {
             showCustomAlert(
-              "🚨 Batas HP Terlewati! (GUGUR BERSAMA)",
+              "🚨 Batas HP (Health Point) Terlewati! (GUGUR BERSAMA)",
               `Kelompok Partner [${team.name1}] & [${team.name2}] dinyatakan GUGUR BERSAMA karena Health Points (HP) telah menyentuh batas kritis -7 HP!`,
               "fa-solid fa-skull-crossbones",
               "text-rose-500",
@@ -3874,7 +3874,7 @@
       if (state.currentMode !== "PJ") return;
 
       const team = state.partners[index];
-      showCustomConfirm("Mitra Mengundurkan Diri", "Pasangan yang tersisa akan dipindahkan menjadi Single Fighter dengan HP direset ke 0.", () => {
+      showCustomConfirm("Mitra Mengundurkan Diri", "Pasangan yang tersisa akan dipindahkan menjadi Single Fighter dengan HP (Health Point) direset ke 0.", () => {
         let survivor = "";
         let resigned = "";
         
@@ -3919,7 +3919,7 @@
         setTimeout(() => {
           showCustomAlert(
             "🛡️ Berjuang Sendiri",
-            `[${survivor}] berhasil diselamatkan dan sekarang berstatus Single Fighter (HP di-reset ke 0)!`,
+            `[${survivor}] berhasil diselamatkan dan sekarang berstatus Single Fighter dengan HP (Health Point) di-reset ke 0!`,
             "fa-solid fa-shield-halved",
             "text-emerald-600",
             "bg-emerald-100"
@@ -3937,7 +3937,7 @@
         return;
       }
 
-      showCustomConfirm("Konfirmasi Pengunduran Diri", `Apakah Anda yakin ingin memproses pengunduran diri [${resignedName}]? Partner yang bersangkutan (jika ada) akan otomatis berjuang sendiri sebagai Single Fighter (HP di-reset ke 0).`, () => {
+      showCustomConfirm("Konfirmasi Pengunduran Diri", `Apakah Anda yakin ingin memproses pengunduran diri [${resignedName}]? Partner yang bersangkutan (jika ada) akan otomatis berjuang sendiri sebagai Single Fighter dengan HP (Health Point) di-reset ke 0.`, () => {
         const idx = state.partners.findIndex(item => item.name1 === resignedName || item.name2 === resignedName);
         if (idx === -1) {
           // If not in a team, just push as an inactive single
@@ -4010,7 +4010,7 @@
         
         setTimeout(() => {
           showCustomAlert(
-            "🚨 Batas HP Terlewati! (GUGUR BERSAMA)",
+            "🚨 Batas HP (Health Point) Terlewati! (GUGUR BERSAMA)",
             `Kelompok Partner [${team.name1}] & [${team.name2}] dinyatakan GUGUR BERSAMA karena Health Points (HP) telah menyentuh batas kritis -7 HP!`,
             "fa-solid fa-skull-crossbones",
             "text-rose-500",
